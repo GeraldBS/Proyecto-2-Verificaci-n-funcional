@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyecto UVM: UART 16550</title>
+<meta name="description" content="Enunciado del proyecto de verificación funcional con SystemVerilog y UVM 1.2 sobre el núcleo UART 16550 de OpenCores.">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --ink: #1d1c1a;
+    --quiet: #5f5c56;
+    --border: #dcd8cf;
+    --edge: #9a958b;
+    --tint: #f1efe9;
+    --accent: #2563a6;
+    --accent-bg: #e6eff9;
+    --warn: #9a3412;
+    --warn-bg: #fdf0e8;
+    --code-bg: #f3f1ec;
+    --link: #1f5a99;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161614;
+      --surface: #1e1e1b;
+      --ink: #ecebe7;
+      --quiet: #a9a59c;
+      --border: #3a3934;
+      --edge: #7d796f;
+      --tint: #24231f;
+      --accent: #6ea8e6;
+      --accent-bg: #1c2d40;
+      --warn: #f0a77a;
+      --warn-bg: #3a2418;
+      --code-bg: #262521;
+      --link: #8bbcf0;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161614;
+    --surface: #1e1e1b;
+    --ink: #ecebe7;
+    --quiet: #a9a59c;
+    --border: #3a3934;
+    --edge: #7d796f;
+    --tint: #24231f;
+    --accent: #6ea8e6;
+    --accent-bg: #1c2d40;
+    --warn: #f0a77a;
+    --warn-bg: #3a2418;
+    --code-bg: #262521;
+    --link: #8bbcf0;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.6 "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 16px 96px;
+  }
+  header.title {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+  .kicker {
+    font: 600 13px/1.4 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--quiet);
+    margin: 0 0 8px;
+  }
+  h1 {
+    font: 700 clamp(28px, 5vw, 40px)/1.15 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .lead {
+    font-size: 18px;
+    color: var(--ink);
+    margin: 0;
+  }
+  .meta {
+    font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--quiet);
+    margin-top: 16px;
+  }
+  h2, h3 {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.25;
+  }
+  h2 {
+    font-size: 24px;
+    margin: 56px 0 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  h3 { font-size: 18px; margin: 32px 0 8px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--link); text-underline-offset: 2px; }
+  ul, ol { padding-left: 24px; margin: 0 0 16px; }
+  li { margin: 4px 0; }
+  ol ol { list-style: lower-alpha; margin-top: 4px; }
+  strong { font-weight: 700; }
+  code {
+    font: 0.86em/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font: 13px/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    margin: 0 0 20px;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 8px;
+    font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  nav.toc strong { display: block; margin-bottom: 6px; }
+  nav.toc ol { margin: 0; columns: 2; column-gap: 32px; }
+  @media (max-width: 600px) { nav.toc ol { columns: 1; } }
+
+  .table-wrap { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  th { background: var(--tint); font-weight: 600; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  td.num { white-space: nowrap; }
+
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: var(--accent-bg);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 0 0 20px;
+  }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-bg); }
+  .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+  .callout .label {
+    font: 700 13px/1.4 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .callout.warn .label { color: var(--warn); }
+  .callout .label { color: var(--accent); }
+
+  figure { margin: 8px 0 24px; }
+  figure svg { width: 100%; height: auto; display: block; }
+  figcaption { font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--quiet); margin-top: 8px; }
+
+  svg .ink { fill: var(--ink); }
+  svg .quiet { fill: var(--quiet); }
+  svg .box { fill: none; stroke: var(--edge); stroke-width: 1.25; }
+  svg .box-main { fill: var(--accent-bg); stroke: var(--accent); stroke-width: 2; }
+  svg .container { fill: var(--tint); stroke: var(--edge); stroke-width: 1; }
+  svg .wire { fill: none; stroke: var(--edge); stroke-width: 1.25; }
+  svg .wire-accent { fill: none; stroke: var(--accent); stroke-width: 1.25; }
+  svg .head { fill: var(--edge); }
+  svg .gate-main { fill: var(--accent-bg); stroke: var(--accent); stroke-width: 2; }
+  svg text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  svg .name { font-size: 13px; font-weight: 600; }
+  svg .body { font-size: 11.5px; }
+  svg .title { font-size: 15px; font-weight: 600; }
+
+  h4 { font: 600 15px/1.3 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; margin: 20px 0 8px; color: var(--quiet); }
+  table.fill tr.example td { color: var(--quiet); font-style: italic; }
+  table.fill td.fixed { background: var(--tint); font-weight: 600; }
+  table.fill tr.blank td { height: 34px; }
+  table.fill.kv td:first-child { width: 45%; }
+  table.fill:not(.kv) td:first-child { white-space: nowrap; }
+  .fill-box { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); min-height: 120px; padding: 12px 14px; margin: 0 0 20px; }
+  .fill-box .example-text { color: var(--quiet); font: italic 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; }
+
+  footer { margin-top: 64px; font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--quiet); }
+
+  @media print {
+    body { background: #fff; color: #000; font-size: 11pt; }
+    .page { max-width: none; padding: 0; }
+    nav.toc { display: none; }
+    h2 { break-after: avoid; }
+    figure, .table-wrap, pre { break-inside: avoid; }
+    a { color: #000; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+<header class="title">
+  <p class="kicker">Verificación funcional de circuitos integrados · SystemVerilog y UVM</p>
+  <h1>Proyecto: verificación del UART 16550 con UVM</h1>
+  <p class="lead">Cada grupo de tres estudiantes construirá desde cero un ambiente de verificación UVM para el núcleo UART 16550 de OpenCores, lo llevará al menos a 95 % de cobertura funcional y de código, y justificará técnicamente cualquier hueco que no logre cerrar.</p>
+  <p class="meta">Fecha de entrega: Lunes de semana 18 · Grupos de 3 · Synopsys VCS + UVM 1.2 · Versión del 16 de octubre de 2026</p>
+</header>
+
+<nav class="toc" aria-label="Contenido">
+  <strong>Contenido</strong>
+  <ol>
+    <li><a href="#general">Información general</a></li>
+    <li><a href="#objetivos">Objetivos de aprendizaje</a></li>
+    <li><a href="#dut">El DUT: UART 16550</a></li>
+    <li><a href="#filosofia">Filosofía de pruebas</a></li>
+    <li><a href="#arquitectura">Arquitectura del ambiente</a></li>
+    <li><a href="#cobertura">Cobertura y cierre</a></li>
+    <li><a href="#entregables">Entregables y cronograma</a></li>
+    <li><a href="#evaluacion">Evaluación y entrevista</a></li>
+    <li><a href="#machote">Machote del plan de pruebas</a></li>
+    <li><a href="#referencias">Referencias</a></li>
+  </ol>
+</nav>
+
+<!-- 1 -->
+<section id="general">
+<h2>1. Información general</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Aspecto</th><th>Detalle</th></tr></thead>
+  <tbody>
+    <tr><td>Modalidad</td><td>Grupos de 3 estudiantes. Cada integrante debe poder explicar y modificar cualquier parte del código entregado (ver la <a href="#entrevista">entrevista individual</a>).</td></tr>
+    <tr><td>Fecha de entrega</td><td><strong>Lunes de semana 18</strong> (entrega final E3)</td></tr>
+    <tr><td>Simulador</td><td>Synopsys VCS (con <code>-ntb_opts uvm-1.2</code>), cobertura con URG / Verdi</td></tr>
+    <tr><td>Metodología</td><td>UVM 1.2, SystemVerilog IEEE 1800-2017</td></tr>
+    <tr><td>Control de versiones</td><td>Repositorio Git privado por grupo; el profesor debe tener acceso de lectura desde la semana 1. Cada integrante hace commits con su propia cuenta.</td></tr>
+    <tr><td>DUT</td><td><code>uart16550</code> de OpenCores (RTL en Verilog, interfaz Wishbone, compatible con 16550A)</td></tr>
+  </tbody>
+</table></div>
+<p>No se permite reutilizar ambientes UVM existentes para este núcleo (de GitHub, cursos previos o generadores automáticos). Sí se permite usar la documentación de UVM, VIPs de referencia como <strong>ejemplo de estilo</strong>, y el banco de pruebas Verilog original del proyecto solo como referencia de comportamiento.</p>
+<p>El trabajo se reparte entre los tres integrantes, pero la responsabilidad sobre el código es compartida: dividir el ambiente en partes no exime a nadie de entender las partes que escribieron los demás.</p>
+</section>
+
+<!-- 2 -->
+<section id="objetivos">
+<h2>2. Objetivos de aprendizaje</h2>
+<p>Al terminar el proyecto, cada estudiante será capaz de:</p>
+<ol>
+  <li>Extraer de una especificación las características verificables de un dispositivo y convertirlas en un plan de pruebas con métricas de cierre.</li>
+  <li>Diseñar una <strong>prueba base aleatoria restringida</strong> cuyo espacio de estímulos cubra, en teoría, todas las configuraciones y todo el tráfico que el DUT soporta.</li>
+  <li>Dirigir esa misma prueba hacia casos de esquina modificando restricciones mediante <strong>plusargs</strong> propagados por objetos de configuración en <code>uvm_config_db</code>, sin escribir pruebas dirigidas desde cero.</li>
+  <li>Implementar una arquitectura UVM completa: agentes activos y pasivos, secuenciador virtual, secuencias, scoreboard con modelo de referencia, aserciones SVA de interfaz, RAL con predictor, adaptador y acceso por puerta delantera y trasera, y cobertura funcional.</li>
+  <li>Analizar cobertura funcional y de código (línea, condición, rama, FSM y <em>toggle</em>), proponer pruebas adicionales para cerrar huecos y justificar exclusiones con criterio técnico.</li>
+  <li>Documentar y reportar errores del RTL encontrados durante la verificación, distinguiendo entre defectos del diseño, ambigüedades de la especificación y errores del propio ambiente.</li>
+</ol>
+</section>
+
+<!-- 3 -->
+<section id="dut">
+<h2>3. El dispositivo bajo prueba: UART 16550</h2>
+<p>El DUT es <a href="https://opencores.org/projects/uart16550">uart16550</a>, un UART compatible con el NS16550A con interfaz Wishbone Rev. B, marcado como <em>Stable</em> en OpenCores. Se eligió porque tiene RTL completo (unas 3 600 líneas de Verilog), especificación de registros detallada, dos interfaces de protocolo muy distintas (bus paralelo y serie asíncrona), FIFOs, interrupciones con prioridad, señales de módem, modo <em>loopback</em> y registros multiplexados por el bit DLAB, lo cual hace interesante el modelado RAL. Además tiene errores reportados y diferencias entre especificación y RTL que un buen ambiente debe detectar.</p>
+
+<h3>3.1 Dónde obtener el RTL y la documentación</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Recurso</th><th>Enlace</th><th>Uso</th></tr></thead>
+  <tbody>
+    <tr><td>Página del proyecto</td><td><a href="https://opencores.org/projects/uart16550">opencores.org/projects/uart16550</a></td><td>Descripción, estado, mantenedores</td></tr>
+    <tr><td>Descarga del proyecto completo</td><td><a href="https://opencores.org/download/uart16550">opencores.org/download/uart16550</a></td><td>Requiere cuenta gratuita en OpenCores</td></tr>
+    <tr><td>Repositorio SVN</td><td><a href="https://opencores.org/websvn/listing/uart16550">opencores.org/websvn/listing/uart16550</a></td><td>Historial de cambios</td></tr>
+    <tr><td>Espejo en GitHub (recomendado)</td><td><a href="https://github.com/freecores/uart16550">github.com/freecores/uart16550</a></td><td><code>git clone https://github.com/freecores/uart16550.git</code></td></tr>
+    <tr><td>Especificación original (PDF)</td><td><code>doc/UART_spec.pdf</code> en el repositorio</td><td><strong>Documento normativo</strong> del proyecto</td></tr>
+    <tr><td>Especificación revisada (Rev. 0.6.1)</td><td><a href="https://uart16550.readthedocs.io/en/latest/uart16550doc.html">uart16550.readthedocs.io</a></td><td>Misma información en HTML, con aclaraciones y la lista de errores conocidos</td></tr>
+    <tr><td>Bugtracker</td><td><a href="https://opencores.org/projects/uart16550/bugtracker">opencores.org/projects/uart16550/bugtracker</a></td><td>Errores reportados por la comunidad</td></tr>
+  </tbody>
+</table></div>
+<p>Usen únicamente el directorio <code>rtl/verilog/</code> (no <code>rtl/verilog-backup/</code>). Los archivos del DUT son: <code>uart_top.v</code>, <code>uart_wb.v</code>, <code>uart_regs.v</code>, <code>uart_transmitter.v</code>, <code>uart_receiver.v</code>, <code>uart_tfifo.v</code>, <code>uart_rfifo.v</code>, <code>raminfr.v</code>, <code>uart_sync_flops.v</code>, <code>uart_debug_if.v</code>, <code>uart_defines.v</code> y <code>timescale.v</code>. El directorio <code>bench/verilog/</code> contiene un banco de pruebas Verilog antiguo que pueden consultar, pero no reutilizar.</p>
+
+<h3>3.2 Configuración de compilación</h3>
+<ul>
+  <li><strong>Modo obligatorio: bus de datos de 32 bits</strong> (configuración por defecto, <code>DATA_BUS_WIDTH_8</code> sin definir). En este modo la dirección es de 5 bits, se usa <code>wb_sel_i</code> para seleccionar el byte, y están disponibles los registros de depuración Debug 1 y Debug 2.</li>
+  <li><strong>Variante opcional (puntos extra): bus de 8 bits</strong>, compilando con <code>+define+DATA_BUS_WIDTH_8</code>. Como es un parámetro de compilación, no puede aleatorizarse en tiempo de ejecución; el ambiente debe soportar ambas variantes sin cambios de código, solo con un <code>define</code> y un objeto de configuración.</li>
+  <li><code>UART_HAS_BAUDRATE_OUTPUT</code> es opcional; si lo habilitan, deben verificar <code>baud_o</code>.</li>
+  <li>Todos los archivos del RTL incluyen <code>uart_defines.v</code>; agreguen <code>+incdir+</code> al comando de VCS.</li>
+</ul>
+
+<h3>3.3 Interfaces del DUT</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Interfaz</th><th>Señales</th><th>Protocolo</th></tr></thead>
+  <tbody>
+    <tr><td>Bus de sistema</td><td><code>wb_clk_i</code>, <code>wb_rst_i</code>, <code>wb_adr_i</code>, <code>wb_dat_i</code>, <code>wb_dat_o</code>, <code>wb_we_i</code>, <code>wb_stb_i</code>, <code>wb_cyc_i</code>, <code>wb_sel_i</code>, <code>wb_ack_o</code></td><td>Wishbone Rev. B, esclavo, ciclos simples de lectura y escritura</td></tr>
+    <tr><td>Interrupción</td><td><code>int_o</code></td><td>Nivel, activa en alto</td></tr>
+    <tr><td>Serie</td><td><code>stx_pad_o</code>, <code>srx_pad_i</code></td><td>UART asíncrono: 5 a 8 bits, paridad par, impar, <em>stick</em> o ninguna, 1, 1.5 o 2 bits de parada, <em>break</em></td></tr>
+    <tr><td>Módem</td><td><code>rts_pad_o</code>, <code>dtr_pad_o</code>, <code>cts_pad_i</code>, <code>dsr_pad_i</code>, <code>ri_pad_i</code>, <code>dcd_pad_i</code></td><td>Niveles estáticos con detección de cambios (deltas)</td></tr>
+    <tr><td>Opcional</td><td><code>baud_o</code></td><td>16 × tasa de baudios, solo con <code>UART_HAS_BAUDRATE_OUTPUT</code></td></tr>
+  </tbody>
+</table></div>
+
+<h3>3.4 Mapa de registros (resumen)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Dir.</th><th>DLAB = 0, lectura</th><th>DLAB = 0, escritura</th><th>DLAB = 1</th></tr></thead>
+  <tbody>
+    <tr><td class="num">0</td><td>RBR, salida de la FIFO de recepción</td><td>THR, entrada de la FIFO de transmisión</td><td>DLL, byte bajo del divisor</td></tr>
+    <tr><td class="num">1</td><td>IER</td><td>IER</td><td>DLM, byte alto del divisor</td></tr>
+    <tr><td class="num">2</td><td>IIR</td><td>FCR</td><td>igual que DLAB = 0</td></tr>
+    <tr><td class="num">3</td><td>LCR</td><td>LCR</td><td>LCR</td></tr>
+    <tr><td class="num">4</td><td>MCR (ver 3.5)</td><td>MCR</td><td>MCR</td></tr>
+    <tr><td class="num">5</td><td>LSR</td><td>—</td><td>LSR</td></tr>
+    <tr><td class="num">6</td><td>MSR</td><td>—</td><td>MSR</td></tr>
+    <tr><td class="num">7</td><td>ver 3.5</td><td>ver 3.5</td><td>ver 3.5</td></tr>
+    <tr><td class="num">8</td><td>Debug 1 (32 bits, solo lectura)</td><td>—</td><td>Debug 1</td></tr>
+    <tr><td class="num">12</td><td>Debug 2 (32 bits, solo lectura)</td><td>—</td><td>Debug 2</td></tr>
+  </tbody>
+</table></div>
+<p>Los registros tienen efectos laterales que el modelo RAL debe representar: lecturas que limpian bits (LSR, MSR, IIR sobre la interrupción THRE), escrituras a FIFO (THR) y lecturas que extraen de FIFO (RBR), y campos de solo escritura (FCR). La tasa de baudios es <code>f_clk / (16 × DL)</code>; con DL = 0 el UART no transmite ni recibe.</p>
+
+<h3>3.5 Puntos que su plan de pruebas debe aclarar</h3>
+<p>La especificación y el RTL no coinciden en todos los detalles, y el bugtracker tiene reportes abiertos. Antes de escribir su modelo de referencia, revisen al menos estos puntos y documenten en el plan qué comportamiento consideran correcto y por qué:</p>
+<ul>
+  <li>Si existe o no un registro <em>scratch</em> en la dirección 7.</li>
+  <li>Si el MCR se puede leer de vuelta.</li>
+  <li>La polaridad de las salidas <code>rts_pad_o</code> y <code>dtr_pad_o</code> respecto a los bits del MCR, y la de los bits 7:4 del MSR respecto a las entradas de módem.</li>
+  <li>La condición exacta en que se activa TERI (MSR bit 2).</li>
+  <li>La decodificación de dirección cuando <code>wb_sel_i</code> no tiene exactamente un bit activo en el modo de 32 bits.</li>
+  <li>El comportamiento con 1.5 o 2 bits de parada, y qué bit de parada verifica el receptor.</li>
+</ul>
+<p>Cuando su ambiente detecte una discrepancia, deben reportarla en el informe final con: escenario que la produce, semilla y plusargs para reproducirla, comportamiento esperado según la especificación, comportamiento observado y su recomendación.</p>
+<div class="callout warn"><span class="label">Importante</span><p>No modifiquen el RTL para que las pruebas pasen. Un error real se documenta y, si bloquea la cobertura, se excluye con justificación.</p></div>
+</section>
+
+<!-- 4 -->
+<section id="filosofia">
+<h2>4. Filosofía de pruebas: una prueba base que lo cubre todo</h2>
+<p>Toda la regresión del proyecto se construye con <strong>una sola prueba</strong>, <code>uart_base_test</code>, más semillas y archivos de plusargs. No se aceptan pruebas dirigidas escritas como clases nuevas con estímulo propio.</p>
+
+<h3>4.1 Requisito de completitud</h3>
+<p>Con los valores por defecto de todas las restricciones, la prueba base debe poder generar <strong>cualquier configuración legal del DUT y cualquier tipo de tráfico que soporte</strong>. Formalmente: para cada <em>bin</em> alcanzable de su modelo de cobertura, la probabilidad de alcanzarlo con una semilla al azar debe ser mayor que cero. Así, con un número infinito de semillas, la prueba base alcanzaría en teoría 100 % de cobertura.</p>
+<p>Esto implica, como mínimo, que la prueba base aleatorice:</p>
+<ul>
+  <li><strong>Configuración de línea:</strong> longitud de carácter (5 a 8), bits de parada, paridad (deshabilitada, par, impar, <em>stick</em> 0 y <em>stick</em> 1) y divisor DL.</li>
+  <li><strong>Configuración de FIFO e interrupciones:</strong> nivel de disparo (1, 4, 8, 14), limpieza de FIFOs, cada bit de IER y combinaciones.</li>
+  <li><strong>Modo de operación:</strong> normal o <em>loopback</em>; salidas de módem (DTR, RTS, OUT1, OUT2); control de <em>break</em>.</li>
+  <li><strong>Tráfico de transmisión:</strong> escrituras a THR en ráfagas de longitud variable, incluyendo llenar y desbordar la FIFO de 16 posiciones.</li>
+  <li><strong>Tráfico de recepción:</strong> caracteres válidos y con errores inyectados por el agente serie: error de paridad, error de trama, condición de <em>break</em>, <em>glitches</em> en la línea y desajuste de tasa de baudios dentro y fuera de tolerancia.</li>
+  <li><strong>Señales de módem:</strong> cambios en CTS, DSR, RI y DCD en cualquier momento.</li>
+  <li><strong>Estilo de servicio del software:</strong> por interrupciones o por sondeo (<em>polling</em>), con retrasos aleatorios en la atención, para provocar desbordamiento (<em>overrun</em>) y la indicación de <em>timeout</em>.</li>
+  <li><strong>Accesos a registros:</strong> lecturas y escrituras a todas las direcciones, incluyendo reconfiguración en medio del tráfico y accesos con DLAB = 1.</li>
+  <li><strong>Reset:</strong> reset asíncrono en momentos aleatorios, controlado por un plusarg (deshabilitado por defecto si así lo justifican).</li>
+</ul>
+<p>Ninguna restricción por defecto puede llevar la probabilidad de un escenario legal a cero. Si por tiempo de simulación necesitan acotar un rango (por ejemplo DL entre 1 y 16 por defecto), la cola completa del rango debe seguir siendo alcanzable con una probabilidad pequeña, y debe existir un plusarg que la amplíe. Deben justificar en el plan cada uno de estos acotamientos.</p>
+
+<h3>4.2 Casos de esquina por plusargs</h3>
+<p>Los casos de esquina <strong>no</strong> se escriben como pruebas nuevas: se obtienen corriendo la misma prueba base con plusargs que cambian las restricciones de aleatorización. Por ejemplo, “desbordamiento de la FIFO de recepción con nivel de disparo 14 y 5 bits por carácter” es una línea de la regresión:</p>
+<pre><code>./simv +UVM_TESTNAME=uart_base_test +ntb_random_seed=1234 \
+       -f tests/rx_overrun_tl14_5bit.args</code></pre>
+<p>Reglas de diseño obligatorias:</p>
+<ol>
+  <li><strong>Un único punto de lectura.</strong> Los plusargs se leen en un solo lugar (por ejemplo, un método <code>parse_plusargs()</code> en la clase de configuración, usando <code>uvm_cmdline_processor</code>). Ningún driver, monitor ni secuencia llama a <code>$value$plusargs</code> directamente.</li>
+  <li><strong>Todo pasa por objetos de configuración.</strong> Cada valor leído se guarda en un campo <em>knob</em> de un objeto de configuración (<code>uart_env_cfg</code>, <code>wb_agent_cfg</code>, <code>uart_ser_agent_cfg</code>, <code>modem_agent_cfg</code>, <code>uart_scb_cfg</code>, <code>uart_cov_cfg</code>, etc.), y esos objetos se publican con <code>uvm_config_db#(...)::set</code> durante <code>build_phase</code>.</li>
+  <li><strong>Disponibles en todos los componentes.</strong> Agentes, drivers, monitores, secuenciadores, secuencias, scoreboard, predictor y colectores de cobertura obtienen su objeto con <code>uvm_config_db#(...)::get</code> y usan sus <em>knobs</em>. Las secuencias lo obtienen a través de su secuenciador (<code>get_sequencer()</code> o <code>p_sequencer</code>).</li>
+  <li><strong>Restricciones parametrizadas por knobs.</strong> Cada restricción usa rangos o pesos tomados de los <em>knobs</em>, no constantes mágicas. Los valores por defecto cumplen el requisito de completitud de 4.1.</li>
+  <li><strong>Convención de nombres.</strong> <code>+UART_&lt;BLOQUE&gt;_&lt;KNOB&gt;=&lt;valor&gt;</code>, por ejemplo <code>+UART_LCR_WLS_WEIGHTS=0,0,0,1</code> o <code>+UART_SER_PARITY_ERR_PCT=30</code>. El plan debe incluir la tabla completa de plusargs.</li>
+  <li><strong>Trazabilidad.</strong> Al inicio de cada simulación, el ambiente imprime todos los <em>knobs</em> con su valor y su origen (por defecto o plusarg), para poder reproducir cualquier corrida con la semilla y el archivo de argumentos.</li>
+</ol>
+<p>Patrón sugerido (orientativo, no obligatorio):</p>
+<pre><code>class uart_line_cfg extends uvm_object;
+  `uvm_object_utils(uart_line_cfg)
+  rand bit [1:0]  wls;            // 5..8 bits
+  rand bit        stb, pen, eps, sp;
+  rand bit [15:0] dl;
+  // knobs (no aleatorios)
+  int unsigned wls_w[4]  = '{1,1,1,1};
+  int unsigned dl_min = 1, dl_max_fast = 16, dl_max = 16'hFFFF;
+  int unsigned dl_tail_pct = 2;   // probabilidad de explorar la cola
+
+  constraint c_wls { wls dist { 0 := wls_w[0], 1 := wls_w[1],
+                                2 := wls_w[2], 3 := wls_w[3] }; }
+  constraint c_dl  { dl dist { [dl_min:dl_max_fast]   :/ (100 - dl_tail_pct),
+                               [dl_max_fast+1:dl_max] :/ dl_tail_pct }; }
+
+  function void parse_plusargs();
+    uvm_cmdline_processor clp = uvm_cmdline_processor::get_inst();
+    string v;
+    if (clp.get_arg_value("+UART_LCR_DL_MAX=", v)) dl_max = v.atoi();
+    // ...
+  endfunction
+endclass</code></pre>
+</section>
+
+<!-- 5 -->
+<section id="arquitectura">
+<h2>5. Requisitos de la arquitectura del ambiente</h2>
+<p>Cada grupo propone su propia arquitectura y la justifica a partir de su plan de pruebas; los elementos de esta sección son el <strong>mínimo obligatorio</strong>. El diagrama de 5.4 muestra una arquitectura de referencia, no la única válida.</p>
+
+<h3>5.1 Componentes obligatorios</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Componente</th><th>Requisitos mínimos</th></tr></thead>
+  <tbody>
+    <tr><td>Agente Wishbone (activo)</td><td>Driver maestro Wishbone con retardos aleatorios entre transacciones y en <code>stb</code>; monitor que publica cada transacción por un <code>uvm_analysis_port</code>; manejo de <code>wb_sel_i</code> en modo de 32 bits</td></tr>
+    <tr><td>Agente serie UART (activo y pasivo)</td><td>Driver que transmite hacia <code>srx_pad_i</code> con cualquier formato de línea e inyección de errores (paridad, trama, <em>break</em>, <em>glitch</em>, desviación de baudios); monitor de <code>stx_pad_o</code> que reconstruye caracteres; monitor de <code>srx_pad_i</code></td></tr>
+    <tr><td>Agente de módem</td><td>Driver de <code>cts</code>, <code>dsr</code>, <code>ri</code>, <code>dcd</code> con cambios aleatorios; monitor de las cuatro entradas y de <code>rts</code>, <code>dtr</code></td></tr>
+    <tr><td>Monitor de interrupción</td><td>Observa <code>int_o</code> y lo correlaciona con IER, IIR y el estado del modelo</td></tr>
+    <tr><td>Secuenciador virtual</td><td>Coordina los secuenciadores Wishbone, serie y de módem; es donde corre la secuencia principal de la prueba base</td></tr>
+    <tr><td>Secuencias</td><td>Biblioteca de secuencias de registros (sobre el RAL), de tráfico TX, de tráfico RX, de módem, de servicio de interrupciones y de reconfiguración; una secuencia virtual principal que las combina aleatoriamente</td></tr>
+    <tr><td>Scoreboard y modelo de referencia</td><td>Compara datos TX (THR contra línea serie), datos RX (línea serie contra RBR), estado de LSR, MSR, IIR e <code>int_o</code>; modela FIFOs, niveles de disparo, <em>overrun</em>, <em>timeout</em> y prioridades de interrupción</td></tr>
+    <tr><td>Aserciones SVA</td><td>Módulo o interfaz enlazado con <code>bind</code>: protocolo Wishbone (estabilidad de señales mientras <code>cyc &amp;&amp; stb</code> sin <code>ack</code>, <code>ack</code> en un ciclo acotado, ausencia de X), protocolo serie (bit de inicio, ancho de bit según DL, línea en reposo en 1, <code>stx_pad_o</code> en 1 durante <em>loopback</em>), señales de módem en <em>loopback</em>; cada propiedad con su <code>cover property</code></td></tr>
+    <tr><td>RAL</td><td>Modelo de registros generado a mano o con <code>ralgen</code>, con mapas para DLAB = 0 y DLAB = 1 (o la estrategia que justifiquen), adaptador <code>reg2bus</code> / <code>bus2reg</code> para Wishbone, predictor explícito (<code>uvm_reg_predictor</code>) conectado al monitor Wishbone, acceso por puerta delantera y por puerta trasera (<code>hdl_path</code> a <code>uart_top.regs.*</code>)</td></tr>
+    <tr><td>Cobertura funcional</td><td><code>covergroup</code> de configuración, de tráfico, de errores, de interrupciones, de módem y de registros, con cruces relevantes; muestreados desde monitores, el RAL o el scoreboard, nunca desde el driver</td></tr>
+    <tr><td>Objetos de configuración</td><td>Uno por agente y uno por ambiente, con los <em>knobs</em> de la sección 4</td></tr>
+  </tbody>
+</table></div>
+
+<h3>5.2 Requisitos del RAL</h3>
+<ul>
+  <li>Modelar los campos con su acceso correcto (<code>RW</code>, <code>RO</code>, <code>WO</code>, <code>RC</code> o con <em>callbacks</em> para efectos laterales) y sus valores de reset según la especificación.</li>
+  <li>Resolver el problema de los registros que comparten dirección (RBR/THR/DLL, IER/DLM, IIR/FCR) y explicar la solución en el plan.</li>
+  <li>Usar la puerta trasera al menos para: verificación de valores de reset, comprobación de que una escritura por puerta delantera llegó al registro interno, y lectura de estado sin efectos laterales.</li>
+  <li>Correr las secuencias integradas de UVM que apliquen (<code>uvm_reg_hw_reset_seq</code>, <code>uvm_reg_bit_bash_seq</code>, <code>uvm_reg_access_seq</code>), excluyendo con <code>NO_REG_TESTS</code> u opciones equivalentes los registros donde no aplican y justificando cada exclusión.</li>
+</ul>
+
+<h3>5.3 Requisitos generales de calidad</h3>
+<ul>
+  <li>Cero advertencias de compilación propias del ambiente; <code>UVM_ERROR</code> y <code>UVM_FATAL</code> en cero en una corrida que pasa.</li>
+  <li>Uso de la <em>factory</em> para todos los componentes y objetos, de modo que un plusarg <code>+uvm_set_type_override</code> permita sustituir cualquier pieza.</li>
+  <li>Fin de prueba con objeciones, sin <code>#delay</code> arbitrarios; un <em>drain time</em> justificado.</li>
+  <li>Script de compilación y regresión (Makefile o Python) que corre la regresión completa y fusiona la cobertura con <code>urg</code>.</li>
+</ul>
+
+<h3>5.4 Arquitectura de referencia</h3>
+<figure>
+<svg viewBox="0 0 760 712" role="img" aria-label="Una sola prueba base configura todo el ambiente por config_db">
+  <defs>
+    <marker id="arq-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="head"/></marker>
+  </defs>
+  <text class="title ink" x="24" y="30">Una sola prueba base configura todo el ambiente por config_db</text>
+
+  <rect class="box-main" x="24" y="48" width="712" height="64" rx="8"/>
+  <text class="name ink" x="36" y="72">uart_base_test</text>
+  <text class="body ink" x="36" y="92">parse_plusargs() → knobs en objetos de configuración → uvm_config_db::set para todos los componentes</text>
+
+  <rect class="container" x="24" y="136" width="712" height="448" rx="8"/>
+  <text class="name ink" x="40" y="158">uart_env</text>
+
+  <g class="wire">
+    <path d="M380 112V136" marker-end="url(#arq-arrow)"/>
+    <path d="M148 264V328" marker-end="url(#arq-arrow)"/>
+    <path d="M148 288H612V328" marker-end="url(#arq-arrow)"/>
+    <path d="M380 288V328" marker-end="url(#arq-arrow)"/>
+    <path d="M148 416V480" marker-end="url(#arq-arrow)"/>
+    <path d="M380 416V480" marker-end="url(#arq-arrow)"/>
+    <path d="M612 416V480" marker-end="url(#arq-arrow)"/>
+    <path d="M148 440H612"/>
+    <path d="M380 584V616" marker-end="url(#arq-arrow)"/>
+    <path d="M520 652H536"/>
+  </g>
+  <text class="body quiet" x="396" y="312">secuencias → secuenciadores</text>
+  <text class="body quiet" x="264" y="432" text-anchor="middle">analysis ports</text>
+  <text class="body quiet" x="392" y="604">interfaces virtuales (wb_if, uart_if, modem_if)</text>
+
+  <!-- fila 1 -->
+  <rect class="box" x="40" y="176" width="216" height="88" rx="8"/>
+  <text class="name ink" x="52" y="200">Virtual sequencer</text>
+  <text class="body ink" x="52" y="220">corre la secuencia principal</text>
+  <text class="body ink" x="52" y="236">coordina WB, serie y módem</text>
+  <text class="body ink" x="52" y="252">lanza secuencias del RAL</text>
+
+  <rect class="box" x="272" y="176" width="216" height="88" rx="8"/>
+  <text class="name ink" x="284" y="200">Modelo RAL</text>
+  <text class="body ink" x="284" y="220">reg_block con mapas DLAB 0/1</text>
+  <text class="body ink" x="284" y="236">adaptador WB, puerta delantera</text>
+  <text class="body ink" x="284" y="252">puerta trasera: uart_top.regs</text>
+
+  <rect class="box" x="504" y="176" width="216" height="88" rx="8"/>
+  <text class="name ink" x="516" y="200">Objetos de configuración</text>
+  <text class="body ink" x="516" y="220">knobs leídos de plusargs</text>
+  <text class="body ink" x="516" y="236">publicados en uvm_config_db</text>
+  <text class="body ink" x="516" y="252">visibles en todo el ambiente</text>
+
+  <!-- fila 2 -->
+  <rect class="box" x="40" y="328" width="216" height="88" rx="8"/>
+  <text class="name ink" x="52" y="352">Agente Wishbone</text>
+  <text class="body ink" x="52" y="372">driver maestro con retardos</text>
+  <text class="body ink" x="52" y="388">monitor → analysis port</text>
+  <text class="body ink" x="52" y="404">maneja wb_sel_i (32 bits)</text>
+
+  <rect class="box" x="272" y="328" width="216" height="88" rx="8"/>
+  <text class="name ink" x="284" y="352">Agente serie UART</text>
+  <text class="body ink" x="284" y="372">driver a srx_pad_i con errores</text>
+  <text class="body ink" x="284" y="388">monitor de stx_pad_o</text>
+  <text class="body ink" x="284" y="404">monitor de srx_pad_i</text>
+
+  <rect class="box" x="504" y="328" width="216" height="88" rx="8"/>
+  <text class="name ink" x="516" y="352">Agente módem + int_o</text>
+  <text class="body ink" x="516" y="372">driver de cts, dsr, ri, dcd</text>
+  <text class="body ink" x="516" y="388">monitor de rts y dtr</text>
+  <text class="body ink" x="516" y="404">monitor de interrupción</text>
+
+  <!-- fila 3 -->
+  <rect class="box" x="40" y="480" width="216" height="88" rx="8"/>
+  <text class="name ink" x="52" y="504">Predictor RAL</text>
+  <text class="body ink" x="52" y="524">uvm_reg_predictor</text>
+  <text class="body ink" x="52" y="540">actualiza el espejo del RAL</text>
+  <text class="body ink" x="52" y="556">con lo observado en el bus</text>
+
+  <rect class="box" x="272" y="480" width="216" height="88" rx="8"/>
+  <text class="name ink" x="284" y="504">Scoreboard</text>
+  <text class="body ink" x="284" y="524">modelo de referencia</text>
+  <text class="body ink" x="284" y="540">compara TX, RX, LSR, IIR, MSR</text>
+  <text class="body ink" x="284" y="556">y la línea int_o</text>
+
+  <rect class="box" x="504" y="480" width="216" height="88" rx="8"/>
+  <text class="name ink" x="516" y="504">Cobertura funcional</text>
+  <text class="body ink" x="516" y="524">configuración, tráfico,</text>
+  <text class="body ink" x="516" y="540">errores, interrupciones,</text>
+  <text class="body ink" x="516" y="556">módem y registros</text>
+
+  <!-- DUT -->
+  <rect class="box" x="24" y="616" width="496" height="72" rx="8"/>
+  <text class="name ink" x="36" y="640">uart_top (DUT)</text>
+  <text class="body ink" x="36" y="660">Wishbone · serie stx/srx · módem · int_o</text>
+
+  <rect class="box" x="536" y="616" width="200" height="72" rx="8"/>
+  <text class="name ink" x="548" y="640">Aserciones SVA (bind)</text>
+  <text class="body ink" x="548" y="660">Wishbone, serie, loopback</text>
+</svg>
+<figcaption>La prueba base publica la configuración; el secuenciador virtual estimula por los tres agentes y todos los monitores alimentan al predictor, al scoreboard y a la cobertura.</figcaption>
+</figure>
+</section>
+
+<!-- 6 -->
+<section id="cobertura">
+<h2>6. Análisis de cobertura y cierre</h2>
+<p>La meta es <strong>al menos 95 % en cobertura funcional y al menos 95 % en cada métrica de cobertura de código</strong> (línea, condición, rama, FSM y <em>toggle</em>), medidas sobre la regresión completa fusionada con <code>urg</code>. Si no la alcanzan, la nota de esta parte depende de la calidad de la justificación.</p>
+
+<h3>6.1 Cómo medir</h3>
+<ul>
+  <li>Compilar con <code>-cm line+cond+branch+fsm+tgl</code> y <code>-cm_hier</code> limitado a la jerarquía del DUT (<code>uart_top</code> y sus instancias); el ambiente no cuenta en la cobertura de código.</li>
+  <li>Ejecutar cada corrida con <code>-cm_name &lt;prueba&gt;_&lt;semilla&gt;</code> y fusionar con <code>urg -dir *.vdb -dbname merged -report cov_report</code>.</li>
+  <li>Las exclusiones se hacen únicamente con archivos de exclusión de URG / Verdi (<code>.el</code>), versionados en el repositorio, con un comentario de justificación por cada elemento excluido.</li>
+</ul>
+
+<h3>6.2 Proceso obligatorio</h3>
+<ol>
+  <li><strong>Línea base.</strong> Correr solo la prueba base con valores por defecto y N semillas (N ≥ 200, o lo que justifiquen por tiempo). Graficar cobertura funcional y de código contra número de semillas: la curva debe mostrar cómo se satura.</li>
+  <li><strong>Análisis de huecos.</strong> Clasificar cada <em>bin</em> o elemento de código no cubierto en una de cuatro categorías:
+    <ol>
+      <li><strong>Alcanzable, baja probabilidad:</strong> se cierra con un archivo de plusargs nuevo que cambia pesos o rangos.</li>
+      <li><strong>Falta capacidad de estímulo:</strong> el ambiente no sabe generarlo; se corrige el ambiente y se explica por qué la prueba base no cumplía el requisito de completitud.</li>
+      <li><strong>Inalcanzable:</strong> código muerto, constante, rama <code>default</code> imposible, lógica del modo de bus no compilado; se excluye con justificación.</li>
+      <li><strong>Bloqueado por un error del DUT:</strong> se documenta el error (sección 3.5) y se excluye o se deja abierto con justificación.</li>
+    </ol>
+  </li>
+  <li><strong>Pruebas adicionales.</strong> Para cada hueco de la categoría a, proponer un archivo <code>.args</code> con nombre descriptivo, el objetivo de cobertura que persigue y cuántas semillas necesita.</li>
+  <li><strong>Iteración.</strong> Repetir hasta llegar a la meta o hasta que todo hueco restante esté en las categorías c o d.</li>
+  <li><strong>Informe de cierre.</strong> Tabla de huecos finales con su categoría y justificación, cobertura por métrica antes y después de las pruebas adicionales, y lista de <em>bins</em> que solo se alcanzan con plusargs (indicador de restricciones por defecto demasiado estrechas).</li>
+</ol>
+
+<h3>6.3 Qué no se acepta</h3>
+<ul>
+  <li>Bajar la meta eliminando <em>bins</em> del modelo de cobertura sin justificación, o usar <code>option.weight = 0</code> e <code>ignore_bins</code> para esconder huecos alcanzables.</li>
+  <li>Excluir código alcanzable solo porque no lo cubrieron.</li>
+  <li>Pruebas dirigidas escritas fuera del mecanismo de plusargs.</li>
+  <li>Cobertura muestreada en el driver (mide lo que se intentó, no lo que ocurrió).</li>
+</ul>
+</section>
+
+<!-- 7 -->
+<section id="entregables">
+<h2>7. Entregables y cronograma</h2>
+<p>El proyecto tiene tres entregas evaluadas y una entrevista individual: la propuesta al final de la semana 2 del proyecto, el avance al final de la semana 4 del proyecto, y la entrega final el <strong>Lunes de semana 18</strong>, seguida de las entrevistas. Las semanas del proyecto (S1, S2, …) se cuentan desde la publicación del enunciado; las fechas exactas de E1 y E2 se publican en el sistema del curso; las entregas se hacen con una etiqueta Git (<code>entrega1</code>, <code>entrega2</code>, <code>final</code>) más los documentos en PDF.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Entrega</th><th>Semana</th><th>Contenido obligatorio</th></tr></thead>
+  <tbody>
+    <tr><td>E1. Propuesta</td><td class="num">Fin de la semana 2 del proyecto</td><td>Plan de pruebas según el machote de la sección 9; arquitectura propuesta con diagrama; tabla completa de <em>knobs</em> y plusargs; modelo de cobertura funcional (covergroups, coverpoints, bins y cruces); lista de aserciones; estrategia RAL; distribución del trabajo entre los tres integrantes; RTL compilando en VCS. Defensa oral de 20 minutos.</td></tr>
+    <tr><td>E2. Avance</td><td class="num">Fin de la semana 4 del proyecto</td><td>Ambiente compilando y corriendo la prueba base con al menos 20 semillas sin errores falsos; agentes Wishbone y serie completos; RAL con <code>uvm_reg_hw_reset_seq</code> pasando por puerta delantera y trasera; scoreboard de TX y RX funcionando; primer reporte de cobertura de URG. Documento corto (≤ 4 páginas) con el estado, problemas encontrados y plan para las semanas restantes.</td></tr>
+    <tr><td>E3. Final</td><td class="num">Lunes de semana 18</td><td>Código completo en el repositorio con script de regresión; informe final (plan actualizado, arquitectura final, resultados de cobertura con la curva de línea base, análisis de huecos, pruebas adicionales en <code>.args</code>, exclusiones justificadas, errores del DUT encontrados); reporte HTML de URG; presentación y demostración en vivo de 25 minutos con participación de los tres integrantes.</td></tr>
+    <tr><td>Entrevista individual</td><td class="num">Semana 18, tras E3</td><td>Sesión individual de 20 a 30 minutos con cada integrante sobre el código entregado en la etiqueta <code>final</code>. Ver <a href="#entrevista">sección 8.2</a>.</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Plan semanal sugerido</h3>
+<figure>
+<svg viewBox="0 0 760 300" role="img" aria-label="Tres entregas y la entrevista: la entrega final es el Lunes de semana 18">
+  <text class="title ink" x="24" y="30">Tres entregas y la entrevista: la entrega final es el Lunes de semana 18</text>
+
+  <rect class="box" x="24" y="56" width="199" height="136" rx="8"/>
+  <text class="name ink" x="36" y="80">Propuesta · S1–S2</text>
+  <text class="body ink" x="36" y="108">S1 · leer la especificación</text>
+  <text class="body ink" x="36" y="124">y compilar el RTL en VCS</text>
+  <text class="body ink" x="36" y="152">S2 · plan de pruebas,</text>
+  <text class="body ink" x="36" y="168">arquitectura y knobs</text>
+
+  <rect class="box" x="231" y="56" width="195" height="136" rx="8"/>
+  <text class="name ink" x="243" y="80">Construcción · S3–S4</text>
+  <text class="body ink" x="243" y="108">S3 · interfaces, agentes</text>
+  <text class="body ink" x="243" y="124">y modelo RAL</text>
+  <text class="body ink" x="243" y="152">S4 · scoreboard, módem</text>
+  <text class="body ink" x="243" y="168">y aserciones SVA</text>
+
+  <rect class="box" x="434" y="56" width="302" height="136" rx="8"/>
+  <text class="name ink" x="446" y="80">Cobertura y cierre · S5 en adelante</text>
+  <text class="body ink" x="446" y="108">S5 · covergroups, regresión, línea base</text>
+  <text class="body ink" x="446" y="132">S6 · análisis de huecos, archivos .args</text>
+  <text class="body ink" x="446" y="156">Final · exclusiones, informe, demo</text>
+
+  <line class="wire" x1="227" y1="192" x2="227" y2="216" stroke-dasharray="4 4"/>
+  <path class="box" d="M227 216l12 12l-12 12l-12 -12z"/>
+  <text class="name ink" x="227" y="260" text-anchor="middle">E1 · Propuesta (25 %)</text>
+  <text class="body quiet" x="227" y="276" text-anchor="middle">fin de la semana 2 del proyecto</text>
+
+  <line class="wire" x1="430" y1="192" x2="430" y2="216" stroke-dasharray="4 4"/>
+  <path class="box" d="M430 216l12 12l-12 12l-12 -12z"/>
+  <text class="name ink" x="430" y="260" text-anchor="middle">E2 · Avance (15 %)</text>
+  <text class="body quiet" x="430" y="276" text-anchor="middle">fin de la semana 4 del proyecto</text>
+
+  <line class="wire-accent" x1="724" y1="192" x2="724" y2="216" stroke-dasharray="4 4"/>
+  <path class="gate-main" d="M724 216l12 12l-12 12l-12 -12z"/>
+  <text class="name ink" x="736" y="260" text-anchor="end">E3 · Final (60 %) + entrevista</text>
+  <text class="body quiet" x="736" y="276" text-anchor="end">Lunes de semana 18</text>
+</svg>
+<figcaption>La fase de cobertura va desde la semana 5 del proyecto hasta el Lunes de semana 18 porque el cierre al 95 % suele tomar más iteraciones de lo previsto; el grupo que termine la construcción antes debe adelantar la línea base.</figcaption>
+</figure>
+</section>
+
+<!-- 8 -->
+<section id="evaluacion">
+<h2>8. Evaluación</h2>
+<p>La nota del grupo se reparte 25 % en la propuesta, 15 % en el avance y 60 % en la entrega final. La nota individual de cada integrante es la nota del grupo, siempre que apruebe la entrevista individual de la sección 8.2.</p>
+
+<h3>8.1 Rúbrica de la nota del grupo</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Rubro</th><th>Entrega</th><th>Peso</th><th>Criterio de excelencia</th></tr></thead>
+  <tbody>
+    <tr><td>Plan de pruebas</td><td>E1</td><td class="num">15 %</td><td>Cada característica de la especificación tiene un ítem verificable, un mecanismo de verificación y una métrica; los puntos de la sección 3.5 están discutidos</td></tr>
+    <tr><td>Arquitectura y estrategia de estímulo</td><td>E1</td><td class="num">10 %</td><td>Prueba base con argumento claro de completitud; tabla de <em>knobs</em> coherente; RAL y cobertura bien diseñados</td></tr>
+    <tr><td>Estado del avance</td><td>E2</td><td class="num">15 %</td><td>Se cumplen los puntos de E2 sin errores falsos; problemas identificados con plan realista</td></tr>
+    <tr><td>Implementación del ambiente</td><td>E3</td><td class="num">20 %</td><td>Todos los componentes de la sección 5 funcionan; código limpio, reutilizable y con <em>factory</em></td></tr>
+    <tr><td>Mecanismo de plusargs y configuración</td><td>E3</td><td class="num">10 %</td><td>Cumple las seis reglas de 4.2; cualquier corrida se reproduce con semilla y archivo <code>.args</code></td></tr>
+    <tr><td>RAL completo</td><td>E3</td><td class="num">10 %</td><td>Predictor, adaptador, puerta delantera y trasera, secuencias integradas con exclusiones justificadas</td></tr>
+    <tr><td>Cobertura y análisis de cierre</td><td>E3</td><td class="num">15 %</td><td>≥ 95 % en cada métrica, o huecos clasificados y justificados con rigor; curva de línea base; pruebas adicionales bien motivadas</td></tr>
+    <tr><td>Errores del DUT reportados</td><td>E3</td><td class="num">5 %</td><td>Reportes reproducibles y bien argumentados contra la especificación</td></tr>
+    <tr><td>Presentación y demostración</td><td>E3</td><td class="num">—</td><td>Incluida en los rubros anteriores; los tres integrantes presentan</td></tr>
+  </tbody>
+</table></div>
+<p><strong>Puntos extra (hasta 10 %):</strong> soporte de la variante de bus de 8 bits sin cambios de código; verificación de <code>baud_o</code>; aserciones formales corridas con VC Formal sobre la interfaz Wishbone.</p>
+
+<h3 id="entrevista">8.2 Entrevista individual (requisito de aprobación)</h3>
+<div class="callout warn">
+  <span class="label">Regla eliminatoria</span>
+  <p>Cada integrante tiene una entrevista individual sobre el código que el grupo presentó. <strong>Si el integrante demuestra que no entiende el código, su nota del proyecto es cero</strong>, sin importar la nota del grupo. La nota de los otros integrantes no se ve afectada por el resultado de un compañero.</p>
+</div>
+<p><strong>Formato.</strong> La entrevista se hace en la semana 18, después de la entrega E3 del Lunes de semana 18, con cada integrante por separado y sin presencia de los demás miembros del grupo. Dura entre 20 y 30 minutos. El estudiante trabaja en su propia cuenta, con el repositorio en la etiqueta <code>final</code>, el simulador y el editor; no puede consultar a sus compañeros ni a terceros durante la sesión. No asistir a la entrevista sin justificación válida equivale a no aprobarla.</p>
+<p><strong>Qué se revisa.</strong> El profesor elige las partes del código; el estudiante no decide de qué se le pregunta. Las preguntas cubren componentes escritos por cualquiera de los tres integrantes. Como mínimo se le pedirá:</p>
+<ol>
+  <li>Explicar la arquitectura del ambiente y seguir el recorrido de una transacción, desde la secuencia virtual hasta el scoreboard y la cobertura.</li>
+  <li>Explicar en detalle al menos dos componentes elegidos por el profesor (por ejemplo, el adaptador del RAL, el modelo de interrupciones del scoreboard o una restricción de la configuración), incluyendo por qué está escrito así.</li>
+  <li>Hacer en vivo un cambio pequeño y ejecutarlo: agregar un <em>knob</em> con su plusarg y usarlo en una restricción, agregar un <em>bin</em> o un cruce, o modificar una aserción.</li>
+  <li>Interpretar un resultado: un mensaje de error del scoreboard, una falla de aserción o un hueco en el reporte de URG, y decir cómo lo investigaría.</li>
+</ol>
+<p><strong>Criterio.</strong> El resultado es <em>aprueba</em> o <em>no aprueba</em>. Se considera que el integrante <strong>no entiende el código</strong> si no puede explicar el propósito y el funcionamiento de las partes consultadas, no logra hacer el cambio pedido ni describir cómo lo haría, o da explicaciones contradictorias con lo que el código hace. No se exige recordar cada línea de memoria: se puede leer el código durante la entrevista. El historial de commits del repositorio se usa como evidencia de contexto, pero no reemplaza la entrevista.</p>
+</section>
+
+<!-- 9 -->
+<section id="machote">
+<h2>9. Machote del plan de pruebas</h2>
+<p>El plan de pruebas de la entrega E1 se escribe en un documento ODT (LibreOffice Writer) que contenga las tablas de esta sección, en el mismo orden. Pueden descargar el machote ya armado, <a href="machote_plan_pruebas_uart16550.odt" download><code>machote_plan_pruebas_uart16550.odt</code></a>, o reproducir las tablas en su propio documento.</p>
+<div class="callout"><span class="label">Cómo llenarlo</span><p>Llenen todas las tablas. Las filas en gris son ejemplos que muestran el nivel de detalle esperado: reemplácenlas por las suyas. Pueden agregar filas y secciones, pero no eliminar ninguna. Entreguen el ODT y una copia en PDF.</p></div>
+<h3>Portada</h3>
+<div class="table-wrap"><table class="fill kv">
+<thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody>
+<tr><td class="fixed">Proyecto</td><td>Verificación del UART 16550 con UVM</td></tr>
+<tr><td class="fixed">Integrante 1</td><td></td></tr>
+<tr><td class="fixed">Integrante 2</td><td></td></tr>
+<tr><td class="fixed">Integrante 3</td><td></td></tr>
+<tr><td class="fixed">Versión del plan</td><td></td></tr>
+<tr><td class="fixed">Fecha</td><td></td></tr>
+<tr><td class="fixed">Repositorio Git</td><td></td></tr>
+<tr><td class="fixed">Etiqueta Git</td><td>entrega1</td></tr>
+</tbody></table></div>
+<h3>1. Alcance</h3>
+<div class="table-wrap"><table class="fill kv">
+<thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody>
+<tr><td class="fixed">Versión del RTL verificada (commit o revisión SVN)</td><td></td></tr>
+<tr><td class="fixed">Configuración de compilación (bus de 32 bits; variante de 8 bits sí/no)</td><td></td></tr>
+<tr><td class="fixed">Frecuencia de reloj en simulación y rango de DL soportado</td><td></td></tr>
+<tr><td class="fixed">Funcionalidad fuera de alcance y justificación</td><td></td></tr>
+</tbody></table></div>
+<h3>2. Documentos de referencia</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Documento</th><th>Versión</th><th>Enlace o ubicación</th></tr></thead><tbody>
+<tr class="example"><td>UART IP Core Specification</td><td>Rev. 0.6</td><td>doc/UART_spec.pdf</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>3. Interpretación de la especificación</h3>
+<p>Una fila por cada ambigüedad o discrepancia entre la especificación y el RTL (sección 3.5 del enunciado).</p>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>ID</th><th>Tema</th><th>La especificación dice</th><th>El RTL hace</th><th>Comportamiento que modelamos</th><th>Justificación</th></tr></thead><tbody>
+<tr class="example"><td>AMB-01</td><td>Registro scratch en la dirección 7</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>4. Lista de características</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>ID</th><th>Característica</th><th>Fuente (sección de la especificación)</th><th>Prioridad (alta, media, baja)</th></tr></thead><tbody>
+<tr class="example"><td>F-LCR-01</td><td>Longitud de carácter de 5, 6, 7 y 8 bits</td><td>Line Control Register, bits 1:0</td><td>Alta</td></tr>
+<tr class="example"><td>F-INT-03</td><td>Interrupción de timeout tras 4 tiempos de carácter</td><td>Interrupt Identification Register</td><td>Alta</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>5. Matriz de verificación</h3>
+<p>Una o más filas por cada característica de la sección 4.</p>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>ID ítem</th><th>Característica</th><th>Qué se verifica</th><th>Mecanismo (scoreboard, SVA, RAL, cobertura)</th><th>Métrica de cierre (coverpoint o aserción)</th><th>Plusargs que lo dirigen</th></tr></thead><tbody>
+<tr class="example"><td>V-LCR-01</td><td>F-LCR-01</td><td>Datos TX y RX correctos con cada longitud</td><td>Scoreboard TX y RX</td><td>cg_line_cfg.cp_wls × cp_dir</td><td>+UART_LCR_WLS_WEIGHTS</td></tr>
+<tr class="example"><td>V-INT-03</td><td>F-INT-03</td><td>IIR[3:0] = 4'hC con datos bajo el nivel de disparo y sin actividad</td><td>Modelo de interrupciones y SVA</td><td>cg_int.cp_iir_id[TIMEOUT]</td><td>+UART_SW_SERVICE_DELAY_MAX</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>6. Estrategia de estímulo: prueba base</h3>
+<h4>6.1 Espacio de aleatorización</h4>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Variable aleatoria</th><th>Objeto de configuración</th><th>Rango legal</th><th>Distribución por defecto</th><th>Knobs</th></tr></thead><tbody>
+<tr class="example"><td>lcr.wls</td><td>uart_line_cfg</td><td>0 a 3</td><td>Uniforme</td><td>wls_w[4]</td></tr>
+<tr class="example"><td>dl</td><td>uart_line_cfg</td><td>1 a 65535</td><td>98 % en 1 a 16, 2 % en el resto</td><td>dl_max_fast, dl_max, dl_tail_pct</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h4>6.2 Argumento de completitud</h4>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Bin o grupo de bins</th><th>Por qué su probabilidad es mayor que cero con los valores por defecto</th><th>Plusarg que lo acelera</th></tr></thead><tbody>
+<tr class="example"><td>cg_err.cp_oe × cp_tl</td><td>La FIFO RX se llena si el retraso de servicio aleatorio supera el tiempo de 16 caracteres; el rango por defecto del retraso lo permite</td><td>+UART_SW_SERVICE_DELAY_MIN</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h4>6.3 Secuencia virtual principal</h4>
+<div class="fill-box"><p class="example-text">Describa o escriba en pseudocódigo el flujo de la prueba base: reset, configuración, mezcla de tráfico, reconfiguraciones, servicio de interrupciones y fin de prueba.</p></div>
+<h3>7. Tabla de plusargs</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Plusarg</th><th>Tipo y rango</th><th>Valor por defecto</th><th>Componentes que lo usan</th><th>Objeto de configuración</th><th>Efecto</th></tr></thead><tbody>
+<tr class="example"><td>+UART_SER_PARITY_ERR_PCT</td><td>Entero 0 a 100</td><td>5</td><td>Driver serie, scoreboard</td><td>uart_ser_agent_cfg</td><td>Porcentaje de caracteres RX con paridad corrupta</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>8. Casos de esquina planificados</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>ID</th><th>Escenario</th><th>Archivo .args</th><th>Plusargs</th><th>Bins objetivo</th><th>Semillas</th></tr></thead><tbody>
+<tr class="example"><td>CE-01</td><td>Overrun de la FIFO RX con nivel de disparo 14</td><td>rx_overrun_tl14.args</td><td>+UART_FCR_TL_WEIGHTS=0,0,0,1 +UART_SW_SERVICE_DELAY_MIN=…</td><td>cg_err.cp_oe × cp_tl</td><td>20</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>9. Arquitectura del ambiente</h3>
+<h4>9.1 Diagrama</h4>
+<div class="fill-box"><p class="example-text">Inserte aquí el diagrama del ambiente: prueba, ambiente, agentes, secuenciador virtual, RAL, scoreboard, cobertura y SVA.</p></div>
+<h4>9.2 Componentes</h4>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Componente</th><th>Clase UVM base</th><th>Responsabilidad</th><th>Puertos TLM</th></tr></thead><tbody>
+<tr class="example"><td>uart_wb_agent</td><td>uvm_agent</td><td>Maneja y observa la interfaz Wishbone</td><td>ap (uvm_analysis_port)</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h4>9.3 Flujo de configuración</h4>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Objeto de configuración</th><th>Ruta en uvm_config_db</th><th>Lo publica</th><th>Lo obtienen</th></tr></thead><tbody>
+<tr class="example"><td>wb_agent_cfg</td><td>uvm_test_top.env.wb_agt*</td><td>uart_base_test</td><td>Driver, monitor y secuencias Wishbone</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>10. Modelo de referencia y scoreboard</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Qué se predice</th><th>Fuente de la predicción</th><th>Momento de la comparación</th><th>Tolerancia</th></tr></thead><tbody>
+<tr class="example"><td>Datos TX</td><td>Escrituras a THR (monitor Wishbone)</td><td>Al reconstruir el carácter en stx_pad_o</td><td>Ninguna</td></tr>
+<tr><td class="fixed">Datos RX</td><td></td><td></td><td></td></tr>
+<tr><td class="fixed">LSR</td><td></td><td></td><td></td></tr>
+<tr><td class="fixed">IIR</td><td></td><td></td><td></td></tr>
+<tr><td class="fixed">MSR</td><td></td><td></td><td></td></tr>
+<tr><td class="fixed">int_o</td><td></td><td></td><td></td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>11. Aserciones</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>ID</th><th>Interfaz</th><th>Propiedad (en palabras)</th><th>Tipo (assert, assume, cover)</th><th>Ítem del plan</th></tr></thead><tbody>
+<tr class="example"><td>A-WB-01</td><td>Wishbone</td><td>adr, dat_i, we y sel estables mientras cyc y stb están activos y no hay ack</td><td>assert y cover</td><td>V-WB-01</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>12. RAL</h3>
+<h4>12.1 Registros y campos</h4>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Registro</th><th>Dirección</th><th>DLAB</th><th>Campo</th><th>Bits</th><th>Acceso</th><th>Reset</th><th>Ruta de puerta trasera</th></tr></thead><tbody>
+<tr class="example"><td>LCR</td><td>3</td><td>0 y 1</td><td>WLS</td><td>1:0</td><td>RW</td><td>2'b11</td><td>uart_top.regs.lcr</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h4>12.2 Decisiones de modelado</h4>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Tema</th><th>Decisión</th><th>Justificación</th></tr></thead><tbody>
+<tr><td class="fixed">Registros con dirección compartida (DLAB)</td><td></td><td></td></tr>
+<tr><td class="fixed">Predictor y adaptador: conexión y política de predicción</td><td></td><td></td></tr>
+<tr><td class="fixed">Efectos laterales (lectura que limpia, FIFOs)</td><td></td><td></td></tr>
+<tr><td class="fixed">Secuencias integradas que se correrán y exclusiones</td><td></td><td></td></tr>
+</tbody></table></div>
+<h3>13. Modelo de cobertura funcional</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Covergroup</th><th>Dónde se muestrea</th><th>Coverpoints</th><th>Cruces</th><th>Bins ilegales o ignorados (justificación)</th></tr></thead><tbody>
+<tr class="example"><td>cg_line_cfg</td><td>Monitor Wishbone al escribir LCR</td><td>wls, stb, pen, eps, sp, bc</td><td>wls × stb × paridad</td><td>Stick sin paridad habilitada: ignorado, no tiene efecto</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>14. Cobertura de código</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Métrica</th><th>Jerarquía incluida</th><th>Meta</th><th>Exclusiones previstas y justificación</th></tr></thead><tbody>
+<tr><td class="fixed">Línea</td><td></td><td>≥ 95 %</td><td></td></tr>
+<tr><td class="fixed">Condición</td><td></td><td>≥ 95 %</td><td></td></tr>
+<tr><td class="fixed">Rama</td><td></td><td>≥ 95 %</td><td></td></tr>
+<tr><td class="fixed">FSM</td><td></td><td>≥ 95 %</td><td></td></tr>
+<tr><td class="fixed">Toggle</td><td></td><td>≥ 95 %</td><td></td></tr>
+</tbody></table></div>
+<h3>15. Criterios de cierre</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Criterio</th><th>Meta</th><th>Cómo se mide</th></tr></thead><tbody>
+<tr><td class="fixed">Cobertura funcional</td><td>≥ 95 %</td><td></td></tr>
+<tr><td class="fixed">Cada métrica de cobertura de código</td><td>≥ 95 %</td><td></td></tr>
+<tr><td class="fixed">UVM_ERROR en la regresión</td><td>0, salvo errores del DUT documentados</td><td></td></tr>
+<tr><td class="fixed">Aserciones con cover alcanzado</td><td>100 %</td><td></td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>16. Riesgos y mitigación</h3>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Riesgo</th><th>Impacto</th><th>Mitigación</th></tr></thead><tbody>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+<h3>17. Distribución del trabajo</h3>
+<p>Cada integrante es responsable principal de algunos componentes, pero los tres deben entender todo el ambiente (entrevista individual, sección 8.2 del enunciado).</p>
+<div class="table-wrap"><table class="fill">
+<thead><tr><th>Componente o tarea</th><th>Responsable principal</th><th>Revisor (otro integrante)</th><th>Semana</th></tr></thead><tbody>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr class="blank"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- 10 -->
+<section id="referencias">
+<h2>10. Referencias</h2>
+<ul>
+  <li><a href="https://opencores.org/projects/uart16550">UART 16550 core, OpenCores</a>: página del proyecto, descarga y bugtracker.</li>
+  <li><a href="https://github.com/freecores/uart16550">freecores/uart16550, GitHub</a>: espejo del repositorio con RTL, banco de pruebas original y <code>doc/UART_spec.pdf</code>.</li>
+  <li><a href="https://uart16550.readthedocs.io/en/latest/uart16550doc.html">UART IP Core Specification, Rev. 0.6.1</a>: especificación en HTML con aclaraciones y lista de errores conocidos del núcleo.</li>
+  <li>Accellera, <em>Universal Verification Methodology (UVM) 1.2 Class Reference</em> y <em>UVM 1.2 User's Guide</em>.</li>
+  <li>IEEE 1800-2017, <em>SystemVerilog Language Reference Manual</em>, capítulos 16 (aserciones), 18 (aleatorización) y 19 (cobertura funcional).</li>
+  <li>OpenCores, especificación del bus Wishbone Rev. B.3, en la sección <a href="https://opencores.org/howto/wishbone">WISHBONE de OpenCores</a>.</li>
+  <li>Synopsys, <em>VCS User Guide</em> y <em>Coverage Technology User Guide</em> (URG), disponibles en SolvNetPlus con la licencia del curso.</li>
+</ul>
+</section>
+
+<footer>Verificación funcional de circuitos integrados · Enunciado del proyecto UVM · 2026</footer>
+</main>
+
+
+</body>
+</html>
