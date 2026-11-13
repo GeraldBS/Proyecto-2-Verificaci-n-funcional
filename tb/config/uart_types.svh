@@ -50,6 +50,32 @@ localparam bit [4:0] UART_SCR = 5'd7;
 localparam bit [4:0] UART_DBG1 = 5'd8;
 localparam bit [4:0] UART_DBG2 = 5'd12;
 
+// En el bus de 32 bits el DUT no usa wb_adr_i[1:0]: saca el registro y
+// el carril de wb_sel_i (big endian, uart_wb.v). Con un sel inválido
+// cae en el registro 0 o 4 y toma el carril [7:0] (AMB-05). Estas dos
+// funciones hacen lo mismo que el RTL, para que las secuencias, el
+// scoreboard y la cobertura lean el bus igual que el DUT.
+function automatic bit [4:0] uart_reg_of(bit [4:0] adr, bit [3:0] sel);
+  if (adr >= 8) return adr;   // Debug 1 y 2 van con sel = 1111
+  case (sel)
+    4'b1000: return {adr[4:2], 2'd0};
+    4'b0100: return {adr[4:2], 2'd1};
+    4'b0010: return {adr[4:2], 2'd2};
+    4'b0001: return {adr[4:2], 2'd3};
+    default: return {adr[4:2], 2'd0};
+  endcase
+endfunction
+
+// byte de un registro de 8 bits dentro de la palabra del bus
+function automatic bit [7:0] uart_lane8(bit [3:0] sel, bit [31:0] data);
+  case (sel)
+    4'b1000: return data[31:24];
+    4'b0100: return data[23:16];
+    4'b0010: return data[15:8];
+    default: return data[7:0];
+  endcase
+endfunction
+
 // Periodo del reloj de tb_top en ns (50 MHz). Lo usamos para pasar
 // tiempos de carácter a tiempo de simulación.
 localparam real UART_CLK_NS = 20.0;
