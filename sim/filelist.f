@@ -18,12 +18,13 @@
 ../rtl/uart_top.v
 
 // ---- Interfaces y aserciones ----
-../tb/wb_if.sv
-../tb/uart_ser_if.sv
-../tb/modem_if.sv
-../tb/uart_wb_sva.sv
+../tb/if/wb_if.sv
+../tb/if/uart_ser_if.sv
+../tb/if/modem_if.sv
+../tb/sva/uart_wb_sva.sv
 
 // ---- Ambiente UVM (agreguen aquí sus paquetes, antes de tb_top) ----
+../tb/uart_pkg.sv
 ../tb/uart_hello_pkg.sv
 
 // ---- Top ----
