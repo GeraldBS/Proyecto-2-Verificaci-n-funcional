@@ -11,6 +11,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns/1ps   // unidad de tiempo 1 ns, precisión 1 ps
+`include "uart_defines.v"   // anchos del bus (UART_ADDR_WIDTH y UART_DATA_WIDTH)
 
 package uart_pkg;
 
@@ -44,6 +45,7 @@ package uart_pkg;
   localparam string UART_PATH_COV     = "env.cov*";      // uart_cov_cfg
 
 
+  // Nombre del campo con el que se publican todos los objetos de configuración
   localparam string UART_KEY_CFG = "cfg";
 
   // uart_knobs
@@ -52,7 +54,7 @@ package uart_pkg;
   class uart_knobs;
     static string log_name[$];   // registro: nombre del knob
     static string log_val [$];   // registro: valor final
-    static string log_src [$];   // registro: origen (default)
+    static string log_src [$];   // registro: origen (default o plusarg)
 
     // Anota el nombre, valor y origen de un knob en el registro
     static function void record(string name, string val, bit from_plusarg);
@@ -128,7 +130,7 @@ package uart_pkg;
   class uart_line_cfg extends uvm_object;
     `uvm_object_utils(uart_line_cfg)   // macro de UVM: registra la clase en la factory
 
-    // Pesos y parámetros por defecto 
+    // Pesos y parámetros por defecto (secciones 6.15 y 7 del plan)
     int wls_w[]       = '{1, 1, 1, 1};        // 5, 6, 7, 8 bits
     int stb_w[]       = '{1, 1};              // 1 bit, 1.5/2 bits
     int par_w[]       = '{1, 1, 1, 1, 1};     // ninguna, impar, par, stick1, stick0
@@ -178,13 +180,13 @@ package uart_pkg;
 
     // Pesos y parámetros por defecto
     int tl_w[]          = '{1, 1, 1, 1};          // nivel 1, 4, 8, 14
-    int fcr_clr_pct     = 50;                     // % de limpiar cada FIFO
+    int fcr_clr_pct     = 50;                     // % de limpiar cada FIFO (RX y TX) al configurar
     int ier_bit_pct[]   = '{50, 50, 50, 50};      // % de cada bit en 1: RDA, THRE, RLS, MS
     int mcr_out_pct     = 50;                     // % en 1 de DTR, RTS, OUT1 y OUT2
     int mcr_loop_pct    = 20;                     // % de episodios en loopback
 
     rand bit [1:0] tl;             // 0..3 = 1, 4, 8, 14
-    rand bit       rx_clr, tx_clr; // limpiar FIFO RX / FIFO TX 
+    rand bit       rx_clr, tx_clr; // limpiar FIFO RX / FIFO TX (FCR[1] y FCR[2])
     rand bit [3:0] ier;            // bits 3:0 de IER
     rand bit       dtr, rts, out1, out2, loop;   // bits 0 a 4 de MCR
     rand bit [3:0] fcr_ign;        // bits 5:4, 3 y 0 (el DUT los ignora)
@@ -221,12 +223,12 @@ package uart_pkg;
     uart_ctrl_cfg ctrl_cfg;   // FCR, IER y MCR
 
     // Episodios
-    int ep_min          = 5;         // mínimo 
-    int ep_max          = 5;         // máximo 
-    int ep_timeout      = 2000;      // tiempo máximo 
+    int ep_min          = 5;         // mínimo de episodios por corrida
+    int ep_max          = 5;         // máximo de episodios por corrida
+    int ep_timeout      = 2000;      // tiempo máximo de un episodio, en Tc (tiempo de carácter)
 
     // Software que atiende
-    int sw_mode_w[]     = '{1, 1};   // interrupciones
+    int sw_mode_w[]     = '{1, 1};   // interrupciones, sondeo
     int sw_delay_min    = 0;         // retraso mínimo de atención, en Tc
     int sw_delay_max    = 24;        // retraso máximo de atención, en Tc
     int sw_delay_w[]    = '{70, 22, 8};   // pesos de retraso corto, medio y largo
@@ -236,13 +238,13 @@ package uart_pkg;
 
     // Transmision
     int tx_bursts_max   = 6;         // ráfagas máximas de escritura a THR por episodio
-    int tx_len_max      = 20;        // largo máximo de una ráfaga
-    int tx_len_w[]      = '{70, 15, 15};   // pesos de ráfaga corta 
+    int tx_len_max      = 20;        // largo máximo de una ráfaga, en caracteres
+    int tx_len_w[]      = '{70, 15, 15};   // pesos de ráfaga corta (1-15), de 16 y de desborde (17-20)
     int tx_blind_pct    = 30;        // % de ráfagas escritas sin revisar THRE
     int tx_gap_max      = 4;         // pausa máxima entre ráfagas, en Tc
-    int tx_break_pct    = 5;         // % de episodios con break en TX 
-    int tx_break_max    = 4;         // duración máxima del break TX
-    int data_corner_pct = 20;        
+    int tx_break_pct    = 5;         // % de episodios con break en TX (LCR[6])
+    int tx_break_max    = 4;         // duración máxima del break TX, en Tc
+    int data_corner_pct = 20;        // TX y RX (00, FF, 55, AA)
 
     // Eventos raros
     int reg_noise_pct   = 10;        // % de accesos extra a direcciones al azar
@@ -250,8 +252,8 @@ package uart_pkg;
     int reg_reconfig_pct = 10;       // % de episodios que reescriben LCR, DL, FCR o MCR con tráfico
     int reg_fifo_clr_pct = 10;       // % de episodios que limpian una FIFO con tráfico
     int reg_hw_reset_chk = 1;        // 1 = revisar valores de reset con el RAL al inicio
-    int rst_pct         = 5;         // % de episodios con reset asíncrono 
-    int rst_width_max   = 5;         // ancho máximo del reset
+    int rst_pct         = 5;         // % de episodios con reset asíncrono en medio
+    int rst_width_max   = 5;         // ancho máximo del reset, en ciclos
 
     // Constructor
     function new(string name = "uart_env_cfg");
@@ -325,9 +327,9 @@ package uart_pkg;
     virtual uart_ser_if vif;   // interfaz virtual de la línea serie
     uvm_active_passive_enum is_active = UVM_ACTIVE;
 
-    int rx_chars_max       = 40;          // caracteres RX máximos 
-    int slow_dl            = 256;         // DL para tráfico
-    int slow_chars_max     = 2;           // caracteres máximos
+    int rx_chars_max       = 40;          // caracteres RX máximos por episodio
+    int slow_dl            = 256;         // DL desde el cual se limita el tráfico
+    int slow_chars_max     = 2;           // caracteres máximos con DL lento
     int rx_gap_max         = 80;          // bits
     int rx_gap_w[]         = '{60, 30, 10};   // pesos de pausa 0, corta y larga
     int parity_err_pct     = 5;           // % de caracteres con paridad corrupta
@@ -337,11 +339,11 @@ package uart_pkg;
     int glitch_pct         = 3;           // % de glitches aislados con la línea en reposo
     int glitch_w_max       = 15;          // 1/16 de bit
     int baud_in_pct        = 10;          // % con desviación de baudios dentro de tolerancia
-    int baud_in_max        = 25;          // desviación máxima dentro de tolerancia, en décimas de % 
+    int baud_in_max        = 25;          // desviación máxima dentro de tolerancia, en décimas de % (2.5 %)
     int baud_out_pct       = 2;           // % con desviación de baudios fuera de tolerancia
-    int baud_out_min       = 50;          // desviación mínima
-    int baud_out_max       = 100;         // desviación máxima 
-    int short_stop_pct     = 5;           // % con 1.5/2 bits de parada en que el agente manda solo 1 
+    int baud_out_min       = 50;          // desviación mínima fuera de tolerancia, en décimas de % (5 %)
+    int baud_out_max       = 100;         // desviación máxima fuera de tolerancia, en décimas de % (10 %)
+    int short_stop_pct     = 5;           // % con 1.5/2 bits de parada en que el agente manda solo 1 (AMB-06)
 
     // Constructor
     function new(string name = "uart_ser_agent_cfg");
@@ -457,5 +459,19 @@ package uart_pkg;
       uart_knobs::get_int("UART_COV_CURVE_EVERY", cov_curve_every);
     endfunction
   endclass : uart_cov_cfg
+
+  // ---------------------------------------------------------------------------
+  // Componentes del ambiente (cada integrante agrega los suyos, en este orden)
+  // ---------------------------------------------------------------------------
+  // Agente Wishbone (Leonardo). Son .sv pero NO van en filelist.f: se compilan
+  // solo a través de estos `include (cada archivo define clases de este paquete).
+  `include "wishbone_agent/wb_item.sv"
+  `include "wishbone_agent/wb_events.sv"
+  `include "wishbone_agent/wb_driver.sv"
+  `include "wishbone_agent/wb_sequencer.sv"
+  `include "wishbone_agent/wb_monitor.sv"
+  `include "wishbone_agent/uart_int_monitor.sv"
+  `include "wishbone_agent/wb_agent.sv"
+  `include "wishbone_agent/wb_seqs.sv"
 
 endpackage : uart_pkg

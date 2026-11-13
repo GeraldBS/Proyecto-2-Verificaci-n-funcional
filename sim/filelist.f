@@ -25,6 +25,7 @@
 
 // ---- Ambiente UVM (agreguen aquí sus paquetes, antes de tb_top) ----
 ../tb/uart_pkg.sv
+../tb/wishbone_agent/uart_wb_smoke_pkg.sv
 ../tb/uart_hello_pkg.sv
 
 // ---- Top ----
