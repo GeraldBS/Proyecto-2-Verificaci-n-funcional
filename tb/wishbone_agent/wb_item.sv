@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////
-// wb_item.sv Copia todos los campos de otro wb_item (la usan copy() y clone())
-// function void do_copy
+// wb_item.sv
+// Un acceso Wishbone: dirección, selección de byte, dato y resultado
 //////////////////////////////////////////////////////////////////////////////////
 
 typedef enum int {SEL_NONE = 0, SEL_ONE, SEL_ALL, SEL_MULTI} wb_sel_kind_e;
@@ -59,20 +59,6 @@ class wb_item extends uvm_sequence_item;
     if (sel_kind() == SEL_ONE) return 0;
     if (sel == 4'b1111 && is_debug_adr()) return 0;
     return 1;
-  endfunction
-
-
-  // Registro que el DUT realmente accede (lo que decide wb_sel_i y adr)
-  function bit [4:0] eff_reg();
-    bit [1:0] lane;
-    case (sel)
-      4'b1000: lane = 2'd0;
-      4'b0100: lane = 2'd1;
-      4'b0010: lane = 2'd2;
-      4'b0001: lane = 2'd3;
-      default: lane = 2'd0;   // sel inválido: el DUT usa el registro {adr[4:2], 0}
-    endcase
-    return {adr[4:2], lane};
   endfunction
 
   // Llena adr, sel, dat y we para acceder al registro idx
