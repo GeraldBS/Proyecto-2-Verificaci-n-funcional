@@ -4,6 +4,7 @@
 
 +incdir+../rtl
 +incdir+../tb
++incdir+../tests
 
 // ---- RTL del DUT (no modificar) ----
 ../rtl/raminfr.v
@@ -18,15 +19,14 @@
 ../rtl/uart_top.v
 
 // ---- Interfaces y aserciones ----
-../tb/if/wb_if.sv
-../tb/if/uart_ser_if.sv
-../tb/if/modem_if.sv
-../tb/sva/uart_wb_sva.sv
+../tb/interfaces/wb_if.sv
+../tb/interfaces/uart_ser_if.sv
+../tb/interfaces/modem_if.sv
+../tb/assertions/uart_wb_sva.sv
 
 // ---- Ambiente UVM (agreguen aquí sus paquetes, antes de tb_top) ----
-../tb/uart_pkg.sv
-../tb/wishbone_agent/uart_wb_smoke_pkg.sv
 ../tb/uart_hello_pkg.sv
+../tb/uart_pkg.sv
 
 // ---- Top ----
 ../tb/tb_top.sv
