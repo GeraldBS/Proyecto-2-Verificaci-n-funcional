@@ -1,0 +1,18 @@
+# salidas de vcs, urg y verdi
+simv
+simv.daidir/
+simv.vdb/
+csrc/
+ucli.key
+vc_hdrs.h
+*.log
+*.fsdb
+merged.vdb/
+cov_report/
+sim/cov_hier.cfg
+novas*
+verdiLog/
+AN.DB/
+DVEfiles/
+.fsm.sch.verilog.xml
+verdi_config_file
