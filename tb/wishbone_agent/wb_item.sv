@@ -1,29 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////
-// wb_item.sv
+// wb_item.sv Copia todos los campos de otro wb_item (la usan copy() y clone())
+// function void do_copy
 //////////////////////////////////////////////////////////////////////////////////
 
-// Índices de registro de la especificación (adr = índice, ver arriba)
-localparam int REG_RBR  = 0;   // lectura  (DLAB = 0)
-localparam int REG_THR  = 0;   // escritura (DLAB = 0)
-localparam int REG_DLL  = 0;   // DLAB = 1
-localparam int REG_IER  = 1;   // DLAB = 0
-localparam int REG_DLM  = 1;   // DLAB = 1
-localparam int REG_IIR  = 2;   // lectura
-localparam int REG_FCR  = 2;   // escritura
-localparam int REG_LCR  = 3;
-localparam int REG_MCR  = 4;
-localparam int REG_LSR  = 5;
-localparam int REG_MSR  = 6;
-localparam int REG_SCR  = 7;   // scratch (AMB-01)
-localparam int REG_DBG1 = 8;   // Debug 1 (32 bits, sel = 1111)
-localparam int REG_DBG2 = 12;  // Debug 2 (32 bits, sel = 1111)
-
-// Clasificación de wb_sel_i (coincide con los bins de cg_reg_access.cp_sel)
 typedef enum int {SEL_NONE = 0, SEL_ONE, SEL_ALL, SEL_MULTI} wb_sel_kind_e;
 
-// Un acceso Wishbone: dirección, selección de byte, dato y resultado
 class wb_item extends uvm_sequence_item;
-  `uvm_object_utils(wb_item)   // macro de UVM: registra la clase en la factory
+  `uvm_object_utils(wb_item)   // registra en factory
 
   // bus 
   rand bit [`UART_ADDR_WIDTH-1:0] adr;   // dirección = índice del registro
@@ -33,11 +16,11 @@ class wb_item extends uvm_sequence_item;
 
   // Resultado (lo llena el driver o el monitor) 
   bit [`UART_DATA_WIDTH-1:0] dat_rd;        // dato leído (wb_dat_o con el ack)
-  bit                        aborted;       // un reset cortó la transferencia
+  bit                        aborted;       
   bit                        timeout;       // no llegó ack a tiempo
   bit                        sel_injected;  // el driver cambió sel por uno inválido
-  realtime                   t_start;   // instante en que empieza el acceso
-  realtime                   t_end;   // instante en que termina el acceso
+  realtime                   t_start;   // empieza el acceso
+  realtime                   t_end;   // termina el acceso
 
   // Controles para el driver 
   int unsigned gap       = '1;              // ciclos de pausa antes del acceso
@@ -78,7 +61,21 @@ class wb_item extends uvm_sequence_item;
     return 1;
   endfunction
 
-  
+
+  // Registro que el DUT realmente accede (lo que decide wb_sel_i y adr)
+  function bit [4:0] eff_reg();
+    bit [1:0] lane;
+    case (sel)
+      4'b1000: lane = 2'd0;
+      4'b0100: lane = 2'd1;
+      4'b0010: lane = 2'd2;
+      4'b0001: lane = 2'd3;
+      default: lane = 2'd0;   // sel inválido: el DUT usa el registro {adr[4:2], 0}
+    endcase
+    return {adr[4:2], lane};
+  endfunction
+
+  // Llena adr, sel, dat y we para acceder al registro idx
   function void set_reg_access(int idx, bit is_write, bit [7:0] wr8 = 8'h00);
     adr = idx[`UART_ADDR_WIDTH-1:0];
     we  = is_write;
@@ -96,6 +93,25 @@ class wb_item extends uvm_sequence_item;
         2'd3: dat[7:0]   = wr8;
       endcase
     end
+  endfunction
+
+  function void do_copy(uvm_object rhs);
+    wb_item r;
+    super.do_copy(rhs);
+    if (!$cast(r, rhs)) `uvm_fatal("WB_ITEM", "do_copy: el objeto no es un wb_item")   // error 
+    adr = r.adr;  dat = r.dat;  sel = r.sel;  we = r.we;
+    dat_rd = r.dat_rd;  aborted = r.aborted;  timeout = r.timeout;
+    sel_injected = r.sel_injected;  t_start = r.t_start;  t_end = r.t_end;
+    gap = r.gap;  stb_delay = r.stb_delay;  bad_sel_ok = r.bad_sel_ok;
+  endfunction
+
+  // Texto de una línea para los mensajes del log
+  function string convert2string();
+    return $sformatf("%s adr=0x%02h sel=%04b dat=0x%08h rd=0x%08h%s%s%s",
+                     we ? "WR" : "RD", adr, sel, dat, dat_rd,
+                     sel_injected ? " [sel inyectado]" : "",
+                     aborted      ? " [abortado por reset]" : "",
+                     timeout      ? " [TIMEOUT]" : "");
   endfunction
 
 endclass : wb_item
