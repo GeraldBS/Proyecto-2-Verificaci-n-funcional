@@ -9,7 +9,7 @@
 #   make verdi                 abre Verdi con la base de datos de compilación
 # -----------------------------------------------------------------------------
 
-TEST  ?= uart_hello_test
+TEST  ?= uart_base_test
 SEED  ?= 1
 ARGS  ?=
 BUS8  ?= 0
