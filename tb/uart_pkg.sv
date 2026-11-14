@@ -1,14 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 // uart_pkg.sv
 // Paquete del ambiente UVM del UART 16550.
-//
-// El orden de los include sigue las dependencias: primero tipos y
-// configuración, luego transacciones y agentes, RAL y scoreboard, y al final
-// cobertura, secuencias, ambiente y prueba. Los nombres de los archivos de
-// cada parte están en docs/contrato_ambiente.md.
-//
-// Los .svh/.sv que se incluyen aquí NO van en filelist.f: se compilan solo a
-// través de estos `include (cada archivo define clases de este paquete).
 //////////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns/1ps          // unidad de tiempo 1 ns, precisión 1 ps
@@ -36,14 +28,14 @@ package uart_pkg;
   // nombre del campo con el que se publican todos los objetos de configuración
   localparam string UART_KEY_CFG = "cfg";
 
-  // Tipos y objetos de configuración (Gerald)
+  // Tipos y objetos de configuración 
   `include "config/uart_types.svh"
   `include "config/uart_line_cfg.svh"
   `include "config/uart_ctrl_cfg.svh"
   `include "config/uart_agent_cfgs.svh"
   `include "config/uart_env_cfg.svh"
 
-  // Agente Wishbone y monitor de int_o (Leonardo)
+  // Agente Wishbone y monitor de int_o 
   `include "wishbone_agent/wb_item.sv"
   `include "wishbone_agent/wb_events.sv"
   `include "wishbone_agent/wb_driver.sv"
@@ -53,25 +45,25 @@ package uart_pkg;
   `include "wishbone_agent/wb_agent.sv"
   `include "wishbone_agent/wb_seqs.sv"
 
-  // Agente serie y agente de módem (Wilbert)
+  // Agente serie y agente de módem 
   `include "serial_agent/ser_item.svh"
   `include "serial_agent/uart_ser_agent.svh"
   `include "modem_agent/mdm_item.svh"
   `include "modem_agent/modem_agent.svh"
 
-  // Modelo de registros (Leonardo)
+  // Modelo de registros 
   `include "register_model/uart_ral.svh"
 
-  // Scoreboard y modelo de referencia (Wilbert)
+  // Scoreboard y modelo de referencia 
   `include "scoreboard/uart_model_evt.svh"
   `include "scoreboard/uart_scoreboard.svh"
 
-  // Cobertura y secuencias (Gerald)
+  // Cobertura y secuencias 
   `include "coverage/uart_cov.svh"
   `include "sequences/uart_virtual_sequencer.svh"
   `include "sequences/uart_seqs.svh"
 
-  // Ambiente (Leonardo) y prueba
+  // Ambiente 
   `include "environment/uart_env.svh"
   `include "uart_base_test.svh"
 
