@@ -64,7 +64,7 @@ package uart_pkg;
   `include "sequences/uart_seqs.svh"
 
   // Ambiente 
-  `include "environment/uart_env.svh"
+  `include "environment/uart_env.sv"
   `include "uart_base_test.svh"
 
 endpackage : uart_pkg
