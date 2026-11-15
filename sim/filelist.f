@@ -23,6 +23,7 @@
 ../tb/interfaces/uart_ser_if.sv
 ../tb/interfaces/modem_if.sv
 ../tb/assertions/uart_wb_sva.sv
+../tb/assertions/uart_ser_sva.sv
 
 // ---- Ambiente UVM (agreguen aquí sus paquetes, antes de tb_top) ----
 ../tb/uart_hello_pkg.sv

@@ -7,6 +7,9 @@
 #   make BUS8=1                compila la variante de bus de 8 bits
 #   make cov                   fusiona la cobertura y genera el reporte HTML
 #   make verdi                 abre Verdi con la base de datos de compilación
+#   make check                 valida el ambiente: 40 semillas sin errores falsos
+#   make regress               línea base: 350 semillas (N=350 JOBS=8)
+#   make corner                casos de esquina CE-01 a CE-17 (tests/casos.list)
 # -----------------------------------------------------------------------------
 
 TEST  ?= uart_base_test
@@ -40,7 +43,7 @@ SIMV_OPTS := +UVM_TESTNAME=$(TEST) +ntb_random_seed=$(SEED) \
              $(ARGS) \
              -l run_$(TEST)_$(SEED).log
 
-.PHONY: all comp run cov verdi clean
+.PHONY: all comp run cov verdi clean check regress corner
 
 all: comp run
 
@@ -57,10 +60,21 @@ cov_hier.cfg:
 cov:
 	urg -full64 -dir simv.vdb -dbname merged -report cov_report -format both
 
+N    ?= 350
+JOBS ?= 8
+check:
+	JOBS=$(JOBS) ./regress.sh check
+
+regress:
+	JOBS=$(JOBS) ./regress.sh base $(N)
+
+corner:
+	JOBS=$(JOBS) ./regress.sh corner all
+
 verdi:
 	verdi -dbdir simv.daidir -ssf waves.fsdb &
 
 clean:
-	rm -rf simv simv.daidir simv.vdb csrc ucli.key vc_hdrs.h \
+	rm -rf simv simv.daidir simv.vdb csrc ucli.key vc_hdrs.h logs regress_out \
 	       *.log *.fsdb cov_report merged.vdb cov_hier.cfg \
 	       novas* verdiLog AN.DB
