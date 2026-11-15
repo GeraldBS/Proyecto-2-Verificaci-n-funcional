@@ -52,7 +52,7 @@ class uart_env extends uvm_env;
 
     // RAL: puerta delantera por el secuenciador Wishbone, predicción explícita.
     mod_reg.dlab0_map.set_sequencer     (wb_agt.sqr, adapter);
-    mod_reg.dlab1_map.set_sequencer     (+wb_agt.sqr, adapter);
+    mod_reg.dlab1_map.set_sequencer     (wb_agt.sqr, adapter);
     mod_reg.dlab0_map.set_auto_predict  (0);
     mod_reg.dlab1_map.set_auto_predict  (0);
 
@@ -66,7 +66,6 @@ class uart_env extends uvm_env;
     wb_agt.rst_ap.connect (scb.rst_imp);
     wb_agt.int_ap.connect (scb.int_imp);
     wb_agt.ap.connect     (cov.wb_imp);
-    wb_agt.rst_ap.connect (cov.rst_imp);
     wb_agt.int_ap.connect (cov.int_imp);
 
     // Serie y módem  
