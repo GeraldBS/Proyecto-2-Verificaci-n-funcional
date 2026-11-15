@@ -7,8 +7,8 @@
 package uart_wb_smoke_pkg;
 
   import uvm_pkg::*;
-  `include "uvm_macros.svh"
-  import uart_pkg::*;   // clases del ambiente y constantes UART_* de uart_types.svh
+  `include "uvm_macros.sv"
+  import uart_pkg::*;   // clases del ambiente y constantes UART_* de uart_types.sv
 
   // Compara un valor leído con el esperado
   function automatic bit smoke_check(string what, bit [31:0] got, bit [31:0] exp);

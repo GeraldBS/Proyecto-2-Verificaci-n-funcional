@@ -29,11 +29,11 @@ package uart_pkg;
   localparam string UART_KEY_CFG = "cfg";
 
   // Tipos y objetos de configuración 
-  `include "config/uart_types.svh"
-  `include "config/uart_line_cfg.svh"
-  `include "config/uart_ctrl_cfg.svh"
-  `include "config/uart_agent_cfgs.svh"
-  `include "config/uart_env_cfg.svh"
+  `include "config/uart_types.sv"
+  `include "config/uart_line_cfg.sv"
+  `include "config/uart_ctrl_cfg.sv"
+  `include "config/uart_agent_cfgs.sv"
+  `include "config/uart_env_cfg.sv"
 
   // Agente Wishbone y monitor de int_o 
   `include "wishbone_agent/wb_item.sv"
@@ -46,25 +46,25 @@ package uart_pkg;
   `include "wishbone_agent/wb_seqs.sv"
 
   // Agente serie y agente de módem 
-  `include "serial_agent/ser_item.svh"
-  `include "serial_agent/uart_ser_agent.svh"
-  `include "modem_agent/mdm_item.svh"
-  `include "modem_agent/modem_agent.svh"
+  `include "serial_agent/ser_item.sv"
+  `include "serial_agent/uart_ser_agent.sv"
+  `include "modem_agent/mdm_item.sv"
+  `include "modem_agent/modem_agent.sv"
 
   // Modelo de registros 
-  `include "register_model/uart_ral.svh"
+  `include "register_model/uart_ral.sv"
 
   // Scoreboard y modelo de referencia 
-  `include "scoreboard/uart_model_evt.svh"
-  `include "scoreboard/uart_scoreboard.svh"
+  `include "scoreboard/uart_model_evt.sv"
+  `include "scoreboard/uart_scoreboard.sv"
 
   // Cobertura y secuencias 
-  `include "coverage/uart_cov.svh"
-  `include "sequences/uart_virtual_sequencer.svh"
-  `include "sequences/uart_seqs.svh"
+  `include "coverage/uart_cov.sv"
+  `include "sequences/uart_virtual_sequencer.sv"
+  `include "sequences/uart_seqs.sv"
 
   // Ambiente 
   `include "environment/uart_env.sv"
-  `include "uart_base_test.svh"
+  `include "uart_base_test.sv"
 
 endpackage : uart_pkg
