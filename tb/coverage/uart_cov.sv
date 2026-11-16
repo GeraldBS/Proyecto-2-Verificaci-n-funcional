@@ -8,11 +8,8 @@
 // Algunos covergroups se muestrean desde dos lugares; para eso tienen
 // sample() con un argumento "kind" y cada coverpoint se filtra con iff.
 //////////////////////////////////////////////////////////////////////
-`uvm_analysis_imp_decl(_wb)
-`uvm_analysis_imp_decl(_tx)
-`uvm_analysis_imp_decl(_rx)
-`uvm_analysis_imp_decl(_mdm)
-`uvm_analysis_imp_decl(_int)
+// Los sufijos _wb, _tx, _rx, _mdm e _int ya los declara uart_scoreboard,
+// que se incluye antes en uart_pkg; aquí solo falta el de los eventos.
 `uvm_analysis_imp_decl(_evt)
 
 typedef enum {CK_CHAR, CK_PUSH, CK_RDEMPTY, CK_BREAK, CK_LEVEL, CK_EDGE, CK_IIR, CK_CHG, CK_MSR, CK_MCR} uart_cov_kind_e;

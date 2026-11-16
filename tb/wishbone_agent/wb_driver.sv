@@ -25,6 +25,7 @@ class wb_driver extends uvm_driver #(wb_item);
     vif = cfg.vif;
     if (vif == null)
       `uvm_fatal("NOVIF", "wb_driver: wb_agent_cfg.vif no está asignada")   // error
+  endfunction
 
   // Mide el periodo del reloj y atiende los items del secuenciador
   task run_phase(uvm_phase phase);

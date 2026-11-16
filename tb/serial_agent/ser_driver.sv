@@ -23,9 +23,9 @@ class ser_driver extends uvm_driver #(ser_item);
     virtual task run_phase(uvm_phase phase);
         cfg.vif.srx = 1'b1; // Inicializar la línea de recepción en alto
         forever begin
-            ser_item_port.get_next_item(req);
+            seq_item_port.get_next_item(req);
 
-            if (cfg.loop == 1'b1) begin
+            if (cfg.loopback == 1'b1) begin
                 // En loopback, simulamos el tiempo de espera pero no inyectamos nada físico
                 repeat(cfg.line.tc_cycles()) @(posedge cfg.vif.clk); 
             end else begin

@@ -52,6 +52,10 @@ class uart_ser_agent extends uvm_agent;
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 
+    // Exponemos los puertos de los monitores para que el env los conecte
+    tx_ap = stx_mon.tx_ap;
+    rx_ap = srx_mon.rx_ap;
+
     // Solo conectamos el puerto de ítems si somos un agente ACTIVO (y existen ambos)
     if (cfg.is_active == UVM_ACTIVE) begin
       // Conexión TLM estándar de UVM: puerto_del_driver -> export_del_sequencer

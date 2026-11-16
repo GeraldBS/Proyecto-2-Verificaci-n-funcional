@@ -7,9 +7,9 @@
 #   make BUS8=1                compila la variante de bus de 8 bits
 #   make cov                   fusiona la cobertura y genera el reporte HTML
 #   make verdi                 abre Verdi con la base de datos de compilación
-#   make check                 valida el ambiente: 40 semillas sin errores falsos
+#   make check                 valida el ambiente: 40 semillas de la prueba base
 #   make regress               línea base: 350 semillas (N=350 JOBS=8)
-#   make corner                casos de esquina CE-01 a CE-17 (tests/casos.list)
+#   make corner                casos de esquina (tests/*.args y tests/semillas.txt)
 # -----------------------------------------------------------------------------
 
 TEST  ?= uart_base_test
@@ -63,13 +63,13 @@ cov:
 N    ?= 350
 JOBS ?= 8
 check:
-	JOBS=$(JOBS) ./regress.sh check
+	./regresion.sh -j $(JOBS) base 40
 
 regress:
-	JOBS=$(JOBS) ./regress.sh base $(N)
+	./regresion.sh -j $(JOBS) base $(N)
 
 corner:
-	JOBS=$(JOBS) ./regress.sh corner all
+	./regresion.sh -j $(JOBS) esquinas
 
 verdi:
 	verdi -dbdir simv.daidir -ssf waves.fsdb &

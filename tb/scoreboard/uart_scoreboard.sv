@@ -78,8 +78,8 @@ class uart_scoreboard extends uvm_scoreboard;
     uart_model_evt evt;
     bit [7:0] dat8;
 
-    // Ignorar accesos abortados o sin acuse (ack)
-    if (!item.ack || item.aborted) return; 
+    // Ignorar accesos abortados o que no recibieron ack a tiempo
+    if (item.timeout || item.aborted) return; 
 
     // Extraer el byte válido según el carril 
     dat8 = uart_lane8(item.sel, item.dat);
