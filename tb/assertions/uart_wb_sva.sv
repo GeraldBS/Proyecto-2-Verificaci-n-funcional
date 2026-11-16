@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////
-// uart_wb_sva: aserciones de la interfaz Wishbone (sección 11)    
+// uart_wb_sva: aserciones de la interfaz Wishbone   
 //
 // Cada propiedad tiene su cover. Los fallos se reportan con rep_err para
 // que el contador de UVM_ERROR de la prueba los vea.
@@ -46,7 +46,7 @@ module uart_wb_sva (
        (!wb_we_i || $stable(wb_dat_i)));
   endproperty
   a_wb01_stable: assert property (p_wb01_stable)
-    else rep_err("A-WB-01", "el maestro cambió la transferencia antes de recibir ack");
+    else rep_err("A-WB-01", "cambió la transferencia");
   c_wb01_wait:   cover property (req && !wb_ack_o ##1 req && !wb_ack_o ##1 wb_ack_o);
   c_wb01_wr:     cover property (req && wb_we_i && !wb_ack_o ##1 wb_ack_o);
   c_wb01_rd:     cover property (req && !wb_we_i && !wb_ack_o ##1 wb_ack_o);
