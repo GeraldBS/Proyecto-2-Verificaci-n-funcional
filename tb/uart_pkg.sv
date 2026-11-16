@@ -47,6 +47,10 @@ package uart_pkg;
 
   // Agente serie y agente de módem 
   `include "serial_agent/ser_item.sv"
+  `include "serial_agent/ser_sequencer.sv"
+  `include "serial_agent/ser_driver.sv"
+  `include "serial_agent/ser_tx_monitor.sv"
+  `include "serial_agent/ser_rx_monitor.sv"
   `include "serial_agent/uart_ser_agent.sv"
   `include "modem_agent/mdm_item.sv"
   `include "modem_agent/modem_agent.sv"
