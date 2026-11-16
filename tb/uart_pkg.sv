@@ -52,7 +52,11 @@ package uart_pkg;
   `include "serial_agent/ser_tx_monitor.sv"
   `include "serial_agent/ser_rx_monitor.sv"
   `include "serial_agent/uart_ser_agent.sv"
+
   `include "modem_agent/mdm_item.sv"
+  `include "modem_agent/modem_sequencer.sv"
+  `include "modem_agent/modem_driver.sv"
+  `include "modem_agent/modem_monitor.sv"
   `include "modem_agent/modem_agent.sv"
 
   // Modelo de registros 
