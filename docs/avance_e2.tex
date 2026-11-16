@@ -1,0 +1,156 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage[margin=2cm]{geometry}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,calc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+
+\setlist{nosep,leftmargin=*}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\newcommand{\cod}[1]{\texttt{#1}}
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\begin{center}
+{\large Instituto Tecnológico de Costa Rica}\\[2pt]
+Verificación funcional de circuitos integrados, II semestre 2026\\[6pt]
+{\Large\bfseries Proyecto 2. Verificación del UART 16550 con UVM}\\[2pt]
+{\large Entrega 2, avance del ambiente}\\[6pt]
+Wilbert Alonso Román Rodríguez \quad Gerald Blanco Sáenz \quad Leonardo Enrique Pérez Sandoval\\[2pt]
+17 de noviembre de 2026 \quad Repositorio \url{https://github.com/GeraldBS/Proyecto-2-Verificaci-n-funcional}
+\end{center}
+
+\section{Estado frente a los puntos de E2}
+
+La tabla~\ref{tab:estado} compara lo que pide el enunciado para la entrega 2 con lo que tenemos en el repositorio al día de hoy. Todo el ambiente ya tiene su estructura completa en código, pero todavía no lo hemos compilado integrado en VCS. Al revisar el código encontramos errores de integración entre las partes de cada integrante, que corregimos en el commit \cod{0707e68} (sección~\ref{sec:problemas}). El siguiente paso es compilar en el servidor del curso y correr las primeras semillas.
+
+\begin{table}[h]
+\centering\small
+\caption{Puntos obligatorios de E2 y su estado.}\label{tab:estado}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.2cm} p{2.1cm} Y}
+\toprule
+Punto de E2 & Estado & Comentario \\
+\midrule
+Ambiente compilando & Por verificar & Código completo y con los arreglos de integración; falta la compilación en VCS en el servidor. \\
+Prueba base con 20 semillas sin errores falsos & Pendiente & Depende de compilar. El script \cod{sim/regresion.sh} y \cod{make check} (40 semillas) ya están listos. \\
+Agente Wishbone completo & Hecho & Driver con pausas, retraso de \cod{stb}, \cod{sel} inválido y reset asíncrono; monitor del bus, monitor de \cod{int\_o} y eventos de reset. \\
+Agente serie completo & Casi completo & Driver con errores de paridad, trama, break, glitch, desviación de baudios y parada corta. Los monitores de \cod{stx} y \cod{srx} detectan paridad y trama, pero todavía no reportan break ni glitch. \\
+RAL con \cod{uvm\_reg\_hw\_reset\_seq} por puerta delantera y trasera & Parcial & Modelo con mapas para DLAB = 0 y DLAB = 1, adaptador, predictor explícito y rutas HDL hacia \cod{tb\_top.dut.regs}. La secuencia de reset corre al inicio de \cod{uart\_main\_vseq} por puerta delantera; falta la corrida por puerta trasera. \\
+Scoreboard de TX y RX funcionando & Parcial & Modela las FIFO de TX y RX desde el bus y manda eventos a la cobertura, pero \cod{write\_tx} y \cod{write\_rx} todavía están vacías y no comparan contra lo que ven los monitores serie. \\
+Primer reporte de cobertura de URG & Pendiente & Los 11 covergroups y \cod{make cov} están listos; el reporte sale con la primera regresión. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Arquitectura del ambiente}
+
+La figura~\ref{fig:arq} muestra el ambiente completo. La prueba \cod{uart\_base\_test} crea la configuración, lee los plusargs en un solo lugar (\cod{uart\_env\_cfg::parse\_plusargs()}) e imprime los knobs con \cod{print\_knobs()}. El objeto \cod{uart\_line\_cfg} se comparte por referencia entre los agentes, el scoreboard y la cobertura, así que cuando un episodio cambia la configuración de la línea todos la ven al mismo tiempo.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=0.86, transform shape,
+  caja/.style={draw, rounded corners=2pt, align=center, font=\small, minimum height=1.1cm, text width=4.5cm},
+  flecha/.style={-{Stealth[length=2mm]}, thick},
+  marco/.style={draw, rounded corners=4pt, inner sep=8pt}]
+
+  \node[caja] (ral)  at (0,7)    {Modelo de registros\\ \cod{uart\_reg\_block}, adaptador, predictor};
+  \node[caja] (vsqr) at (6,7)    {\cod{uart\_virtual\_sequencer}\\ corre \cod{uart\_main\_vseq}};
+  \node[caja] (cfg)  at (12,7)   {\cod{uart\_env\_cfg}\\ \cod{line\_cfg}, \cod{ctrl\_cfg}, knobs};
+
+  \node[caja] (wb)   at (0,4.5)  {\cod{uart\_wb\_agent}\\ driver, sequencer,\\ monitor y monitor de \cod{int\_o}};
+  \node[caja] (ser)  at (6,4.5)  {\cod{uart\_ser\_agent}\\ driver, sequencer,\\ monitores de \cod{stx} y \cod{srx}};
+  \node[caja] (mdm)  at (12,4.5) {\cod{modem\_agent}\\ driver, sequencer,\\ monitor};
+
+  \node[caja] (scb)  at (2.3,1.6)  {\cod{uart\_scoreboard}\\ modelo de referencia};
+  \node[caja] (cov)  at (9.7,1.6)  {\cod{uart\_cov}\\ 11 covergroups};
+
+  \node[marco, fit=(ral)(cfg)(scb)(cov)(wb)(mdm), inner sep=14pt] (env) {};
+  \node[font=\small, anchor=north west] at (env.north west) {\cod{uart\_env}};
+  \node[marco, fit=(env), inner sep=12pt] (test) {};
+  \node[font=\small, anchor=north west] at (test.north west) {\cod{uart\_base\_test}};
+
+  \node[caja, text width=3.2cm] (wbif)  at (0,-1.3)  {\cod{wb\_if}};
+  \node[caja, text width=3.2cm] (serif) at (6,-1.3)  {\cod{uart\_ser\_if}};
+  \node[caja, text width=3.2cm] (mdmif) at (12,-1.3) {\cod{modem\_if}};
+  \node[caja, text width=13cm, minimum height=0.9cm] (dut) at (6,-3.1) {DUT \cod{uart\_top} con aserciones \cod{uart\_wb\_sva} y \cod{uart\_ser\_sva} (\cod{bind})};
+  \node[marco, fit=(test)(dut), inner sep=12pt] (top) {};
+  \node[font=\small, anchor=north west] at (top.north west) {\cod{tb\_top}};
+
+  \draw[flecha] (vsqr) -- (wb);
+  \draw[flecha] (vsqr) -- (ser);
+  \draw[flecha] (vsqr) -- (mdm);
+  \draw[flecha, <->] (ral) -- node[left, font=\scriptsize, align=right]{accesos y\\predicción} (wb);
+
+  % bus de puertos de análisis
+  \draw[thick, dashed] (-1.2,3.0) -- (13.2,3.0) node[pos=0, below right, font=\scriptsize]{puertos de análisis};
+  \foreach \a in {wb, ser, mdm} \draw[thick] (\a.south) ++(0.6,0) -- ++(0,-0.95);
+  \draw[flecha] (2.3,3.0) -- (scb.north);
+  \draw[flecha] (9.7,3.0) -- (cov.north);
+  \draw[flecha] (scb) -- node[above, font=\scriptsize, align=center]{eventos\\del modelo} (cov);
+
+  \draw[flecha, <->] (wb.south)  ++(-0.6,0) -- ($(wbif.north)+(-0.6,0)$);
+  \draw[flecha, <->] (ser.south) ++(-0.6,0) -- ($(serif.north)+(-0.6,0)$);
+  \draw[flecha, <->] (mdm.south) ++(-0.6,0) -- ($(mdmif.north)+(-0.6,0)$);
+  \draw[flecha, <->] (wbif) -- (wbif|-dut.north);
+  \draw[flecha, <->] (serif) -- (dut);
+  \draw[flecha, <->] (mdmif) -- (mdmif|-dut.north);
+\end{tikzpicture}
+\caption{Diagrama de bloques del ambiente UVM.}\label{fig:arq}
+\end{figure}
+
+La prueba base corre de 1 a 5 episodios. En cada episodio elige al azar una configuración del UART (largo de palabra, paridad, bits de parada, divisor, FIFO, interrupciones y módem), la programa por el bus, mueve datos en las dos direcciones en paralelo con eventos de módem, ruido de registros y resets, y al final espera a que las FIFO se vacíen. Los casos de esquina usan la misma prueba con otras probabilidades, mediante los 17 archivos \cod{.args} de \cod{sim/tests}.
+
+Componentes que ya están en el repositorio:
+\begin{itemize}
+\item Configuración y plusargs. \cod{uart\_line\_cfg}, \cod{uart\_ctrl\_cfg}, las configuraciones de los agentes y la del ambiente (\cod{uart\_env\_cfg}), que es el único lugar donde se leen plusargs.
+\item Secuencias. \cod{uart\_main\_vseq} con episodios y semáforo del bus para las ventanas de DLAB, más las secuencias de programación, TX, RX, módem, software (interrupción o sondeo) y eventos.
+\item Cobertura. 11 covergroups de la sección 13 del plan, muestreados desde los monitores y desde los eventos del scoreboard.
+\item Aserciones. 17 \cod{assert property} y 24 \cod{cover property} sobre la interfaz Wishbone y las líneas serie y de módem.
+\item Regresión. \cod{sim/regresion.sh} corre semillas en paralelo y los casos de esquina, y fusiona la cobertura con URG.
+\end{itemize}
+
+\section{Problemas encontrados}\label{sec:problemas}
+
+\begin{itemize}
+\item Errores de integración. Cada integrante escribió su parte por separado y no compilamos el conjunto antes de subirlo. Al leer el código integrado encontramos clases de \cod{uvm\_analysis\_imp\_decl} declaradas dos veces (scoreboard y cobertura), un \cod{endfunction} faltante en \cod{wb\_driver}, el campo \cod{ack} usado en el scoreboard aunque \cod{wb\_item} no lo tiene, el puerto \cod{ser\_item\_port} en vez de \cod{seq\_item\_port}, \cod{cfg.loop} en vez de \cod{cfg.loopback} y los puertos \cod{tx\_ap} y \cod{rx\_ap} del agente serie sin conectar a sus monitores. Todo quedó corregido en \cod{0707e68}. Para no repetirlo vamos a compilar en el servidor antes de cada push.
+\item Nombres que se alejaron del contrato. Escribimos \cod{docs/contrato\_ambiente.md} con los nombres de clases, puertos y campos, pero algunas partes se escribieron sin revisarlo. Los errores anteriores vienen casi todos de ahí.
+\item El scoreboard lee \cod{width\_cycles} del reset cuando sube, pero ese valor solo es válido cuando baja. Por eso el covergroup de reset recibe siempre 0 ciclos. Está anotado para corregirlo junto con el resto del scoreboard.
+\item Los targets \cod{check}, \cod{regress} y \cod{corner} del Makefile llamaban a un script que ya no existe. Ahora llaman a \cod{regresion.sh}.
+\item El plan de pruebas de E1 no definía la prueba base y no tenía diagrama de bloques. La prueba base y el diagrama de este documento pasan al plan corregido.
+\end{itemize}
+
+\section{Plan para las semanas restantes}
+
+\begin{table}[h]
+\centering\small
+\caption{Plan de trabajo. S5 es la semana que sigue a esta entrega.}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.1cm} Y >{\raggedright\arraybackslash}p{3.6cm}}
+\toprule
+Semana & Tarea & Responsable \\
+\midrule
+S5 & Compilar en VCS, depurar y correr \cod{make check} hasta tener 20 semillas o más sin errores falsos & Los tres \\
+S5 & Comparación de TX y RX en el scoreboard (\cod{write\_tx}, \cod{write\_rx}, evento \cod{EV\_RX\_PUSH}) & Wilbert Román \\
+S5 & Break y glitch en los monitores serie & Wilbert Román \\
+S5 & \cod{uvm\_reg\_hw\_reset\_seq} por puerta trasera y revisión del predictor & Leonardo Pérez \\
+S5 & Scoreboard de LSR, IIR, MSR e \cod{int\_o} & Leonardo Pérez \\
+S5 & Primer reporte de URG y curva de cobertura \cod{[COV\_CURVE]} & Gerald Blanco \\
+S6 & Línea base de 350 semillas y fusión de cobertura con URG & Wilbert Román y Gerald Blanco \\
+S6 en adelante & Análisis de huecos, ajuste de los \cod{.args}, exclusiones \cod{.el} y reporte de errores del DUT & Los tres \\
+Semana 18 & Plan actualizado, informe final y presentación (E3) & Los tres \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+El riesgo principal es el tiempo de depuración después de la primera compilación, porque es la primera vez que corren juntas las partes de los tres. Para bajarlo vamos a compilar con \cod{make comp} apenas se suba cada cambio y a revisar los primeros logs con poca verbosidad y una sola semilla antes de lanzar la regresión.
+
+\end{document}
