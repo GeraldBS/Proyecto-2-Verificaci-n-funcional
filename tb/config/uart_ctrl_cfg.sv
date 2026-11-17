@@ -1,15 +1,15 @@
 //////////////////////////////////////////////////////////////////////
-// uart_ctrl_cfg: FIFO, interrupciones y módem (FCR, IER, MCR)      //
-//////////////////////////////////////////////////////////////////////
+// uart_ctrl_cfg: FIFO, interrupciones y módem (FCR, IER, MCR)      
 // Se aleatoriza junto con uart_line_cfg al inicio de cada episodio.
 // Los bits que el DUT ignora también se aleatorizan, así se mueven
-// todos los bits del bus y ayuda al toggle.
+// todos los bits del bus.
 //////////////////////////////////////////////////////////////////////
+
 class uart_ctrl_cfg extends uvm_object;
   `uvm_object_utils(uart_ctrl_cfg)
 
-  // ---------------- configuración (aleatoria) ----------------
-  rand bit [1:0] tl;            // 0..3 = nivel de disparo 1, 4, 8, 14
+  // configuración (aleatoria)
+  rand bit [1:0] tl;            // 0...3 = nivel de disparo 1, 4, 8, 14
   rand bit       rx_clr, tx_clr;
   rand bit [3:0] fcr_dc;        // bits 0, 3, 4, 5 de FCR (el DUT los ignora)
   rand bit [3:0] ier;           // RDA, THRE, RLS, MS
@@ -17,7 +17,7 @@ class uart_ctrl_cfg extends uvm_object;
   rand bit       dtr, rts, out1, out2, loop;
   rand bit [2:0] mcr_dc;        // bits 7:5 de MCR
 
-  // ---------------- knobs ----------------
+  // knobs
   int unsigned tl_w[]        = '{1, 1, 1, 1};
   int unsigned fcr_clr_pct   = 50;
   int unsigned ier_bit_pct[] = '{50, 50, 50, 50};
@@ -41,7 +41,7 @@ class uart_ctrl_cfg extends uvm_object;
     loop dist { 1 := mcr_loop_pct, 0 := 100 - mcr_loop_pct };
   }
 
-  function new(string name = "uart_ctrl_cfg");
+  function new(string name = "uart_ctrl_cfg"); // constructor
     super.new(name);
   endfunction
 

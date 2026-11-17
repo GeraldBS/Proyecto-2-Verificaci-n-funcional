@@ -1,13 +1,10 @@
 //////////////////////////////////////////////////////////////////////
-// uart_types: tipos y constantes que usa todo el ambiente          //
-//////////////////////////////////////////////////////////////////////
-// Los enums viven aquí y no en cada componente para que el driver
+// uart_types: tipos y constantes que usa todo el ambiente,          
+// los enums viven aquí y no en cada componente para que el driver
 // serie, las secuencias, el scoreboard y la cobertura hablen igual.
 //////////////////////////////////////////////////////////////////////
 
-// Modo de paridad. Lo aleatorizamos como enum y de ahí sacamos
-// PEN, EPS y SP de LCR (tabla de uart_transmitter.v):
-//   {EPS,SP} = 00 impar, 10 par, 01 stick 1, 11 stick 0
+// Modo de paridad.
 typedef enum bit [2:0] {
   PAR_NONE,
   PAR_ODD,
@@ -16,9 +13,7 @@ typedef enum bit [2:0] {
   PAR_STICK0
 } uart_par_e;
 
-// Error que el agente serie mete en un carácter de recepción.
-// El monitor de srx usa el mismo enum para decir qué midió en la línea.
-typedef enum bit [3:0] {
+typedef enum bit [3:0] { // Errores
   SER_OK,
   SER_PARITY,       // bit de paridad invertido
   SER_FRAME,        // primer bit de parada en 0
@@ -50,11 +45,6 @@ localparam bit [4:0] UART_SCR = 5'd7;
 localparam bit [4:0] UART_DBG1 = 5'd8;
 localparam bit [4:0] UART_DBG2 = 5'd12;
 
-// En el bus de 32 bits el DUT no usa wb_adr_i[1:0]: saca el registro y
-// el carril de wb_sel_i (big endian, uart_wb.v). Con un sel inválido
-// cae en el registro 0 o 4 y toma el carril [7:0] (AMB-05). Estas dos
-// funciones hacen lo mismo que el RTL, para que las secuencias, el
-// scoreboard y la cobertura lean el bus igual que el DUT.
 function automatic bit [4:0] uart_reg_of(bit [4:0] adr, bit [3:0] sel);
   if (adr >= 8) return adr;   // Debug 1 y 2 van con sel = 1111
   case (sel)
@@ -76,6 +66,5 @@ function automatic bit [7:0] uart_lane8(bit [3:0] sel, bit [31:0] data);
   endcase
 endfunction
 
-// Periodo del reloj de tb_top en ns (50 MHz). Lo usamos para pasar
-// tiempos de carácter a tiempo de simulación.
+// Periodo del reloj de tb_top en ns (50 MHz). Lo usamos para pasar tiempos de carácter a tiempo de simulación.
 localparam real UART_CLK_NS = 20.0;

@@ -1,9 +1,9 @@
-// -----------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////
 // tb_top.sv
 // Módulo superior del banco de pruebas: genera reloj y reset, instancia las
 // interfaces y el DUT, enlaza las aserciones y entrega las interfaces
 // virtuales al ambiente UVM antes de run_test().
-// -----------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/1ps
 `include "uart_defines.v"
 
@@ -14,10 +14,7 @@ module tb_top;
   import uart_hello_pkg::*;   // prueba de humo del kit
   import uart_pkg::*;         // nuestro ambiente
 
-  // ---------------------------------------------------------------------------
   // Reloj y reset
-  // ---------------------------------------------------------------------------
-  // 50 MHz: con DL = 1 la tasa es 50e6 / 16 = 3.125 Mbaud (simulaciones rápidas).
   parameter real CLK_PERIOD_NS = 20.0;
 
   logic clk = 1'b0;
@@ -28,8 +25,6 @@ module tb_top;
   modem_if    mdm (clk);
 
   // Reset inicial y valores de reposo mientras los drivers no toman control.
-  // Si su plan incluye reset aleatorio, muevan el manejo de wb.rst a un
-  // componente del ambiente y eliminen esta parte.
   initial begin
     wb.rst     = 1'b1;
     wb.cyc     = 1'b0;

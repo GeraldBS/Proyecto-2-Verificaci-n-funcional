@@ -32,7 +32,7 @@ Wilbert Alonso Román Rodríguez \quad Gerald Blanco Sáenz \quad Leonardo Enriq
 
 \section{Estado frente a los puntos de E2}
 
-La tabla~\ref{tab:estado} compara lo que pide el enunciado para la entrega 2 con lo que tenemos en el repositorio al día de hoy. Todo el ambiente ya tiene su estructura completa en código, pero todavía no lo hemos compilado integrado en VCS. Al revisar el código encontramos errores de integración entre las partes de cada integrante, que corregimos en el commit \cod{0707e68} (sección~\ref{sec:problemas}). El siguiente paso es compilar en el servidor del curso y correr las primeras semillas.
+La tabla~\ref{tab:estado} compara lo que pide el enunciado para la entrega 2 con lo que tenemos en el repositorio al día de hoy. Todo el ambiente ya tiene su estructura completa en código, pero todavía no lo hemos compilado integrado en VCS. Al revisar el código encontramos errores de integración entre las partes de cada integrante, que corregimos y queda reflejado en el repositorio. El siguiente paso es compilar en el servidor del curso y correr las primeras semillas.
 
 \begin{table}[h]
 \centering\small
@@ -41,13 +41,13 @@ La tabla~\ref{tab:estado} compara lo que pide el enunciado para la entrega 2 con
 \toprule
 Punto de E2 & Estado & Comentario \\
 \midrule
-Ambiente compilando & Por verificar & Código completo y con los arreglos de integración; falta la compilación en VCS en el servidor. \\
-Prueba base con 20 semillas sin errores falsos & Pendiente & Depende de compilar. El script \cod{sim/regresion.sh} y \cod{make check} (40 semillas) ya están listos. \\
-Agente Wishbone completo & Hecho & Driver con pausas, retraso de \cod{stb}, \cod{sel} inválido y reset asíncrono; monitor del bus, monitor de \cod{int\_o} y eventos de reset. \\
-Agente serie completo & Casi completo & Driver con errores de paridad, trama, break, glitch, desviación de baudios y parada corta. Los monitores de \cod{stx} y \cod{srx} detectan paridad y trama, pero todavía no reportan break ni glitch. \\
-RAL con \cod{uvm\_reg\_hw\_reset\_seq} por puerta delantera y trasera & Parcial & Modelo con mapas para DLAB = 0 y DLAB = 1, adaptador, predictor explícito y rutas HDL hacia \cod{tb\_top.dut.regs}. La secuencia de reset corre al inicio de \cod{uart\_main\_vseq} por puerta delantera; falta la corrida por puerta trasera. \\
+Ambiente compilando & Por verificar & Relativamente completo y con los arreglos de integración, unicamente quedaran detalles y falta la compilación en VCS en el servidor. \\
+Prueba base con 40 semillas sin errores falsos & Pendiente & Depende de compilar. El script \cod{sim/regresion.sh} y \cod{make check} (40 semillas) ya están listos. \\
+Agente Wishbone completo & Hecho & Driver con pausas, retraso de \cod{stb}, \cod{sel} inválido y reset asíncrono, monitor del bus, monitor de \cod{int\_o} y eventos de reset, falta una revision exhaustiva. \\
+Agente serie & Casi completo & Driver con errores de paridad, trama, break, glitch, desviación de baudios y parada corta. Los monitores de \cod{stx} y \cod{srx} detectan paridad y trama, pero todavía no reportan break ni glitch. \\
+RAL con \cod{uvm\_reg\_hw\_reset\_seq} por puerta delantera y trasera & Parcial & Modelo con mapas para DLAB = 0 y DLAB = 1, adaptador, predictor explícito y rutas HDL hacia \cod{tb\_top.dut.regs}. La secuencia de reset corre al inicio de \cod{uart\_main\_vseq} por puerta delantera, falta la corrida por puerta trasera. \\
 Scoreboard de TX y RX funcionando & Parcial & Modela las FIFO de TX y RX desde el bus y manda eventos a la cobertura, pero \cod{write\_tx} y \cod{write\_rx} todavía están vacías y no comparan contra lo que ven los monitores serie. \\
-Primer reporte de cobertura de URG & Pendiente & Los 11 covergroups y \cod{make cov} están listos; el reporte sale con la primera regresión. \\
+Primer reporte de cobertura de URG & Pendiente & Los 11 covergroups y \cod{make cov} están listos, el reporte sale con la primera regresión. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -122,8 +122,8 @@ Componentes que ya están en el repositorio:
 \section{Problemas encontrados}\label{sec:problemas}
 
 \begin{itemize}
-\item Errores de integración. Cada integrante escribió su parte por separado y no compilamos el conjunto antes de subirlo. Al leer el código integrado encontramos clases de \cod{uvm\_analysis\_imp\_decl} declaradas dos veces (scoreboard y cobertura), un \cod{endfunction} faltante en \cod{wb\_driver}, el campo \cod{ack} usado en el scoreboard aunque \cod{wb\_item} no lo tiene, el puerto \cod{ser\_item\_port} en vez de \cod{seq\_item\_port}, \cod{cfg.loop} en vez de \cod{cfg.loopback} y los puertos \cod{tx\_ap} y \cod{rx\_ap} del agente serie sin conectar a sus monitores. Todo quedó corregido en \cod{0707e68}. Para no repetirlo vamos a compilar en el servidor antes de cada push.
-\item Nombres que se alejaron del contrato. Escribimos \cod{docs/contrato\_ambiente.md} con los nombres de clases, puertos y campos, pero algunas partes se escribieron sin revisarlo. Los errores anteriores vienen casi todos de ahí.
+\item Errores de integración. Cada integrante escribió su parte por separado y no compilamos el conjunto antes de subirlo. Al leer el código integrado encontramos clases de \cod{uvm\_analysis\_imp\_decl} declaradas dos veces (scoreboard y cobertura), un \cod{endfunction} faltante en \cod{wb\_driver}, el campo \cod{ack} usado en el scoreboard aunque \cod{wb\_item} no lo tiene, el puerto \cod{ser\_item\_port} en vez de \cod{seq\_item\_port}, \cod{cfg.loop} en vez de \cod{cfg.loopback} y los puertos \cod{tx\_ap} y \cod{rx\_ap} del agente serie sin conectar a sus monitores. Todo quedó corregido y para no repetirlo vamos a compilar en el servidor antes de cada push y mejorar la comunicación.
+\item Nombres que se alejaron del incoherentes con lo establecido. Escribimos \cod{docs/contrato\_ambiente.md} con los nombres de clases, puertos y campos, pero algunas partes se escribieron sin revisarlo. Los errores anteriores vienen casi todos de ahí.
 \item El scoreboard lee \cod{width\_cycles} del reset cuando sube, pero ese valor solo es válido cuando baja. Por eso el covergroup de reset recibe siempre 0 ciclos. Está anotado para corregirlo junto con el resto del scoreboard.
 \item Los targets \cod{check}, \cod{regress} y \cod{corner} del Makefile llamaban a un script que ya no existe. Ahora llaman a \cod{regresion.sh}.
 \item El plan de pruebas de E1 no definía la prueba base y no tenía diagrama de bloques. La prueba base y el diagrama de este documento pasan al plan corregido.

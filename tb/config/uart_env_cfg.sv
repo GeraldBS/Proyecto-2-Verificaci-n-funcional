@@ -1,11 +1,6 @@
 //////////////////////////////////////////////////////////////////////
-// uart_env_cfg: configuración de la prueba y lectura de plusargs   //
-//////////////////////////////////////////////////////////////////////
-// Es el único lugar donde se leen plusargs (regla 1 de la sección
-// 4.2 del enunciado). parse_plusargs() pasa cada +UART_<BLOQUE>_<KNOB>
-// al knob del objeto que le toca y print_knobs() imprime todo con su
-// origen, para poder reproducir cualquier corrida.
-// Mismo patrón que spi_env_cfg del laboratorio de SPI.
+// uart_env_cfg: configuración de la prueba y lectura de plusargs   
+// Es el único lugar donde se leen plusargs 
 //////////////////////////////////////////////////////////////////////
 class uart_env_cfg extends uvm_object;
   `uvm_object_utils(uart_env_cfg)
@@ -19,7 +14,7 @@ class uart_env_cfg extends uvm_object;
   uart_scb_cfg       scb;
   uart_cov_cfg       cov;
 
-  // ---------------- knobs de la secuencia principal ----------------
+  // knobs de la secuencia principal 
   int unsigned ep_min        = 5;
   int unsigned ep_max        = 5;
   int unsigned ep_timeout_tc = 2000;
@@ -72,7 +67,7 @@ class uart_env_cfg extends uvm_object;
     cov.line = line;  cov.ctrl = ctrl;
   endfunction
 
-  // -------------------------------------------------------- utilidades
+  // utilidades
   local function bit get_str(string name, output string val);
     uvm_cmdline_processor clp = uvm_cmdline_processor::get_inst();
     return clp.get_arg_value({"+", name, "="}, val) != 0;

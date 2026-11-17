@@ -1,12 +1,9 @@
 //////////////////////////////////////////////////////////////////////
-// uart_agent_cfgs: objetos de configuración de agentes, scb y cov  //
-//////////////////////////////////////////////////////////////////////
-// Solo guardan knobs y la interfaz virtual. Los valores los pone
-// uart_env_cfg::parse_plusargs() y la prueba los publica en
-// uvm_config_db (tabla 9.3 del plan). Nadie más lee plusargs.
+// uart_agent_cfgs: objetos de configuración de agentes, scb y cov 
+// Solo guardan knobs y la interfaz virtual. 
 //////////////////////////////////////////////////////////////////////
 
-// ---------------------------------------------------------------- Wishbone
+// Wishbone
 class wb_agent_cfg extends uvm_object;
   `uvm_object_utils(wb_agent_cfg)
   virtual wb_if          vif;
@@ -25,17 +22,13 @@ class wb_agent_cfg extends uvm_object;
   endfunction
 endclass : wb_agent_cfg
 
-// ---------------------------------------------------------------- serie
+// serie
 class uart_ser_agent_cfg extends uvm_object;
   `uvm_object_utils(uart_ser_agent_cfg)
   virtual uart_ser_if    vif;
   uvm_active_passive_enum is_active = UVM_ACTIVE;
 
-  // formato vigente: es la misma referencia que tiene uart_env_cfg,
-  // así el driver y los monitores siguen cada reconfiguración
-  uart_line_cfg line;
-  // en loopback el DUT ignora srx; el driver lo deja en reposo
-  bit           loopback;
+  bit           loopback; // en loopback el DUT ignora srx, el driver lo deja en reposo
 
   // tráfico de recepción (los usa la secuencia RX para llenar ser_item)
   int unsigned rx_chars_max    = 40;
@@ -61,7 +54,7 @@ class uart_ser_agent_cfg extends uvm_object;
   endfunction
 endclass : uart_ser_agent_cfg
 
-// ---------------------------------------------------------------- módem
+// Módem
 class modem_agent_cfg extends uvm_object;
   `uvm_object_utils(modem_agent_cfg)
   virtual modem_if       vif;
@@ -77,36 +70,34 @@ class modem_agent_cfg extends uvm_object;
   endfunction
 endclass : modem_agent_cfg
 
-// ---------------------------------------------------------------- scoreboard
+// scoreboard
 class uart_scb_cfg extends uvm_object;
   `uvm_object_utils(uart_scb_cfg)
 
-  // chequeos activos; +UART_SCB_EN=tx,rx,lsr (o all)
+  // chequeos activos
   bit chk_tx = 1, chk_rx = 1, chk_lsr = 1, chk_iir = 1, chk_msr = 1, chk_int = 1;
   int unsigned max_errors = 10;   // 0 = nunca detener
-  // severidad de las diferencias conocidas del DUT (AMB-03, AMB-04)
+  // severidad de las diferencias conocidas del DUT 
   uvm_severity dut_bug_sev = UVM_WARNING;
 
-  // el formato vigente, igual que en el agente serie
   uart_line_cfg line;
   uart_ctrl_cfg ctrl;
 
-  function new(string name = "uart_scb_cfg");
+  function new(string name = "uart_scb_cfg"); // constructor
     super.new(name);
   endfunction
 endclass : uart_scb_cfg
 
-// ---------------------------------------------------------------- cobertura
+// cobertura
 class uart_cov_cfg extends uvm_object;
   `uvm_object_utils(uart_cov_cfg)
 
   bit          enable      = 1;
-  int unsigned curve_every = 1;   // [COV_CURVE] cada N episodios, 0 = no
+  int unsigned curve_every = 1;   // cada N episodios, 0 = no
   uart_line_cfg line;
   uart_ctrl_cfg ctrl;
-  // modo del software en el episodio actual; lo pone la secuencia principal
+
   uart_sw_mode_e sw_mode = SW_IRQ;
-  // para saber si un reset cayó en medio de un acceso al bus
   virtual wb_if  wb_vif;
 
   function new(string name = "uart_cov_cfg");
