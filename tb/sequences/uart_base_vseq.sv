@@ -1,15 +1,15 @@
 //////////////////////////////////////////////////////////////////////
-// uart_base_vseq: base de todas las secuencias virtuales           //
-//////////////////////////////////////////////////////////////////////
-// Tiene lo que todas usan: acceso a la configuración por p_sequencer,
+// uart_base_vseq: base de todas las secuencias virtuales          
+// Tiene lo que todas usan, acceso a la configuración por p_sequencer,
 // lecturas y escrituras Wishbone de un registro, esperas medidas en
-// ciclos o en tiempos de carácter (Tc) y sorteos con los knobs.
+// ciclos o en Tc y sorteos con los knobs.
 //////////////////////////////////////////////////////////////////////
-class uart_base_vseq extends uvm_sequence;
-  `uvm_object_utils(uart_base_vseq)
-  `uvm_declare_p_sequencer(uart_virtual_sequencer)
 
-  function new(string name = "uart_base_vseq");
+class uart_base_vseq extends uvm_sequence;
+  `uvm_object_utils(uart_base_vseq) //objeto
+  `uvm_declare_p_sequencer(uart_virtual_sequencer) // secuencia
+
+  function new(string name = "uart_base_vseq"); // constructor
     super.new(name);
   endfunction
 
@@ -18,7 +18,7 @@ class uart_base_vseq extends uvm_sequence;
   function uart_line_cfg line(); return p_sequencer.cfg.line; endfunction
   function uart_ctrl_cfg ctrl(); return p_sequencer.cfg.ctrl; endfunction
 
-  // ---------------------------------------------------------- sorteos
+  // sorteos
   // true con probabilidad pct/100
   function bit pct(int unsigned p);
     return $urandom_range(99) < p;
