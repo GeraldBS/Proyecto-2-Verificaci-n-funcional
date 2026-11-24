@@ -37,7 +37,7 @@ class wb_base_seq extends uvm_sequence #(wb_item);
     finish_item(item);   // envía el item al driver y espera a que termine
     last = item;   // guarda el item para consultar dat_rd
     n_acc++;   // cuenta el acceso
-    val = (idx >= 8) ? item.dat_rd : {24'h0, item.rdata8()};   // 32 bits en Debug 1 y 2, 8 bits en los demás
+    val = (idx >= 8) ? item.dat_rd : {24'h0, uart_lane8(item.sel, item.dat_rd)};   // 32 bits en Debug 1 y 2, 8 bits en los demás
   endtask
 
   // Pausa en ciclos de reloj dentro de una secuencia
