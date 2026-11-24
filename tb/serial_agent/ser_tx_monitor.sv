@@ -73,7 +73,7 @@ class ser_tx_monitor extends uvm_monitor;
           calc_parity = ~cfg.line.eps; // Stick parity (fija)
         end else begin
           calc_parity = ^(shift_reg & ((1 << cfg.line.data_bits()) - 1)); // Paridad real
-          if (cfg.line.eps) calc_parity = ~calc_parity;
+          if (!cfg.line.eps) calc_parity = ~calc_parity;   // impar
         end
 
         // Si lo que medimos no cuadra con lo calculado, marcamos error de paridad
@@ -87,6 +87,8 @@ class ser_tx_monitor extends uvm_monitor;
       // Muestreo del primer bit de parada
       if (cfg.vif.stx == 1'b0) begin
         observed_item.err = SER_FRAME;
+        // todo en 0 hasta la parada es el break de LCR[6], no un caracter
+        if (shift_reg == 8'h00) observed_item.err = SER_BREAK;
       end
 
       // Enviar el paquete observado al Scoreboard y a los colectores de cobertura

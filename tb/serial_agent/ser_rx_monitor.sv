@@ -25,6 +25,36 @@ class ser_rx_monitor extends uvm_monitor;
     end
   endfunction
 
+  int unsigned t;        // ciclos desde el flanco de inicio
+  int          t_sube;   // primer ciclo en que srx volvio a 1, -1 si todavia no
+
+  // igual que repeat(n) @(posedge clk) pero anotando cuando sube srx
+  task avanzar(int unsigned n);
+    repeat (n) begin
+      @(posedge cfg.vif.clk);
+      t++;
+      if (t_sube < 0 && cfg.vif.srx === 1'b1) t_sube = t;
+    end
+  endtask
+
+  // la primera subida tiene que caer en un borde de bit, si no la velocidad viene desviada
+  function void medir_baudios(ser_item item, int bit_ticks);
+    int k, err_ciclos, desv;
+    if (t_sube <= 0) return;   // no subio (break), no hay que medir
+    k = (t_sube + bit_ticks / 2) / bit_ticks;
+    if (k == 0) k = 1;
+    err_ciclos = t_sube - k * bit_ticks;
+    if (err_ciclos < 0) err_ciclos = -err_ciclos;
+    if (err_ciclos > 0) err_ciclos--;   // un ciclo de gracia porque el driver y nosotros vemos el mismo flanco
+    desv = err_ciclos * 1000 / (k * bit_ticks);   // en decimas de %
+    if (k == 1 && t_sube < bit_ticks * 85 / 100)
+      item.err = SER_GLITCH_START;   // el inicio duro mucho menos de un bit
+    else if (desv >= cfg.baud_out_min)
+      item.err = SER_BAUD_OUT;
+    else if (desv > 0 && item.err == SER_OK)
+      item.err = SER_BAUD_IN;
+  endfunction
+
   virtual task run_phase(uvm_phase phase);
     ser_item  observed_item;
     int       bit_ticks;
@@ -37,8 +67,10 @@ class ser_rx_monitor extends uvm_monitor;
       @(negedge cfg.vif.srx);
 
       bit_ticks = cfg.line.bit_cycles();
+      t      = 0;
+      t_sube = -1;
 
-      repeat(bit_ticks / 2) @(posedge cfg.vif.clk);
+      avanzar(bit_ticks / 2);
       
       if (cfg.vif.srx !== 1'b0) begin
         
@@ -51,11 +83,11 @@ class ser_rx_monitor extends uvm_monitor;
       shift_reg = 8'h00;
 
       
-      repeat(bit_ticks) @(posedge cfg.vif.clk);
+      avanzar(bit_ticks);
 
       for (int i = 0; i < cfg.line.data_bits(); i++) begin
         shift_reg[i] = cfg.vif.srx;
-        repeat(bit_ticks) @(posedge cfg.vif.clk); // Saltar a la mitad del siguiente bit
+        avanzar(bit_ticks); // Saltar a la mitad del siguiente bit
       end
       observed_item.data = shift_reg;
 
@@ -67,7 +99,7 @@ class ser_rx_monitor extends uvm_monitor;
           calc_parity = ~cfg.line.eps; // Stick parity (fija)
         end else begin
           calc_parity = ^(shift_reg & ((1 << cfg.line.data_bits()) - 1)); // Paridad real
-          if (cfg.line.eps) calc_parity = ~calc_parity;
+          if (!cfg.line.eps) calc_parity = ~calc_parity;   // impar
         end
 
         // Si lo que medimos no cuadra con lo calculado, marcamos error de paridad
@@ -75,13 +107,16 @@ class ser_rx_monitor extends uvm_monitor;
           observed_item.err = SER_PARITY;
         end
         
-        repeat(bit_ticks) @(posedge cfg.vif.clk); // Saltar a la mitad del bit de parada
+        avanzar(bit_ticks); // Saltar a la mitad del bit de parada
       end
 
       // Muestreo del primer bit de parada
       if (cfg.vif.srx == 1'b0) begin
         observed_item.err = SER_FRAME;
+        // datos, paridad y parada en 0 es un break, el DUT mete un 00 a la FIFO
+        if (shift_reg == 8'h00 && !(cfg.line.pen && sampled_parity)) observed_item.err = SER_BREAK;
       end
+      medir_baudios(observed_item, bit_ticks);
 
       rx_ap.write(observed_item);
     end
