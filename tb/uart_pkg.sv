@@ -74,7 +74,7 @@ package uart_pkg;
   // Ambiente 
   `include "environment/uart_env.sv"
   `include "uart_base_test.sv"
-  `include "uart_smoke_test.sv"
+  `include "humo/uart_smoke_test.sv"
   `include "uart_frame_sweep_test.sv"
   `include "uart_multi_ep_test.sv"
 
