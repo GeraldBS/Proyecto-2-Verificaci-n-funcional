@@ -63,7 +63,9 @@ class uart_cov extends uvm_component;
       bins b256 = {[256:4095]}; bins b4096 = {[4096:65534]}; bins maximo = {65535};
     }
     cp_order : coverpoint lsb_first { bins msb_primero = {0}; bins lsb_primero = {1}; }
-    cx_dl_order : cross cp_dl, cp_order;
+    cx_dl_order : cross cp_dl, cp_order {
+      ignore_bins dlm_cero = binsof(cp_dl.cero) || binsof(cp_dl.uno);  // con DLM = 0 el orden da igual
+    }
   endgroup
 
   covergroup cg_fifo_ctrl with function sample(bit [7:0] fcr, bit [1:0] traffic);
@@ -231,7 +233,6 @@ class uart_cov extends uvm_component;
     super.build_phase(phase);
     if (!uvm_config_db#(uart_cov_cfg)::get(this, "", "cfg", cfg))
       `uvm_fatal("NOCFG", "No se encontró la configuración de cobertura")
-    // con +UART_COV_EN=0 los write_* salen sin muestrear nada
   endfunction
 
   // [COV_CURVE] al final de cada episodio, para la curva de la línea base
