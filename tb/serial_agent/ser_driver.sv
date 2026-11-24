@@ -90,7 +90,7 @@ class ser_driver extends uvm_driver #(ser_item);
       end else begin
         // Paridad real (Par o Impar calculada sobre los bits de datos usados)
         parity_calc = ^(item.data & ((1 << cfg.line.data_bits()) - 1)); // XOR de los datos
-        if (cfg.line.eps) parity_calc = ~parity_calc; // Si es par, invertimos
+        if (!cfg.line.eps) parity_calc = ~parity_calc; // impar, invertimos (EPS = 1 es par, igual que el RTL)
       end
 
       // Inyección del ERROR DE PARIDAD
