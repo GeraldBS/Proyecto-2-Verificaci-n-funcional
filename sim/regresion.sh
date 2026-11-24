@@ -23,6 +23,8 @@ NBASE=${2:-30}
 
 COV="line+cond+fsm+branch+tgl"
 mkdir -p logs
+# borramos los logs de corridas viejas para que el resumen cuente solo esta
+rm -f logs/*_*.log
 
 # compilamos una sola vez; todas las corridas usan el mismo simv
 if [ $COMPILE -eq 1 ]; then
@@ -77,10 +79,15 @@ urg -full64 -dir simv.vdb -dbname merged -report cov_report -format both > logs/
     grep -q 'RESULT.*PASA' $f || echo "  $f"
   done
   echo "diferencias conocidas del DUT (DUT_BUG): $(grep -hE 'UVM_(WARNING|ERROR).*\[DUT_BUG\]' logs/*_*.log | wc -l)"
-  grep -h 'cobertura funcional total' logs/base_*.log | tail -1
+  # la cobertura que vale es la fusionada de urg, no la de una sola corrida
+  echo "cobertura fusionada (urg):"
+  grep -A2 'Total Coverage Summary' cov_report/dashboard.txt
 } | tee resumen.txt
 
 # curva de la linea base, una fila por semilla: semilla,episodio,cobertura
-grep -H 'COV_CURVE' logs/base_*.log 2>/dev/null \
-  | sed -E 's#logs/base_([0-9]+)\.log.*ep=([0-9]+) fcov=([0-9.]+).*#\1,\2,\3#' > curva_base.csv
+# solo si corrimos base, si no se borraria la curva anterior
+if [ "$MODE" = "base" ] || [ "$MODE" = "todo" ]; then
+  grep -H 'COV_CURVE' logs/base_*.log 2>/dev/null \
+    | sed -E 's#logs/base_([0-9]+)\.log.*ep=([0-9]+) fcov=([0-9.]+).*#\1,\2,\3#' > curva_base.csv
+fi
 echo "reporte HTML en cov_report/dashboard.html"
