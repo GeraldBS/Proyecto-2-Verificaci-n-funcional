@@ -410,6 +410,8 @@ class uart_reg_block extends uvm_reg_block;
       uvm_resource_db#(bit)::set({"REG::", excl[i].get_full_name()}, "NO_REG_BIT_BASH_TEST", 1);
       uvm_resource_db#(bit)::set({"REG::", excl[i].get_full_name()}, "NO_REG_ACCESS_TEST", 1);
     end
+    // FCR no se puede leer (la dir 2 en lectura es IIR), la prueba de reset tiene que saltarlo
+    uvm_resource_db#(bit)::set({"REG::", fcr.get_full_name()}, "NO_REG_HW_RESET_TEST", 1);
     
 
     // Debug: solo lectura
