@@ -64,7 +64,7 @@ cov:
 
 N    ?= 300
 JOBS ?= 8
-smoke:
+smoke: comp   # recompila, si no corre el simv viejo
 	$(MAKE) run TEST=uart_smoke_test
 
 humo:
