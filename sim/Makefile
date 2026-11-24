@@ -8,6 +8,7 @@
 #   make cov                   fusiona la cobertura y genera el reporte HTML
 #   make verdi                 abre Verdi con la base de datos de compilación
 #   make smoke                 prueba de humo, semilla 1
+#   make humo                  todas las pruebas de humo (tests/humo.txt)
 #   make check                 valida el ambiente: 30 semillas de la prueba base
 #   make regress               línea base: 300 semillas (N=300 JOBS=8)
 #   make corner                casos de esquina (tests/*.args y tests/semillas.txt)
@@ -44,7 +45,7 @@ SIMV_OPTS := +UVM_TESTNAME=$(TEST) +ntb_random_seed=$(SEED) \
              $(ARGS) \
              -l run_$(TEST)_$(SEED).log
 
-.PHONY: all comp run cov verdi clean smoke check regress corner
+.PHONY: all comp run cov verdi clean smoke humo check regress corner
 
 all: comp run
 
@@ -65,6 +66,9 @@ N    ?= 300
 JOBS ?= 8
 smoke:
 	$(MAKE) run TEST=uart_smoke_test
+
+humo:
+	./regresion.sh -j $(JOBS) humo
 
 check:
 	./regresion.sh -j $(JOBS) base 30

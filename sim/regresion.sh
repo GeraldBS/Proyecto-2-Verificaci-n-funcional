@@ -1,6 +1,6 @@
 #!/bin/bash
 # uso desde sim/ (despues del source de Synopsys):
-#   ./regresion.sh humo              prueba de humo con 3 semillas
+#   ./regresion.sh humo              pruebas de humo de tests/humo.txt
 #   ./regresion.sh base 300          linea base, semillas 1 a 300 (30 para validar)
 #   ./regresion.sh esquinas          los casos de tests/semillas.txt
 #   ./regresion.sh todo 300          base y esquinas
@@ -42,17 +42,23 @@ export -f correr
 export COV
 
 lista=$(mktemp)
+
+# humo.txt y semillas.txt tienen el mismo formato, asi que los leemos igual
+leer_casos() {
+  grep -v '^#' $1 | while read caso n prueba; do
+    [ -z "$caso" ] && continue
+    for ((s = 1; s <= n; s++)); do echo "$caso $s $prueba" >> $lista; done
+  done
+}
+
 if [ "$MODE" = "humo" ]; then
-  for s in 1 2 3; do echo "humo $s uart_smoke_test" >> $lista; done
+  leer_casos tests/humo.txt
 fi
 if [ "$MODE" = "base" ] || [ "$MODE" = "todo" ]; then
   for ((s = SEED0; s < SEED0 + NBASE; s++)); do echo "base $s uart_base_test" >> $lista; done
 fi
 if [ "$MODE" = "esquinas" ] || [ "$MODE" = "todo" ]; then
-  grep -v '^#' tests/semillas.txt | while read caso n prueba; do
-    [ -z "$caso" ] && continue
-    for ((s = 1; s <= n; s++)); do echo "$caso $s $prueba" >> $lista; done
-  done
+  leer_casos tests/semillas.txt
 fi
 
 echo "corriendo $(wc -l < $lista) simulaciones con $JOBS en paralelo..."
