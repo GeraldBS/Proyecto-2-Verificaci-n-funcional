@@ -26,7 +26,11 @@ module uart_ser_sva (
   input logic [7:0]                      msr,
   // Transmisor (uart_top.regs)
   input logic [2:0]                      tstate,
-  input logic [`UART_FIFO_COUNTER_W-1:0] tf_count
+  input logic [`UART_FIFO_COUNTER_W-1:0] tf_count,
+  // contador de baudios e interrupcion RDA (uart_top.regs)
+  input logic                            start_dlc,
+  input logic                            rda_int_pnd,
+  input logic                            rda_int
 );
 
   default clocking cb @(posedge wb_clk_i); endclocking
@@ -104,10 +108,11 @@ module uart_ser_sva (
         if (stx_q) begin                       // flanco de bajada: empieza el bit de inicio
           low_len   <= 32'd1;
           low_dl    <= dl;
-          low_clean <= !lcr[6] && !mcr[4];
+          low_clean <= !lcr[6] && !mcr[4] && !start_dlc;
         end else begin
           low_len <= low_len + 32'd1;
-          if (dl != low_dl || lcr[6] || mcr[4]) low_clean <= 1'b0;
+          // escribir DLL reinicia el contador de baudios aunque el valor sea el mismo
+          if (dl != low_dl || lcr[6] || mcr[4] || start_dlc) low_clean <= 1'b0;
         end
       end else if (stx_q) begin
         low_len <= '0;                         // se conserva un ciclo para la aserción
@@ -140,9 +145,11 @@ module uart_ser_sva (
   c_ser04_break: cover property ($rose(lcr[6]) && !mcr[4] && (tstate == S_START || tstate == S_BYTE || tstate == S_PARITY || tstate == S_STOP));   // break a mitad de carácter
 
   // A-RST-01
+  // revisamos un ciclo despues de ver el reset porque el RTL resetea con #1, y si el
+  // reset sube justo antes del flanco el valor viejo todavia se muestrea
   property p_rst01;
     @(posedge wb_clk_i) disable iff (1'b0)
-      (wb_rst_i || $fell(wb_rst_i)) |-> (stx_pad_o && !int_o);
+      $past(wb_rst_i) |-> (stx_pad_o && !int_o);
   endproperty
   a_rst01: assert property (p_rst01)
     else rep_err("A-RST-01", "stx o int_o incorrectos después del reset");
@@ -160,8 +167,13 @@ module uart_ser_sva (
     else if (int_mm_q != 8'hFF)            int_mm_q <= int_mm_q + 8'd1;
   end
 
+  // int_o usa rda_int_pnd pero IIR usa rda_int, si la FIFO de rx baja del nivel
+  // sin leer justo en el nivel (limpieza con FCR) int_o se queda pegado en 1
   a_int01: assert property (!(int_mm_now && int_mm_q == INT_WIN))
-    else rep_err("A-INT-01", $sformatf("int_o = %b con IIR = %h durante más de %0d ciclos", int_o, iir, INT_WIN));
+    else if ($sampled(int_o && rda_int_pnd && !rda_int))
+      rep_dut_bug("AMB-09", $sformatf("int_o = 1 con IIR = %h, rda_int_pnd sigue en 1 sin datos sobre el nivel", iir));
+    else
+      rep_err("A-INT-01", $sformatf("int_o = %b con IIR = %h durante más de %0d ciclos", int_o, iir, INT_WIN));
   c_int_rise: cover property ($rose(int_o));
   c_int_fall: cover property ($fell(int_o));
   c_int_lag:  cover property (int_mm_now ##1 !int_mm_now);   // la ventana de tolerancia sí se usa

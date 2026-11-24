@@ -104,7 +104,10 @@ module tb_top;
     .iir       (iir),
     .msr       (msr),
     .tstate    (tstate),
-    .tf_count  (tf_count)
+    .tf_count  (tf_count),
+    .start_dlc (regs.start_dlc),
+    .rda_int_pnd (regs.rda_int_pnd),
+    .rda_int   (regs.rda_int)
   );
 
   initial begin
