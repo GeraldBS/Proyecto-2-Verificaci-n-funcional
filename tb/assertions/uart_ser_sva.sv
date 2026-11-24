@@ -139,6 +139,7 @@ module uart_ser_sva (
   c_ser04_break: cover property ($rose(lcr[6]) && !mcr[4] && (tstate == S_START || tstate == S_BYTE || tstate == S_PARITY || tstate == S_STOP));   // break a mitad de carácter
 
   // A-RST-01
+  property p_rst01;
     @(posedge wb_clk_i) disable iff (1'b0)
       (wb_rst_i || $fell(wb_rst_i)) |-> (stx_pad_o && !int_o);
   endproperty
