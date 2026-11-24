@@ -178,7 +178,10 @@ class uart_scoreboard extends uvm_scoreboard;
     int unsigned lvl;
 
     // Ignorar accesos abortados o que no recibieron ack a tiempo
-    if (item.timeout || item.aborted) return;
+    if (item.timeout || item.aborted) begin
+      `uvm_info("SCB_DBG", $sformatf("acceso ignorado adr %0d we %0b (timeout %0b, abortado %0b)", item.adr, item.we, item.timeout, item.aborted), UVM_HIGH)
+      return;
+    end
 
     // el registro y el byte que de verdad uso el DUT, igual que la cobertura
     reg_idx = uart_reg_of(item.adr, item.sel);
@@ -186,6 +189,7 @@ class uart_scoreboard extends uvm_scoreboard;
     rd8     = uart_lane8(item.sel, item.dat_rd);
 
     if (item.we) begin
+      `uvm_info("SCB_DBG", $sformatf("escritura reg %0d = %02h con DLAB %0b", reg_idx, dat8, dlab_bit), UVM_HIGH)
       case (reg_idx)
         UART_LCR: begin
           if (dat8[6:0] != lcr_val[6:0]) begin
@@ -247,6 +251,7 @@ class uart_scoreboard extends uvm_scoreboard;
         end
         exp.chk = !tx_dirty;   // pudo cambiar arriba
         tx_q.push_back(exp);
+        `uvm_info("SCB_DBG", $sformatf("THR %02h, en cola %0d, chk %0b", exp.data, tx_q.size(), exp.chk), UVM_HIGH)
         send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
       end
     end
@@ -278,6 +283,7 @@ class uart_scoreboard extends uvm_scoreboard;
 
     if (item.err == SER_BREAK) return;   // break de LCR[6], no es un caracter
     got = item.data & data_mask();
+    `uvm_info("SCB_DBG", $sformatf("stx %02h err %s, en cola %0d, primero %02h chk %0b", got, item.err.name(), tx_q.size(), (tx_q.size() > 0) ? tx_q[0].data : 8'h00, (tx_q.size() > 0) ? tx_q[0].chk : 1'b0), UVM_HIGH)
 
     if (tx_q.size() == 0) begin
       if (tx_dirty) return;
