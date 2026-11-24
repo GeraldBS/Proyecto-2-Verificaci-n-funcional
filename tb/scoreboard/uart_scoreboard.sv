@@ -40,6 +40,8 @@ class uart_scoreboard extends uvm_scoreboard;
   int       n_tx_ok, n_rx_ok, n_skip;
   string    motivo_tx, motivo_rx;   // lo que ensucio cada lado en este episodio
   int       sin_comparar[string];   // cuantos quedaron sin comparar por cada motivo
+  int       tx_desde_vacia;         // escrituras en THR desde que LSR dijo FIFO TX vacia
+  bit       tx_resync_ok;           // TX sucio solo por FIFO llena, TEMT lo puede limpiar
 
   // Puertos TLM
   uvm_analysis_imp_wb  #(wb_item, uart_scoreboard)       wb_imp;
@@ -82,6 +84,7 @@ class uart_scoreboard extends uvm_scoreboard;
       rx_seen  = 0;
       motivo_tx = "";
       motivo_rx = "";
+      tx_desde_vacia = 0;   // el drain espera TEMT antes del fin de episodio
     end
   endtask
 
@@ -94,6 +97,7 @@ class uart_scoreboard extends uvm_scoreboard;
     dlab_bit = 1'b0;
     lcr_val  = 8'h03;  // valor de reset del RTL
     mcr_val  = 8'h00;
+    tx_desde_vacia = 0;
   endfunction
 
   function bit [7:0] data_mask();
@@ -120,9 +124,13 @@ class uart_scoreboard extends uvm_scoreboard;
 
   // desde aqui no se compara lo que este en camino, se cuenta nada mas
   function void ensuciar_tx(string porque);
+    // con la FIFO llena la trama sigue bien, solo se pierde la cuenta, por eso LSR la puede arreglar.
+    // Si encima cambio la linea, el monitor pudo cortar mal un caracter y ahi ya no
+    if (tx_dirty && porque != "FIFO TX llena") tx_resync_ok = 0;
     if (!tx_busy() || tx_dirty) return;
-    tx_dirty  = 1;
-    motivo_tx = porque;
+    tx_dirty     = 1;
+    tx_resync_ok = (porque == "FIFO TX llena");
+    motivo_tx    = porque;
     foreach (tx_q[i]) begin
       tx_q[i].chk    = 0;
       tx_q[i].porque = porque;
@@ -175,6 +183,7 @@ class uart_scoreboard extends uvm_scoreboard;
       if (!item.is_initial) begin
         tx_dirty  = 1;
         rx_dirty  = 1;
+        tx_resync_ok = 0;
         motivo_tx = "reset a media prueba";
         motivo_rx = "reset a media prueba";
       end
@@ -229,7 +238,10 @@ class uart_scoreboard extends uvm_scoreboard;
         end
         UART_FCR: begin   // el RTL escribe FCR sin importar DLAB
           // el caracter en curso no se corta, pero no sabemos cuantos quedaban en la FIFO
-          if (dat8[2]) ensuciar_tx("limpieza de la FIFO TX");
+          if (dat8[2]) begin
+            ensuciar_tx("limpieza de la FIFO TX");
+            tx_desde_vacia = 0;
+          end
           if (dat8[1]) begin
             ensuciar_rx("limpieza de la FIFO RX");
             rx_q.delete();
@@ -258,10 +270,11 @@ class uart_scoreboard extends uvm_scoreboard;
           send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
           return;
         end
-        // con 16 en cola no sabemos si el transmisor ya saco uno, y cada escritura con la FIFO
-        // llena pisa la cabeza de ese momento (AMB-10), asi que cualquiera puede salir cambiado
-        if (lvl >= 16) ensuciar_tx("FIFO TX llena");
-        if (lvl >= 17) begin
+        // la FIFO del DUT solo se puede llenar si van 16 escrituras desde que la vimos vacia.
+        // Desde ahi cada escritura pisa la cabeza de ese momento (AMB-10) y ya no sabemos cual sale
+        tx_desde_vacia++;
+        if (tx_desde_vacia >= 17) ensuciar_tx("FIFO TX llena");
+        if (lvl >= 17 && tx_desde_vacia >= 17) begin
           send_evt(EV_THR_WRITE, 16, rx_q.size(), 1);
           return;
         end
@@ -290,6 +303,27 @@ class uart_scoreboard extends uvm_scoreboard;
         end
         send_evt(EV_RBR_READ, tx_q.size(), lvl, 0);
       end
+      if (reg_idx == UART_LSR) leer_lsr(rd8);
+    end
+  endfunction
+
+  // LSR[5] y LSR[6] solo bajan con una escritura en THR, si se leen en 1 la FIFO TX sigue vacia
+  function void leer_lsr(bit [7:0] lsr);
+    if (mcr_val[4]) return;   // en loopback tx_q no se usa
+    if (lsr[5]) tx_desde_vacia = 0;
+    // TEMT, ya salio todo por stx, lo que quede en cola nunca va a salir
+    if (lsr[6] && (!tx_dirty || tx_resync_ok) && !lcr_val[6]) begin
+      foreach (tx_q[i]) begin
+        if (tx_q[i].chk && cfg.chk_tx) begin
+          error_count++;
+          `uvm_error("SCB_TX", $sformatf("LSR dice transmisor vacio y %02h nunca salio por stx", tx_q[i].data))
+        end else contar_skip(tx_q[i]);
+      end
+      tx_q.delete();
+      // el DUT quedo limpio, lo que se escriba de aqui en adelante si se puede comparar
+      if (tx_dirty) `uvm_info("SCB", "TX vacio segun LSR, se vuelve a comparar TX", UVM_MEDIUM)
+      tx_dirty  = 0;
+      motivo_tx = "";
     end
   endfunction
 
