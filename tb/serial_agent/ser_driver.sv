@@ -58,6 +58,7 @@ class ser_driver extends uvm_driver #(ser_item);
       cfg.vif.srx = 1'b0; // Baja la línea
       repeat(item.glitch_w * (bit_ticks / 16)) @(posedge cfg.vif.clk); // 1 a 15 dieciseisavos
       cfg.vif.srx = 1'b1; // Vuelve a subir
+      repeat(bit_ticks) @(posedge cfg.vif.clk); // si no, con gap 0 el glitch se pega al inicio del siguiente
       return; // El glitch es solo ruido, no envía un carácter real
     end
 
@@ -67,6 +68,7 @@ class ser_driver extends uvm_driver #(ser_item);
       // Duración: el carácter completo + los break_bits extra
       repeat(cfg.line.tc_cycles() + (item.break_bits * bit_ticks)) @(posedge cfg.vif.clk);
       cfg.vif.srx = 1'b1;
+      repeat(bit_ticks) @(posedge cfg.vif.clk); // el DUT sale del break solo cuando ve srx en 1
       return;
     end
 
@@ -117,8 +119,10 @@ class ser_driver extends uvm_driver #(ser_item);
       repeat(cfg.line.stop_ticks() * (bit_ticks / 16)) @(posedge cfg.vif.clk);
     end
 
-    // Retorno a reposo 
+    // Retorno a reposo
     cfg.vif.srx = 1'b1;
+    // con la parada en 0 el DUT espera ver srx en 1 para guardar el caracter
+    if (item.err == SER_FRAME) repeat(bit_ticks) @(posedge cfg.vif.clk);
   endtask
 
 endclass : ser_driver
