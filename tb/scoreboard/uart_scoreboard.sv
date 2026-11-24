@@ -23,8 +23,6 @@ class uart_scoreboard extends uvm_scoreboard;
 
   uart_exp_t tx_q[$];        // escritos en THR que todavia no salen por stx
   uart_exp_t rx_q[$];        // vistos en srx que todavia no se leen de RBR
-  uart_exp_t tx_alt[$];      // la otra version de tx_q cuando no sabemos si el DUT ya saco uno
-  bit        alt_on;
 
   bit [7:0] exp_lsr;         // Estado esperado del Line Status Register
   bit [7:0] exp_iir;         // Estado esperado del Interrupt Identification Register
@@ -76,7 +74,6 @@ class uart_scoreboard extends uvm_scoreboard;
       check_left("fin de episodio");
       tx_q.delete();
       rx_q.delete();
-      alt_on   = 0;
       tx_dirty = 0;
       rx_dirty = 0;
       rx_seen  = 0;
@@ -84,7 +81,6 @@ class uart_scoreboard extends uvm_scoreboard;
   endtask
 
   function void reset_model();
-    alt_on = 0;
     tx_q.delete();
     rx_q.delete();
     exp_lsr  = 8'h60; // THRE y TEMT en 1 (transmisor vacío)
@@ -121,7 +117,6 @@ class uart_scoreboard extends uvm_scoreboard;
   function void ensuciar_tx(string porque);
     if (!tx_busy() || tx_dirty) return;
     tx_dirty = 1;
-    alt_on   = 0;
     foreach (tx_q[i]) tx_q[i].chk = 0;
     `uvm_info("SCB", {"TX no predecible hasta el fin del episodio: ", porque}, UVM_MEDIUM)
   endfunction
@@ -131,12 +126,6 @@ class uart_scoreboard extends uvm_scoreboard;
     rx_dirty = 1;
     foreach (rx_q[i]) rx_q[i].chk = 0;
     `uvm_info("SCB", {"RX no predecible hasta el fin del episodio: ", porque}, UVM_MEDIUM)
-  endfunction
-
-  function void pisar(ref uart_exp_t q[$], input int idx, input bit [7:0] data);
-    if (!q[idx].pisado) q[idx].orig = q[idx].data;
-    q[idx].pisado = 1;
-    q[idx].data   = data;
   endfunction
 
   function void dut_bug(string msg);
@@ -243,26 +232,21 @@ class uart_scoreboard extends uvm_scoreboard;
           send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
           return;
         end
-        // caben 16 en la FIFO mas 1 en el registro de corrimiento. Con 16 en cola no sabemos
-        // si el transmisor ya saco el primero, entonces llevamos las dos versiones
+        // caben 16 en la FIFO mas 1 en el registro de corrimiento. Con 16 en cola no sabemos si el
+        // transmisor ya saco el primero: el 0 o el 1 puede salir pisado (AMB-10) y al final puede
+        // sobrar uno. Del 2 al 15 la posicion no cambia, esos si se revisan
         if (lvl == 16 && !tx_dirty) begin
-          if (alt_on) ensuciar_tx("dos dudas seguidas con la FIFO TX llena");
-          else begin
-            alt_on = 1;
-            tx_alt = tx_q;
-            pisar(tx_alt, 0, exp.data);   // si no lo habia sacado, este se perdio
-          end
+          tx_q[0].chk = 0;
+          tx_q[1].chk = 0;
+          tx_dirty    = 1;
+          `uvm_info("SCB", "FIFO TX llena, desde aqui no se compara TX hasta el fin del episodio", UVM_MEDIUM)
         end
         if (lvl >= 17) begin
-          // el RTL escribe la RAM aunque este llena y pisa el siguiente que iba a salir
-          if (!tx_dirty) pisar(tx_q, 1, exp.data);
-          if (alt_on)    pisar(tx_alt, 0, exp.data);
           send_evt(EV_THR_WRITE, 16, rx_q.size(), 1);
           return;
         end
         exp.chk = !tx_dirty;   // pudo cambiar arriba
         tx_q.push_back(exp);
-        if (alt_on && lvl != 16) tx_alt.push_back(exp);
         send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
       end
     end
@@ -289,9 +273,8 @@ class uart_scoreboard extends uvm_scoreboard;
 
   // caracter que salio por stx, tiene que ser el primero que se escribio en THR
   virtual function void write_tx(ser_item item);
-    uart_exp_t exp, alt;
+    uart_exp_t exp;
     bit [7:0]  got;
-    bit        es_h1, es_h0;
 
     if (item.err == SER_BREAK) return;   // break de LCR[6], no es un caracter
     got = item.data & data_mask();
@@ -304,16 +287,6 @@ class uart_scoreboard extends uvm_scoreboard;
     end
 
     exp = tx_q.pop_front();
-    if (alt_on && tx_alt.size() > 0) begin
-      alt   = tx_alt.pop_front();
-      es_h1 = (got == exp.data);
-      es_h0 = (got == alt.data);
-      if (es_h0 && !es_h1) begin   // el transmisor no habia sacado el primero
-        exp  = alt;
-        tx_q = tx_alt;
-      end
-      if (!(es_h0 && es_h1)) alt_on = 0;   // si calzan las dos seguimos con la duda
-    end
     if (!exp.chk || !cfg.chk_tx) begin
       n_skip++;
       return;
@@ -325,8 +298,6 @@ class uart_scoreboard extends uvm_scoreboard;
     end else if (item.err != SER_OK) begin
       error_count++;
       `uvm_error("SCB_TX", $sformatf("el caracter %02h salio con error %s", got, item.err.name()))
-    end else if (exp.pisado) begin
-      dut_bug($sformatf("stx saco %02h, que se escribio con la FIFO TX llena, en vez de %02h", got, exp.orig));
     end else n_tx_ok++;
   endfunction
 
@@ -353,6 +324,8 @@ class uart_scoreboard extends uvm_scoreboard;
     // fuera de tolerancia o falso inicio, el DUT pudo leer otra cosa
     exp.chk   = !rx_dirty && !(item.err inside {SER_BAUD_OUT, SER_GLITCH_START});
     rx_q.push_back(exp);
+    // el DUT pudo recibir uno de mas o de menos, ya no se puede confiar en la cuenta
+    if (!exp.chk) ensuciar_rx($sformatf("caracter con %s", item.err.name()));
     send_evt(EV_RX_PUSH, tx_q.size(), lvl, 0);
   endfunction
 
