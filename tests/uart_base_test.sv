@@ -1,9 +1,3 @@
-//////////////////////////////////////////////////////////////////////
-// uart_base_test: la única prueba del proyecto                   
-// Arma la configuración, lee los plusargs, la publica y corre la
-// secuencia principal. Los casos de esquina son esta misma prueba con
-// otro archivo .args (sección 6 del plan).
-//////////////////////////////////////////////////////////////////////
 class uart_base_test extends uvm_test;
   `uvm_component_utils(uart_base_test)
 
@@ -18,10 +12,11 @@ class uart_base_test extends uvm_test;
     super.build_phase(phase);
     cfg = uart_env_cfg::type_id::create("cfg");
     cfg.parse_plusargs();
+    test_cfg();
 
     // las interfaces las publica tb_top antes de run_test()
     if (!uvm_config_db#(virtual wb_if)::get(this, "", "wb_vif", cfg.wb.vif))
-      `uvm_fatal("NOVIF", "wb_vif no se encontró  uvm_config_db")
+      `uvm_fatal("NOVIF", "wb_vif no se encontró en uvm_config_db")
     if (!uvm_config_db#(virtual uart_ser_if)::get(this, "", "ser_vif", cfg.ser.vif))
       `uvm_fatal("NOVIF", "ser_vif no se encontró en uvm_config_db")
     if (!uvm_config_db#(virtual modem_if)::get(this, "", "mdm_vif", cfg.mdm.vif))
@@ -37,6 +32,10 @@ class uart_base_test extends uvm_test;
     uvm_config_db#(uart_cov_cfg)::set (this, "env.cov*",     "cfg",     cfg.cov);
 
     env = uart_env::type_id::create("env", this);
+  endfunction
+
+  // las pruebas hijas lo sobreescriben para fijar episodios y cosas asi, en la base no cambia nada
+  virtual function void test_cfg();
   endfunction
 
   function void end_of_elaboration_phase(uvm_phase phase); // siguiente fase de elaboration
