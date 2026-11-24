@@ -13,6 +13,7 @@ typedef struct {
   bit       chk;
   bit       pisado;  // una escritura con la FIFO llena le cayo encima (AMB-10)
   bit [7:0] orig;    // lo que se escribio de verdad, para el mensaje
+  string    porque;  // si chk = 0, por que no se compara
 } uart_exp_t;
 
 class uart_scoreboard extends uvm_scoreboard;
@@ -37,6 +38,8 @@ class uart_scoreboard extends uvm_scoreboard;
   bit       rst_tx_busy, rst_rx_busy;
   int       error_count;
   int       n_tx_ok, n_rx_ok, n_skip;
+  string    motivo_tx, motivo_rx;   // lo que ensucio cada lado en este episodio
+  int       sin_comparar[string];   // cuantos quedaron sin comparar por cada motivo
 
   // Puertos TLM
   uvm_analysis_imp_wb  #(wb_item, uart_scoreboard)       wb_imp;
@@ -77,6 +80,8 @@ class uart_scoreboard extends uvm_scoreboard;
       tx_dirty = 0;
       rx_dirty = 0;
       rx_seen  = 0;
+      motivo_tx = "";
+      motivo_rx = "";
     end
   endtask
 
@@ -116,16 +121,30 @@ class uart_scoreboard extends uvm_scoreboard;
   // desde aqui no se compara lo que este en camino, se cuenta nada mas
   function void ensuciar_tx(string porque);
     if (!tx_busy() || tx_dirty) return;
-    tx_dirty = 1;
-    foreach (tx_q[i]) tx_q[i].chk = 0;
+    tx_dirty  = 1;
+    motivo_tx = porque;
+    foreach (tx_q[i]) begin
+      tx_q[i].chk    = 0;
+      tx_q[i].porque = porque;
+    end
     `uvm_info("SCB", {"TX no predecible hasta el fin del episodio: ", porque}, UVM_MEDIUM)
   endfunction
 
   function void ensuciar_rx(string porque);
     if (!(rx_busy() || rx_seen) || rx_dirty) return;
-    rx_dirty = 1;
-    foreach (rx_q[i]) rx_q[i].chk = 0;
+    rx_dirty  = 1;
+    motivo_rx = porque;
+    foreach (rx_q[i]) begin
+      if (rx_q[i].chk) rx_q[i].porque = porque;   // el que ya traia su motivo lo deja
+      rx_q[i].chk = 0;
+    end
     `uvm_info("SCB", {"RX no predecible hasta el fin del episodio: ", porque}, UVM_MEDIUM)
+  endfunction
+
+  function void contar_skip(uart_exp_t exp);
+    n_skip++;
+    if (exp.porque == "") exp.porque = "chequeo apagado en la cfg";
+    sin_comparar[exp.porque]++;
   endfunction
 
   function void dut_bug(string msg);
@@ -154,8 +173,10 @@ class uart_scoreboard extends uvm_scoreboard;
       rst_rx_busy = rx_busy() || rx_seen;
       // un caracter cortado por el reset igual lo pueden reportar los monitores
       if (!item.is_initial) begin
-        tx_dirty = 1;
-        rx_dirty = 1;
+        tx_dirty  = 1;
+        rx_dirty  = 1;
+        motivo_tx = "reset a media prueba";
+        motivo_rx = "reset a media prueba";
       end
       reset_model();
     end else begin
@@ -231,7 +252,8 @@ class uart_scoreboard extends uvm_scoreboard;
         exp.pisado = 0;
         if (mcr_val[4]) begin
           // en loopback el caracter vuelve por el receptor y no sale por stx
-          exp.chk = 0;
+          exp.chk    = 0;
+          exp.porque = "loopback";
           rx_q.push_back(exp);
           send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
           return;
@@ -243,7 +265,8 @@ class uart_scoreboard extends uvm_scoreboard;
           send_evt(EV_THR_WRITE, 16, rx_q.size(), 1);
           return;
         end
-        exp.chk = !tx_dirty;   // pudo cambiar justo arriba
+        exp.chk    = !tx_dirty;   // pudo cambiar justo arriba
+        exp.porque = motivo_tx;
         tx_q.push_back(exp);
         `uvm_info("SCB_DBG", $sformatf("THR %02h, en cola %0d, chk %0b", exp.data, tx_q.size(), exp.chk), UVM_HIGH)
         send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
@@ -263,7 +286,7 @@ class uart_scoreboard extends uvm_scoreboard;
             end else if (exp.pisado) begin
               dut_bug($sformatf("RBR leyo %02h, que llego con la FIFO RX llena, en vez de %02h", exp.data, exp.orig));
             end else n_rx_ok++;
-          end else n_skip++;
+          end else contar_skip(exp);
         end
         send_evt(EV_RBR_READ, tx_q.size(), lvl, 0);
       end
@@ -288,7 +311,7 @@ class uart_scoreboard extends uvm_scoreboard;
 
     exp = tx_q.pop_front();
     if (!exp.chk || !cfg.chk_tx) begin
-      n_skip++;
+      contar_skip(exp);
       return;
     end
 
@@ -314,7 +337,10 @@ class uart_scoreboard extends uvm_scoreboard;
       if (!rx_q[0].pisado) rx_q[0].orig = rx_q[0].data;
       rx_q[0].pisado = 1;
       rx_q[0].data   = item.data & data_mask();
-      if (item.err inside {SER_BAUD_OUT, SER_GLITCH_START}) rx_q[0].chk = 0;
+      if (item.err inside {SER_BAUD_OUT, SER_GLITCH_START}) begin
+        rx_q[0].chk    = 0;
+        rx_q[0].porque = $sformatf("caracter con %s", item.err.name());
+      end
       send_evt(EV_RX_PUSH, tx_q.size(), lvl, 1);
       return;
     end
@@ -323,6 +349,7 @@ class uart_scoreboard extends uvm_scoreboard;
     exp.pisado = 0;
     // fuera de tolerancia o falso inicio, el DUT pudo leer otra cosa
     exp.chk   = !rx_dirty && !(item.err inside {SER_BAUD_OUT, SER_GLITCH_START});
+    exp.porque = rx_dirty ? motivo_rx : $sformatf("caracter con %s", item.err.name());
     rx_q.push_back(exp);
     // el DUT pudo recibir uno de mas o de menos, ya no se puede confiar en la cuenta
     if (!exp.chk) ensuciar_rx($sformatf("caracter con %s", item.err.name()));
@@ -342,5 +369,7 @@ class uart_scoreboard extends uvm_scoreboard;
     super.report_phase(phase);
     `uvm_info("SCB", $sformatf("TX bien: %0d, RX bien: %0d, sin comparar: %0d, errores: %0d",
               n_tx_ok, n_rx_ok, n_skip, error_count), UVM_LOW)
+    foreach (sin_comparar[motivo])
+      `uvm_info("SCB", $sformatf("sin comparar por %s: %0d", motivo, sin_comparar[motivo]), UVM_LOW)
   endfunction
 endclass : uart_scoreboard
