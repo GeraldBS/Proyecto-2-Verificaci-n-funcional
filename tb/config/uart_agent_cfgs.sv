@@ -24,6 +24,7 @@ class uart_ser_agent_cfg extends uvm_object;
   uvm_active_passive_enum is_active = UVM_ACTIVE;
 
   bit           loopback; // en loopback el DUT ignora srx, el driver lo deja en reposo
+  uart_line_cfg line;     // formato vigente, lo asigna uart_env_cfg (driver y monitores lo usan)
 
   // knobs de recepcion
   int unsigned rx_gap_mode     = 0;           // 0 mezcla, 1 sin pausa, 2 solo pausas largas
