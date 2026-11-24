@@ -76,7 +76,7 @@ urg -full64 -dir simv.vdb -dbname merged -report cov_report -format both > logs/
   for f in logs/*_*.log; do
     grep -q 'RESULT.*PASA' $f || echo "  $f"
   done
-  echo "diferencias conocidas del DUT (DUT_BUG): $(grep -h 'DUT_BUG' logs/*_*.log | wc -l)"
+  echo "diferencias conocidas del DUT (DUT_BUG): $(grep -hE 'UVM_(WARNING|ERROR).*\[DUT_BUG\]' logs/*_*.log | wc -l)"
   grep -h 'cobertura funcional total' logs/base_*.log | tail -1
 } | tee resumen.txt
 

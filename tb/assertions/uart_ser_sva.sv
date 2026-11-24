@@ -63,8 +63,9 @@ module uart_ser_sva (
 `ifdef UART_SVA_NO_UVM
     $display("[SVA_DUT_BUG] %s: %s (t=%0t)", id, msg, $time);
 `else
-    if (dut_bug_sev == "error") uvm_pkg::uvm_report_error  (id, msg, uvm_pkg::UVM_NONE);
-    else                        uvm_pkg::uvm_report_warning(id, msg, uvm_pkg::UVM_NONE);
+    // id DUT_BUG para que el test y la regresion las cuenten, el AMB va en el mensaje
+    if (dut_bug_sev == "error") uvm_pkg::uvm_report_error  ("DUT_BUG", {id, ": ", msg}, uvm_pkg::UVM_NONE);
+    else                        uvm_pkg::uvm_report_warning("DUT_BUG", {id, ": ", msg}, uvm_pkg::UVM_NONE);
 `endif
   endfunction
 
