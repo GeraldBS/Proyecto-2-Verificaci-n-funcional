@@ -236,20 +236,14 @@ class uart_scoreboard extends uvm_scoreboard;
           send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
           return;
         end
-        // caben 16 en la FIFO mas 1 en el registro de corrimiento. Con 16 en cola no sabemos si el
-        // transmisor ya saco el primero: el 0 o el 1 puede salir pisado (AMB-10) y al final puede
-        // sobrar uno. Del 2 al 15 la posicion no cambia, esos si se revisan
-        if (lvl == 16 && !tx_dirty) begin
-          tx_q[0].chk = 0;
-          tx_q[1].chk = 0;
-          tx_dirty    = 1;
-          `uvm_info("SCB", "FIFO TX llena, desde aqui no se compara TX hasta el fin del episodio", UVM_MEDIUM)
-        end
+        // con 16 en cola no sabemos si el transmisor ya saco uno, y cada escritura con la FIFO
+        // llena pisa la cabeza de ese momento (AMB-10), asi que cualquiera puede salir cambiado
+        if (lvl >= 16) ensuciar_tx("FIFO TX llena");
         if (lvl >= 17) begin
           send_evt(EV_THR_WRITE, 16, rx_q.size(), 1);
           return;
         end
-        exp.chk = !tx_dirty;   // pudo cambiar arriba
+        exp.chk = !tx_dirty;   // pudo cambiar justo arriba
         tx_q.push_back(exp);
         `uvm_info("SCB_DBG", $sformatf("THR %02h, en cola %0d, chk %0b", exp.data, tx_q.size(), exp.chk), UVM_HIGH)
         send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
