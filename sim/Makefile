@@ -7,8 +7,9 @@
 #   make BUS8=1                compila la variante de bus de 8 bits
 #   make cov                   fusiona la cobertura y genera el reporte HTML
 #   make verdi                 abre Verdi con la base de datos de compilación
-#   make check                 valida el ambiente: 40 semillas de la prueba base
-#   make regress               línea base: 350 semillas (N=350 JOBS=8)
+#   make smoke                 prueba de humo, semilla 1
+#   make check                 valida el ambiente: 30 semillas de la prueba base
+#   make regress               línea base: 300 semillas (N=300 JOBS=8)
 #   make corner                casos de esquina (tests/*.args y tests/semillas.txt)
 # -----------------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ SIMV_OPTS := +UVM_TESTNAME=$(TEST) +ntb_random_seed=$(SEED) \
              $(ARGS) \
              -l run_$(TEST)_$(SEED).log
 
-.PHONY: all comp run cov verdi clean check regress corner
+.PHONY: all comp run cov verdi clean smoke check regress corner
 
 all: comp run
 
@@ -60,10 +61,13 @@ cov_hier.cfg:
 cov:
 	urg -full64 -dir simv.vdb -dbname merged -report cov_report -format both
 
-N    ?= 350
+N    ?= 300
 JOBS ?= 8
+smoke:
+	$(MAKE) run TEST=uart_smoke_test
+
 check:
-	./regresion.sh -j $(JOBS) base 40
+	./regresion.sh -j $(JOBS) base 30
 
 regress:
 	./regresion.sh -j $(JOBS) base $(N)

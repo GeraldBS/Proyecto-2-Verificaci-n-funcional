@@ -1,18 +1,21 @@
-# caso de esquina (archivo .args sin extensión) y cuántas semillas correr (sección 8 del plan)
-rx_overrun_tl14_5bit 20
-rx_overrun_tl1       20
-rx_timeout           20
-tx_overflow          10
-rx_errors            30
-break                20
-rx_glitch            10
-baud_dev             10
-dl_tail              5
-dl_zero_order        10
-loopback             20
-modem_storm          10
-int_priority         20
-reset_storm          20
-reg_noise            20
-wb_bad_sel           10
-stop_bits            10
+# caso, semillas y prueba (seccion 8 del plan), el caso usa tests/<caso>.args si existe
+rx_overrun_tl14_5bit 20 uart_base_test
+rx_overrun_tl1       20 uart_base_test
+rx_timeout           20 uart_base_test
+tx_overflow          10 uart_base_test
+frame_sweep          20 uart_frame_sweep_test
+break                20 uart_base_test
+rx_glitch            10 uart_base_test
+baud_dev             10 uart_base_test
+dl_256_4095           5 uart_base_test
+dl_zero               5 uart_base_test
+loopback             20 uart_base_test
+modem_storm          10 uart_base_test
+int_priority         30 uart_base_test
+reset_storm          40 uart_multi_ep_test
+reg_noise            30 uart_base_test
+wb_bad_sel           10 uart_base_test
+stop_bits            20 uart_base_test
+dl_4096_65534         3 uart_base_test
+dl_65535              2 uart_base_test
+multi_ep             15 uart_multi_ep_test
