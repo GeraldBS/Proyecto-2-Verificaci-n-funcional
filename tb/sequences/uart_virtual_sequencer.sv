@@ -1,11 +1,3 @@
-//////////////////////////////////////////////////////////////////////
-// uart_virtual_sequencer: donde corre la secuencia principal       //
-//////////////////////////////////////////////////////////////////////
-// No maneja transacciones propias: solo guarda las referencias a los
-// secuenciadores de los tres agentes, al RAL y a la configuración.
-// uart_env llena las referencias en connect_phase; las secuencias
-// virtuales las usan por p_sequencer.
-//////////////////////////////////////////////////////////////////////
 class uart_virtual_sequencer extends uvm_sequencer;
   `uvm_component_utils(uart_virtual_sequencer)
 
@@ -15,11 +7,7 @@ class uart_virtual_sequencer extends uvm_sequencer;
   uart_reg_block            regm;
   uart_env_cfg              cfg;
 
-  // Estado compartido por las actividades que corren en paralelo.
-  // bus_sem: una sola actividad a la vez puede usar el bus; las que
-  // ponen DLAB = 1 o cambian LCR lo guardan durante toda la ventana,
-  // así nadie escribe THR cuando en realidad estaría escribiendo DLL.
-  semaphore bus_sem;
+  semaphore bus_sem;       // si alguien pone DLAB = 1 nadie mas puede escribir THR, seria DLL
   bit       traffic_done;  // TX, RX, módem y eventos terminaron
   bit       rst_hit;       // hubo reset en este episodio: todos cortan
   int       episode;

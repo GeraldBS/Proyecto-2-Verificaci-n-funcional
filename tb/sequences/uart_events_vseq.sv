@@ -1,10 +1,3 @@
-//////////////////////////////////////////////////////////////////////
-// uart_events_vseq: eventos raros en medio del tráfico             //
-//////////////////////////////////////////////////////////////////////
-// Con su probabilidad por episodio, y en un momento al azar dentro de
-// la ventana del episodio: reconfigurar un registro, limpiar una FIFO
-// o dar un reset asíncrono. La secuencia principal decide qué toca.
-//////////////////////////////////////////////////////////////////////
 class uart_events_vseq extends uart_base_vseq;
   `uvm_object_utils(uart_events_vseq)
 

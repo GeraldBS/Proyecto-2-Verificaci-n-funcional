@@ -1,12 +1,3 @@
-//////////////////////////////////////////////////////////////////////
-// uart_sw_vseq: el "software" que atiende al UART                  //
-//////////////////////////////////////////////////////////////////////
-// Corre todo el episodio, hasta que el tráfico termina. En modo de
-// interrupciones espera int_o y lee IIR; en modo de sondeo lee LSR
-// cada cierto tiempo. En los dos casos tarda sw_delay en atender (así
-// salen el overrun y el timeout) y a veces hace un acceso de ruido a
-// una dirección al azar.
-//////////////////////////////////////////////////////////////////////
 class uart_sw_vseq extends uart_base_vseq;
   `uvm_object_utils(uart_sw_vseq)
 
@@ -16,7 +7,7 @@ class uart_sw_vseq extends uart_base_vseq;
     super.new(name);
   endfunction
 
-  // retraso de atención en Tc: corto (0-1), medio (2-6) o largo (7-max)
+  // retraso de atencion en Tc, corto (0-1), medio (2-6) o largo (7-24)
   function int unsigned pick_delay();
     int unsigned band_lo[3] = '{0, 2, 7};
     int unsigned band_hi[3] = '{1, 6, 'hFFFF};
@@ -26,9 +17,7 @@ class uart_sw_vseq extends uart_base_vseq;
   task body();
     while (!p_sequencer.traffic_done && !stop_now()) begin
       if (mode == SW_IRQ) begin
-        // espera int_o, con un sondeo de respaldo cada 32 Tc por si
-        // IER = 0 o se perdió el aviso
-        fork : espera
+        fork : espera   // respaldo cada 32 Tc por si IER = 0 o se perdio el aviso
           wait (p_sequencer.cfg.wb.vif.irq === 1'b1);
           wait_tc(32);
           wait (p_sequencer.traffic_done || p_sequencer.rst_hit);
@@ -47,7 +36,6 @@ class uart_sw_vseq extends uart_base_vseq;
     end
   endtask
 
-  // ------------------------------------------------ por interrupciones
   task service_irq();
     bit [7:0] iir, dummy;
     wb_read(UART_IIR, iir);
@@ -61,7 +49,6 @@ class uart_sw_vseq extends uart_base_vseq;
     endcase
   endtask
 
-  // ------------------------------------------------ por sondeo
   task service_poll();
     bit [7:0] lsr, dummy;
     wb_read(UART_LSR, lsr);
@@ -69,9 +56,7 @@ class uart_sw_vseq extends uart_base_vseq;
     if ($urandom_range(1)) wb_read(UART_MSR, dummy);
   endtask
 
-  // Vacía la FIFO RX. Normalmente pregunta a LSR antes de cada lectura;
-  // a veces lee RBR a ciegas (puede leer con la FIFO vacía) y a veces
-  // se detiene antes de vaciarla, para que salga el timeout.
+  // a veces lee RBR a ciegas o deja datos en la FIFO para que salga el timeout
   task read_rx();
     bit [7:0]    lsr, data;
     bit          lsr_first = pct(cfg().sw_lsr_first_pct);
@@ -85,23 +70,13 @@ class uart_sw_vseq extends uart_base_vseq;
     end
   endtask
 
-  // ------------------------------------------------ ruido de registros
-  // Lecturas a cualquier dirección y escrituras solo donde no cambian
-  // el formato ni el módem (THR, IER, LSR, MSR, scratch y Debug). Con
-  // DLAB = 1 nunca escribimos DLL ni DLM: escribir DLL reinicia el
-  // contador de baudios y dañaría el carácter que esté en la línea.
-  // El sel inválido (AMB-05) lo mete el driver con +UART_WB_BAD_SEL_PCT;
-  // aquí solo le damos permiso donde no hace daño: lecturas, y
-  // escrituras a 0..3 con DLAB = 0, que caen en THR. A 4..7 caerían
-  // en MCR y con DLAB = 1 en DLL, así que ahí nunca damos permiso.
+  // escribir DLL reinicia el contador de baudios y daña el caracter en la linea, por eso con DLAB = 1 nunca se escribe 0 ni 1
   task reg_noise();
     bit [4:0]  rd_addr[10] = '{0, 1, 2, 3, 4, 5, 6, 7, 8, 12};
     bit [4:0]  wr_addr[7]  = '{0, 1, 5, 6, 7, 8, 12};
     bit [31:0] rdata;
     if (pct(cfg().reg_dlab_pct)) begin
-      // con DLAB = 1: leer cualquier dirección (incluye LSR, MSR e IIR,
-      // AMB-07) o escribir donde no pasa nada (LSR, MSR, scratch, Debug)
-      bit [4:0] safe_w[5] = '{5, 6, 7, 8, 12};
+      bit [4:0] safe_w[5] = '{5, 6, 7, 8, 12};   // donde escribir no hace nada raro (AMB-07)
       lock();
       wb_write(UART_LCR, line().lcr(1'b1), 1);
       if ($urandom_range(1)) wb_acc(0, rd_addr[$urandom_range(9, 0)], 0, rdata, 1);
@@ -110,7 +85,7 @@ class uart_sw_vseq extends uart_base_vseq;
       unlock();
     end else if ($urandom_range(1)) begin
       bit [4:0] adr = wr_addr[$urandom_range(6, 0)];
-      wb_acc(1, adr, {24'h0, pick_data()}, rdata, 0, adr < 4);
+      wb_acc(1, adr, {24'h0, pick_data()}, rdata, 0, adr < 4);  // sel malo solo en 0..3, que caen en THR (AMB-05)
     end else begin
       wb_acc(0, rd_addr[$urandom_range(9, 0)], 0, rdata, 0, 1);
     end

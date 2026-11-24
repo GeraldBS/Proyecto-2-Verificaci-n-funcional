@@ -1,10 +1,3 @@
-//////////////////////////////////////////////////////////////////////
-// uart_mdm_vseq: cambios en las entradas de módem                  //
-//////////////////////////////////////////////////////////////////////
-// Cada cambio invierte una entrada (CTS, DSR, RI o DCD) elegida con
-// los pesos del knob, y a veces dos a la vez. Así RI sube y baja con
-// la misma probabilidad, que es lo que hace falta para ver AMB-04.
-//////////////////////////////////////////////////////////////////////
 class uart_mdm_vseq extends uart_base_vseq;
   `uvm_object_utils(uart_mdm_vseq)
 
