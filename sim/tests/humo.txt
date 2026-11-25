@@ -1,3 +1,5 @@
 # pruebas de humo, no son del plan (las recomendo el profe), mismo formato que semillas.txt
 # nombre, semillas y prueba; el nombre usa tests/<nombre>.args si existe
 smoke 3 uart_smoke_test
+smoke_serie 3 uart_ser_smoke_test
+smoke_mdm 1 uart_mdm_smoke_test
