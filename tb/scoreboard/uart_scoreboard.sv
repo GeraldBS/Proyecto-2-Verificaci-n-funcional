@@ -1,5 +1,4 @@
 
-//
 `uvm_analysis_imp_decl(_wb)
 `uvm_analysis_imp_decl(_rst)
 `uvm_analysis_imp_decl(_int)
@@ -38,10 +37,10 @@ class uart_scoreboard extends uvm_scoreboard;
   bit       rst_tx_busy, rst_rx_busy;
   int       error_count;
   int       n_tx_ok, n_rx_ok, n_skip;
-  string    motivo_tx, motivo_rx;   // lo que ensucio cada lado en este episodio
+  string    motivo_tx, motivo_rx;   // por que se dejo de comparar TX y RX
   int       sin_comparar[string];   // cuantos quedaron sin comparar por cada motivo
   int       tx_desde_vacia;         // escrituras en THR desde que LSR dijo FIFO TX vacia
-  bit       tx_resync_ok;           // TX sucio solo por FIFO llena, TEMT lo puede limpiar
+  bit       tx_resync_ok;           // se dejo de comparar solo por FIFO llena, con TEMT se vuelve a comparar
 
   // Puertos TLM
   uvm_analysis_imp_wb  #(wb_item, uart_scoreboard)       wb_imp;
@@ -84,7 +83,7 @@ class uart_scoreboard extends uvm_scoreboard;
       rx_seen  = 0;
       motivo_tx = "";
       motivo_rx = "";
-      tx_desde_vacia = 0;   // el drain espera TEMT antes del fin de episodio
+      tx_desde_vacia = 0;   // antes de terminar el episodio ya se espero TEMT
     end
   endtask
 
@@ -124,8 +123,7 @@ class uart_scoreboard extends uvm_scoreboard;
 
   // desde aqui no se compara lo que este en camino, se cuenta nada mas
   function void ensuciar_tx(string porque);
-    // con la FIFO llena la trama sigue bien, solo se pierde la cuenta, por eso LSR la puede arreglar.
-    // Si encima cambio la linea, el monitor pudo cortar mal un caracter y ahi ya no
+    // si fue solo por FIFO llena, al leer TEMT se puede volver a comparar
     if (tx_dirty && porque != "FIFO TX llena") tx_resync_ok = 0;
     if (!tx_busy() || tx_dirty) return;
     tx_dirty     = 1;
@@ -143,7 +141,7 @@ class uart_scoreboard extends uvm_scoreboard;
     rx_dirty  = 1;
     motivo_rx = porque;
     foreach (rx_q[i]) begin
-      if (rx_q[i].chk) rx_q[i].porque = porque;   // el que ya traia su motivo lo deja
+      if (rx_q[i].chk) rx_q[i].porque = porque;   // se queda con el primer motivo
       rx_q[i].chk = 0;
     end
     `uvm_info("SCB", {"RX no predecible hasta el fin del episodio: ", porque}, UVM_MEDIUM)
@@ -256,7 +254,7 @@ class uart_scoreboard extends uvm_scoreboard;
         ensuciar_rx("escritura de DL");
       end
 
-      // ESCRITURA EN THR (DLAB = 0)
+      // escritura en THR (DLAB = 0)
       if (reg_idx == UART_THR && !dlab_bit) begin
         lvl = tx_q.size();
         exp.data  = dat8 & data_mask();
@@ -285,7 +283,7 @@ class uart_scoreboard extends uvm_scoreboard;
       end
     end
     else begin
-      // LECTURA DE RBR (DLAB = 0)
+      // lectura de RBR (DLAB = 0)
       if (reg_idx == UART_RBR && !dlab_bit) begin
         lvl = rx_q.size();
         // leer con la FIFO vacia no se compara (V-RX-05)
@@ -365,7 +363,7 @@ class uart_scoreboard extends uvm_scoreboard;
     if (mcr_val[4]) return;   // en loopback el DUT ignora srx
     rx_seen = 1;
 
-    // overrun: el nuevo no entra, pero el RTL lo escribe en la RAM encima del mas viejo
+    // el RTL guarda el del overrun encima del mas viejo aunque no lo cuente
     if (lvl >= 16) begin
       if (!rx_q[0].pisado) rx_q[0].orig = rx_q[0].data;
       rx_q[0].pisado = 1;
