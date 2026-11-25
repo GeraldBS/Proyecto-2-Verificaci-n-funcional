@@ -1,6 +1,12 @@
+//////////////////////////////////////////////////////////////////////
+// uart_agent_cfgs:
+// Objetos de configuración de los agentes, el scoreboard y la cobertura.
+// Guardan los knobs, la interfaz virtual y las referencias al formato vigente.
+//////////////////////////////////////////////////////////////////////
+
 // Wishbone
 class wb_agent_cfg extends uvm_object;
-  `uvm_object_utils(wb_agent_cfg)
+  `uvm_object_utils(wb_agent_cfg) // registra en factory
   virtual wb_if          vif;
   uvm_active_passive_enum is_active = UVM_ACTIVE;
 
@@ -9,10 +15,9 @@ class wb_agent_cfg extends uvm_object;
   int unsigned gap_zero_pct  = 60;
   int unsigned stb_delay_pct = 20;
   int unsigned stb_delay_max = 3;
-  // en 0 en la base, solo CE-16 lo sube (AMB-05)
-  int unsigned bad_sel_pct   = 0;
+  int unsigned bad_sel_pct   = 0; // en 0 en la base
 
-  function new(string name = "wb_agent_cfg");
+  function new(string name = "wb_agent_cfg"); // constructor
     super.new(name);
   endfunction
 endclass : wb_agent_cfg
@@ -35,50 +40,55 @@ class uart_ser_agent_cfg extends uvm_object;
   int unsigned baud_out_pct    = 2;
   int unsigned short_stop_pct  = 5;
 
-  // constantes, ya no tienen plusarg en el plan nuevo
+  // constantes
   int unsigned rx_chars_max    = 40;
-  int unsigned slow_dl         = 256;         // desde aqui se limita el trafico
+  int unsigned slow_dl         = 256;         // desde aqui se limita 
   int unsigned slow_chars_max  = 2;
   int unsigned rx_gap_max      = 80;          // bits
   int unsigned rx_gap_w[]      = '{60, 30, 10};  // 0, 1-15 bits, 16-max bits
   int unsigned frame_err_pct   = 5;
   int unsigned break_extra_max = 2;           // Tc
-  int unsigned glitch_w_max    = 15;          // dieciseisavos de bit
+  int unsigned glitch_w_max    = 15;          
   int unsigned baud_in_max     = 25;          // décimas de %
   int unsigned baud_out_min    = 50;
   int unsigned baud_out_max    = 100;
 
-  function new(string name = "uart_ser_agent_cfg");
+  function new(string name = "uart_ser_agent_cfg"); // constructor
     super.new(name);
   endfunction
 endclass : uart_ser_agent_cfg
 
 // Módem
-class modem_agent_cfg extends uvm_object;
+class modem_agent_cfg extends uvm_object; // crea agente de modem
   `uvm_object_utils(modem_agent_cfg)
   virtual modem_if       vif;
   uvm_active_passive_enum is_active = UVM_ACTIVE;
 
+    // constantes
   int unsigned changes_max = 8;
-  // constantes
   int unsigned sig_w[]     = '{1, 1, 1, 1};   // CTS, DSR, RI, DCD
   int unsigned gap_max     = 4;               // Tc
   int unsigned multi_pct   = 10;
 
-  function new(string name = "modem_agent_cfg");
+  function new(string name = "modem_agent_cfg"); // constructor
     super.new(name);
   endfunction
 endclass : modem_agent_cfg
 
 // scoreboard
-class uart_scb_cfg extends uvm_object;
+class uart_scb_cfg extends uvm_object; // crea scoreboard de UART
   `uvm_object_utils(uart_scb_cfg)
 
-  // todos los chequeos van siempre, ya no hay +UART_SCB_EN
-  bit chk_tx = 1, chk_rx = 1, chk_lsr = 1, chk_iir = 1, chk_msr = 1, chk_int = 1;
+  bit chk_tx = 1;
+  bit chk_rx = 1;
+  bit chk_lsr = 1;
+  bit chk_iir = 1;
+  bit chk_msr = 1;
+  bit chk_int = 1;
+
   int unsigned max_errors = 10;   // 0 = nunca detener
-  // severidad de las diferencias conocidas del DUT
-  uvm_severity dut_bug_sev = UVM_WARNING;
+  
+  uvm_severity dut_bug_sev = UVM_WARNING; // severidad
 
   uart_line_cfg line;
   uart_ctrl_cfg ctrl;
@@ -89,7 +99,7 @@ class uart_scb_cfg extends uvm_object;
 endclass : uart_scb_cfg
 
 // cobertura
-class uart_cov_cfg extends uvm_object;
+class uart_cov_cfg extends uvm_object; // crea cobertura de UART
   `uvm_object_utils(uart_cov_cfg)
 
   bit          enable      = 1;
@@ -100,7 +110,7 @@ class uart_cov_cfg extends uvm_object;
   uart_sw_mode_e sw_mode = SW_IRQ;
   virtual wb_if  wb_vif;
 
-  function new(string name = "uart_cov_cfg");
+  function new(string name = "uart_cov_cfg"); // constructor
     super.new(name);
   endfunction
 endclass : uart_cov_cfg

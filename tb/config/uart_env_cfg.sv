@@ -1,4 +1,11 @@
-class uart_env_cfg extends uvm_object;
+//////////////////////////////////////////////////////////////////////
+// uart_env_cfg:
+// Configuración de todo el ambiente. Es el único lugar que lee plusargs
+// y crea los objetos de línea, FIFO, agentes,
+// scoreboard y cobertura, que comparten el formato vigente.
+//////////////////////////////////////////////////////////////////////
+
+class uart_env_cfg extends uvm_object; // Crea el ambiente
   `uvm_object_utils(uart_env_cfg)
 
   // objetos que cuelgan de este (la prueba los publica por separado)
@@ -49,7 +56,7 @@ class uart_env_cfg extends uvm_object;
   // filas de la tabla que imprime print_knobs()
   string knob_rows[$];
 
-  function new(string name = "uart_env_cfg");
+  function new(string name = "uart_env_cfg"); // constructor (agentes, covertura, scorboard, entre otras)
     super.new(name);
     line = uart_line_cfg::type_id::create("line");
     ctrl = uart_ctrl_cfg::type_id::create("ctrl");
@@ -58,7 +65,8 @@ class uart_env_cfg extends uvm_object;
     mdm  = modem_agent_cfg::type_id::create("mdm");
     scb  = uart_scb_cfg::type_id::create("scb");
     cov  = uart_cov_cfg::type_id::create("cov");
-    // todos ven el mismo formato vigente
+
+    // todos ven el mismo formato 
     ser.line = line;
     scb.line = line;  scb.ctrl = ctrl;
     cov.line = line;  cov.ctrl = ctrl;
@@ -75,6 +83,7 @@ class uart_env_cfg extends uvm_object;
     return s;
   endfunction
 
+  // leen un plusarg y arman la tabla de knobs
   local function void add_row(string name, string val, bit found);
     knob_rows.push_back({"  +", pad(name, 26), " = ", pad(val, 16), found ? "plusarg" : "defecto"});
   endfunction
@@ -105,6 +114,8 @@ class uart_env_cfg extends uvm_object;
     if (v > 100) `uvm_fatal("KNOB", $sformatf("+%s=%0d: tiene que estar entre 0 y 100", name, v))
   endfunction
 
+  // lee el plusarg de severidad
+
   local function void knob_sev(string name);
     string s;
     bit    found = get_str(name, s);
@@ -118,7 +129,7 @@ class uart_env_cfg extends uvm_object;
     add_row(name, (scb.dut_bug_sev == UVM_ERROR) ? "error" : "warning", found);
   endfunction
 
-  // único punto de lectura de plusargs (tabla 7 del plan)
+  // único punto de lectura de plusargs
   function void parse_plusargs();
     string s;
     knob_rows.delete();
@@ -198,6 +209,7 @@ class uart_env_cfg extends uvm_object;
       `uvm_fatal("KNOB", "la suma de los porcentajes de error de +UART_SER_* (mas 5 de trama) pasa de 100")
   endfunction
 
+  // imprime resultados
   function void print_knobs();
     string s = "\nKnobs de la corrida (valor y origen):\n";
     foreach (knob_rows[i]) s = {s, knob_rows[i], "\n"};
