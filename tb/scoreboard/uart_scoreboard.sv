@@ -41,6 +41,10 @@ class uart_scoreboard extends uvm_scoreboard;
   int       sin_comparar[string];   // cuantos quedaron sin comparar por cada motivo
   int       tx_desde_vacia;         // escrituras en THR desde que LSR dijo FIFO TX vacia
   bit       tx_resync_ok;           // se dejo de comparar solo por FIFO llena, con TEMT se vuelve a comparar
+  bit [1:0] pin_mdm;                // rts y dtr que vio el monitor de modem la ultima vez
+  bit       pin_visto;              // el monitor solo manda cuando algo cambia, antes de eso no sabemos los pines
+  bit       mdm_pend;               // cambio MCR o los pines, falta revisar
+  int       n_mdm_ok, n_mdm_amb;
 
   // Puertos TLM
   uvm_analysis_imp_wb  #(wb_item, uart_scoreboard)       wb_imp;
@@ -84,6 +88,7 @@ class uart_scoreboard extends uvm_scoreboard;
       motivo_tx = "";
       motivo_rx = "";
       tx_desde_vacia = 0;   // antes de terminar el episodio ya se espero TEMT
+      revisar_mdm();
     end
   endtask
 
@@ -97,6 +102,7 @@ class uart_scoreboard extends uvm_scoreboard;
     lcr_val  = 8'h03;  // valor de reset del RTL
     mcr_val  = 8'h00;
     tx_desde_vacia = 0;
+    mdm_pend = 1;   // MCR vuelve a 0 y los pines tienen que seguirlo
   endfunction
 
   function bit [7:0] data_mask();
@@ -153,9 +159,9 @@ class uart_scoreboard extends uvm_scoreboard;
     sin_comparar[exp.porque]++;
   endfunction
 
-  function void dut_bug(string msg);
-    if (cfg.dut_bug_sev == UVM_ERROR) `uvm_error("DUT_BUG", {"AMB-10: ", msg})
-    else                              `uvm_warning("DUT_BUG", {"AMB-10: ", msg})
+  function void dut_bug(string amb, string msg);
+    if (cfg.dut_bug_sev == UVM_ERROR) `uvm_error("DUT_BUG", {amb, ": ", msg})
+    else                              `uvm_warning("DUT_BUG", {amb, ": ", msg})
   endfunction
 
   function void send_evt(uart_evt_e kind, int unsigned tx_lvl, int unsigned rx_lvl, bit lost);
@@ -205,6 +211,9 @@ class uart_scoreboard extends uvm_scoreboard;
     uart_exp_t exp;
     int unsigned lvl;
 
+    // ya pasaron varios ciclos desde el ultimo cambio, los pines tuvieron tiempo de moverse
+    revisar_mdm();
+
     // Ignorar accesos abortados o que no recibieron ack a tiempo
     if (item.timeout || item.aborted) begin
       `uvm_info("SCB_DBG", $sformatf("acceso ignorado adr %0d we %0b (timeout %0b, abortado %0b)", item.adr, item.we, item.timeout, item.aborted), UVM_HIGH)
@@ -233,6 +242,7 @@ class uart_scoreboard extends uvm_scoreboard;
             ensuciar_rx("cambio de loopback");
           end
           mcr_val = dat8;
+          mdm_pend = 1;
         end
         UART_FCR: begin   // el RTL escribe FCR sin importar DLAB
           // el caracter en curso no se corta, pero no sabemos cuantos quedaban en la FIFO
@@ -294,7 +304,7 @@ class uart_scoreboard extends uvm_scoreboard;
               error_count++;
               `uvm_error("SCB_RX", $sformatf("RBR leyo %02h y se esperaba %02h (%s)", rd8 & data_mask(), exp.data, cfg.line.convert2string()))
             end else if (exp.pisado) begin
-              dut_bug($sformatf("RBR leyo %02h, que llego con la FIFO RX llena, en vez de %02h", exp.data, exp.orig));
+              dut_bug("AMB-10", $sformatf("RBR leyo %02h, que llego con la FIFO RX llena, en vez de %02h", exp.data, exp.orig));
             end else n_rx_ok++;
           end else contar_skip(exp);
         end
@@ -387,19 +397,42 @@ class uart_scoreboard extends uvm_scoreboard;
     send_evt(EV_RX_PUSH, tx_q.size(), lvl, 0);
   endfunction
 
-  // (write_mdm y write_int se mantienen vacías por ahora)
+  // (write_int se mantiene vacía por ahora)
   virtual function void write_int(uart_int_item item); endfunction
-  virtual function void write_mdm(mdm_item item); endfunction
+
+  // se revisa en el siguiente acceso al bus, este monitor y el de Wishbone no siempre llegan en orden
+  virtual function void write_mdm(mdm_item item);
+    if (!pin_visto || {item.rts, item.dtr} != pin_mdm) mdm_pend = 1;
+    pin_mdm   = {item.rts, item.dtr};
+    pin_visto = 1;
+  endfunction
+
+  // V-MDM-01, la especificacion dice que rts y dtr salen invertidos respecto a MCR[1:0]
+  function void revisar_mdm();
+    bit [1:0] mcr_bits = mcr_val[1:0];
+    if (!mdm_pend || !pin_visto) return;
+    mdm_pend = 0;
+    if (pin_mdm == ~mcr_bits) n_mdm_ok++;
+    else if (pin_mdm == mcr_bits) begin   // el RTL los saca sin invertir
+      n_mdm_amb++;
+      dut_bug("AMB-03", $sformatf("rts/dtr = %b%b con MCR[1:0] = %b%b (se esperaba el complemento)", pin_mdm[1], pin_mdm[0], mcr_bits[1], mcr_bits[0]));
+    end else begin
+      error_count++;
+      `uvm_error("SCB_MDM", $sformatf("rts/dtr = %b%b no calza con MCR[1:0] = %b%b de ninguna forma", pin_mdm[1], pin_mdm[0], mcr_bits[1], mcr_bits[0]))
+    end
+  endfunction
 
   virtual function void check_phase(uvm_phase phase);
     super.check_phase(phase);
     check_left("fin de la prueba");
+    revisar_mdm();
   endfunction
 
   virtual function void report_phase(uvm_phase phase);
     super.report_phase(phase);
     `uvm_info("SCB", $sformatf("TX bien: %0d, RX bien: %0d, sin comparar: %0d, errores: %0d",
               n_tx_ok, n_rx_ok, n_skip, error_count), UVM_LOW)
+    `uvm_info("SCB", $sformatf("rts/dtr bien: %0d, con AMB-03: %0d", n_mdm_ok, n_mdm_amb), UVM_LOW)
     foreach (sin_comparar[motivo])
       `uvm_info("SCB", $sformatf("sin comparar por %s: %0d", motivo, sin_comparar[motivo]), UVM_LOW)
   endfunction
