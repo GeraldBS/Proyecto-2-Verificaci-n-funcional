@@ -19,7 +19,7 @@ class ser_tx_monitor extends uvm_monitor;
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     
-    // Obtenemos la maleta de configuración (cfg)
+    // sacamos la cfg del agente
     if (!uvm_config_db#(uart_ser_agent_cfg)::get(this, "", "cfg", cfg)) begin
       `uvm_fatal("NO_CFG", {"Falta uart_ser_agent_cfg para ", get_full_name()})
     end

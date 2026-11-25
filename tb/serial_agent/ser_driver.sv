@@ -53,7 +53,7 @@ class ser_driver extends uvm_driver #(ser_item);
     // Aplicar el Gap 
     repeat(item.gap_bits * bit_ticks) @(posedge cfg.vif.clk);
 
-    //MANEJO DE GLITCH
+    //Manejo de glitch
     if (item.err == SER_GLITCH) begin
       cfg.vif.srx = 1'b0; // Baja la línea
       repeat(item.glitch_w * (bit_ticks / 16)) @(posedge cfg.vif.clk); // 1 a 15 dieciseisavos
@@ -62,7 +62,7 @@ class ser_driver extends uvm_driver #(ser_item);
       return; // El glitch es solo ruido, no envía un carácter real
     end
 
-    //MANEJO DE BREAK (Línea en 0 todo el tiempo)
+    //Manejo de break (Línea en 0 todo el tiempo)
     if (item.err == SER_BREAK) begin
       cfg.vif.srx = 1'b0;
       // Duración: el carácter completo + los break_bits extra
@@ -72,7 +72,7 @@ class ser_driver extends uvm_driver #(ser_item);
       return;
     end
 
-    // TRANSMISIÓN DE UN CARÁCTER NORMAL
+    // Transmisión de un carácter normal
 
     //Bit de Inicio 
     cfg.vif.srx = 1'b0;
@@ -95,7 +95,7 @@ class ser_driver extends uvm_driver #(ser_item);
         if (!cfg.line.eps) parity_calc = ~parity_calc; // impar, invertimos (EPS = 1 es par, igual que el RTL)
       end
 
-      // Inyección del ERROR DE PARIDAD
+      // Inyección del error de paridad
       if (item.err == SER_PARITY) begin
         parity_calc = ~parity_calc; // Corrompemos el bit a propósito
       end
@@ -105,7 +105,7 @@ class ser_driver extends uvm_driver #(ser_item);
     end
 
     // (Stop Bits)
-    // Inyección del ERROR DE TRAMA (Frame Error): Manda un 0 en vez de un 1
+    // Inyección del error de trama (Frame Error): Manda un 0 en vez de un 1
     if (item.err == SER_FRAME) begin
       cfg.vif.srx = 1'b0;
     end else begin

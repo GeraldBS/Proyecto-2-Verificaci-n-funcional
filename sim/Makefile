@@ -1,4 +1,3 @@
-# -----------------------------------------------------------------------------
 # Makefile mínimo para compilar y correr con Synopsys VCS + UVM 1.2
 #
 #   make                       compila y corre uart_hello_test con semilla 1
@@ -12,7 +11,6 @@
 #   make check                 valida el ambiente: 30 semillas de la prueba base
 #   make regress               línea base: 300 semillas (N=300 JOBS=8)
 #   make corner                casos de esquina (tests/*.args y tests/semillas.txt)
-# -----------------------------------------------------------------------------
 
 TEST  ?= uart_base_test
 SEED  ?= 1

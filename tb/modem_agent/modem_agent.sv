@@ -33,7 +33,7 @@ class modem_agent extends uvm_agent;
     // instacia del monitor 
     monitor = modem_monitor::type_id::create("monitor", this);
 
-    // El driver y el secuenciador SOLO se instancian si el agente es activo
+    // El driver y el secuenciador solo se instancian si el agente es activo
     if (cfg.is_active == UVM_ACTIVE) begin
       sqr    = modem_sequencer::type_id::create("sqr", this);
       driver = modem_driver::type_id::create("driver", this);

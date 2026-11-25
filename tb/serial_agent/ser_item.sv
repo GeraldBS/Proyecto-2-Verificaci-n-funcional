@@ -3,7 +3,7 @@
 class ser_item extends uvm_sequence_item;
 
     rand bit [7:0]        data;         // Dato a enviar
-    rand uart_ser_err_e   err;          // Error inyectado (debe coincidir con la enumeración definida por Gerald)
+    rand uart_ser_err_e   err;          // error que se mete a la trama
     rand int unsigned     gap_bits;     // Tiempo de reposo (en bits) antes del carácter
     rand int unsigned     glitch_w;     // Ancho del glitch (en 1/16 de bit)
     rand int              baud_dev;     // Desviación en la tasa de baudios (décimas de %)

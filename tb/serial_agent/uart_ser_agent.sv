@@ -39,7 +39,7 @@ class uart_ser_agent extends uvm_agent;
     srx_mon = ser_rx_monitor::type_id::create("srx_mon", this);
     stx_mon = ser_tx_monitor::type_id::create("stx_mon", this);
 
-    // El driver y el sequencer SOLO se instancian si el agente es ACTIVO
+    // El driver y el sequencer solo se instancian si el agente es activo
     if (cfg.is_active == UVM_ACTIVE) begin
       sqr = ser_sequencer::type_id::create("sqr", this);
       driver    = ser_driver::type_id::create("driver", this);
@@ -56,7 +56,7 @@ class uart_ser_agent extends uvm_agent;
     tx_ap = stx_mon.tx_ap;
     rx_ap = srx_mon.rx_ap;
 
-    // Solo conectamos el puerto de ítems si somos un agente ACTIVO (y existen ambos)
+    // Solo conectamos el puerto de ítems si somos un agente activo (y existen ambos)
     if (cfg.is_active == UVM_ACTIVE) begin
       // Conexión TLM estándar de UVM: puerto_del_driver -> export_del_sequencer
       driver.seq_item_port.connect(sqr.seq_item_export);
