@@ -118,6 +118,15 @@ class ser_rx_monitor extends uvm_monitor;
       end
       medir_baudios(observed_item, bit_ticks);
 
+      // con la parada en 0 el DUT guarda el caracter hasta que srx sube o se cumple el break, avisamos ahi
+      if (observed_item.err == SER_BREAK) begin
+        for (int c = 0; c < bit_ticks / 2 && cfg.vif.srx !== 1'b1; c++) @(posedge cfg.vif.clk);
+        @(posedge cfg.vif.clk);
+      end else if (observed_item.err == SER_FRAME) begin
+        for (int c = 0; c < 12 * bit_ticks && cfg.vif.srx !== 1'b1; c++) @(posedge cfg.vif.clk);
+        @(posedge cfg.vif.clk);
+      end
+
       rx_ap.write(observed_item);
     end
   endtask
