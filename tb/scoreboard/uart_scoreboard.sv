@@ -211,9 +211,6 @@ class uart_scoreboard extends uvm_scoreboard;
     uart_exp_t exp;
     int unsigned lvl;
 
-    // ya pasaron varios ciclos desde el ultimo cambio, los pines tuvieron tiempo de moverse
-    revisar_mdm();
-
     // Ignorar accesos abortados o que no recibieron ack a tiempo
     if (item.timeout || item.aborted) begin
       `uvm_info("SCB_DBG", $sformatf("acceso ignorado adr %0d we %0b (timeout %0b, abortado %0b)", item.adr, item.we, item.timeout, item.aborted), UVM_HIGH)
@@ -224,6 +221,9 @@ class uart_scoreboard extends uvm_scoreboard;
     reg_idx = uart_reg_of(item.adr, item.sel);
     dat8    = uart_lane8(item.sel, item.dat);
     rd8     = uart_lane8(item.sel, item.dat_rd);
+
+    // el DUT cambia los pines antes del ack, asi que con la propia escritura a MCR todavia no revisamos
+    if (!(item.we && reg_idx == UART_MCR)) revisar_mdm();
 
     if (item.we) begin
       `uvm_info("SCB_DBG", $sformatf("escritura reg %0d = %02h con DLAB %0b", reg_idx, dat8, dlab_bit), UVM_HIGH)
