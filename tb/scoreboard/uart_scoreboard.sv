@@ -41,6 +41,7 @@ class uart_scoreboard extends uvm_scoreboard;
   int       sin_comparar[string];   // cuantos quedaron sin comparar por cada motivo
   int       tx_desde_vacia;         // escrituras en THR desde que LSR dijo FIFO TX vacia
   bit       tx_resync_ok;           // se dejo de comparar solo por FIFO llena, con TEMT se vuelve a comparar
+  bit       thr_en_loop;            // se escribio THR en loopback y puede seguir en la FIFO TX
   bit [1:0] pin_mdm;                // rts y dtr que vio el monitor de modem la ultima vez
   bit       pin_visto;              // el monitor solo manda cuando algo cambia, antes de eso no sabemos los pines
   bit       mdm_pend;               // cambio MCR o los pines, falta revisar
@@ -88,6 +89,7 @@ class uart_scoreboard extends uvm_scoreboard;
       motivo_tx = "";
       motivo_rx = "";
       tx_desde_vacia = 0;   // antes de terminar el episodio ya se espero TEMT
+      thr_en_loop = 0;
       revisar_mdm();
     end
   endtask
@@ -102,6 +104,7 @@ class uart_scoreboard extends uvm_scoreboard;
     lcr_val  = 8'h03;  // valor de reset del RTL
     mcr_val  = 8'h00;
     tx_desde_vacia = 0;
+    thr_en_loop = 0;
     mdm_pend = 1;   // MCR vuelve a 0 y los pines tienen que seguirlo
   endfunction
 
@@ -131,7 +134,8 @@ class uart_scoreboard extends uvm_scoreboard;
   function void ensuciar_tx(string porque);
     // si fue solo por FIFO llena, al leer TEMT se puede volver a comparar
     if (tx_dirty && porque != "FIFO TX llena") tx_resync_ok = 0;
-    if (!tx_busy() || tx_dirty) return;
+    // lo que se escribio en loopback no esta en tx_q pero igual puede salir por stx
+    if ((!tx_busy() && !thr_en_loop) || tx_dirty) return;
     tx_dirty     = 1;
     tx_resync_ok = (porque == "FIFO TX llena");
     motivo_tx    = porque;
@@ -249,6 +253,7 @@ class uart_scoreboard extends uvm_scoreboard;
           if (dat8[2]) begin
             ensuciar_tx("limpieza de la FIFO TX");
             tx_desde_vacia = 0;
+            thr_en_loop = 0;
           end
           if (dat8[1]) begin
             ensuciar_rx("limpieza de la FIFO RX");
@@ -274,6 +279,7 @@ class uart_scoreboard extends uvm_scoreboard;
           // en loopback el caracter vuelve por el receptor y no sale por stx
           exp.chk    = 0;
           exp.porque = "loopback";
+          thr_en_loop = 1;
           rx_q.push_back(exp);
           send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
           return;
@@ -316,7 +322,10 @@ class uart_scoreboard extends uvm_scoreboard;
 
   // LSR[5] y LSR[6] solo bajan con una escritura en THR, si se leen en 1 la FIFO TX sigue vacia
   function void leer_lsr(bit [7:0] lsr);
-    if (mcr_val[4]) return;   // en loopback tx_q no se usa
+    if (mcr_val[4]) begin   // en loopback tx_q no se usa
+      if (lsr[6]) thr_en_loop = 0;   // ya salio todo por dentro
+      return;
+    end
     if (lsr[5]) tx_desde_vacia = 0;
     // TEMT, ya salio todo por stx, lo que quede en cola nunca va a salir
     if (lsr[6] && (!tx_dirty || tx_resync_ok) && !lcr_val[6]) begin
