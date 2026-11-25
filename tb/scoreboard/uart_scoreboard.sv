@@ -302,6 +302,7 @@ class uart_scoreboard extends uvm_scoreboard;
       // lectura de RBR (DLAB = 0)
       if (reg_idx == UART_RBR && !dlab_bit) begin
         lvl = rx_q.size();
+        `uvm_info("SCB_DBG", $sformatf("RBR %02h, en cola %0d, primero %02h chk %0b", rd8, lvl, (lvl > 0) ? rx_q[0].data : 8'h00, (lvl > 0) ? rx_q[0].chk : 1'b0), UVM_HIGH)
         // leer con la FIFO vacia no se compara (V-RX-05)
         if (lvl > 0) begin
           exp = rx_q.pop_front();
@@ -379,6 +380,7 @@ class uart_scoreboard extends uvm_scoreboard;
     uart_exp_t exp;
     int unsigned lvl = rx_q.size();
 
+    `uvm_info("SCB_DBG", $sformatf("srx %02h err %s, en cola %0d", item.data, item.err.name(), lvl), UVM_HIGH)
     if (mcr_val[4]) return;   // en loopback el DUT ignora srx
     rx_seen = 1;
 
