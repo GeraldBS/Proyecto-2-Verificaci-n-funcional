@@ -13,6 +13,7 @@ typedef struct {
   bit       pisado;  // una escritura con la FIFO llena le cayo encima (AMB-10)
   bit [7:0] orig;    // lo que se escribio de verdad, para el mensaje
   string    porque;  // si chk = 0, por que no se compara
+  realtime  t;       // cuando lo vio el monitor
 } uart_exp_t;
 
 class uart_scoreboard extends uvm_scoreboard;
@@ -110,6 +111,12 @@ class uart_scoreboard extends uvm_scoreboard;
 
   function bit [7:0] data_mask();
     return 8'hFF >> (3 - lcr_val[1:0]);
+  endfunction
+
+  // el monitor avisa en la mitad de la parada y el DUT guarda el caracter hasta unos 2 DL ciclos despues
+  function bit recien_llegado(bit [7:0] rd8);
+    realtime ventana = (3 * cfg.line.bit_cycles() / 16 + 8) * UART_CLK_NS * 1ns;
+    return ((rd8 & data_mask()) !== rx_q[0].data) && ($realtime - rx_q[0].t < ventana);
   endfunction
 
   function bit tx_busy(); return tx_q.size() > 0; endfunction
@@ -303,6 +310,11 @@ class uart_scoreboard extends uvm_scoreboard;
       if (reg_idx == UART_RBR && !dlab_bit) begin
         lvl = rx_q.size();
         `uvm_info("SCB_DBG", $sformatf("RBR %02h, en cola %0d, primero %02h chk %0b", rd8, lvl, (lvl > 0) ? rx_q[0].data : 8'h00, (lvl > 0) ? rx_q[0].chk : 1'b0), UVM_HIGH)
+        // si el primero acaba de llegar y no calza, el DUT todavia no lo tenia y la FIFO estaba vacia
+        if (lvl > 0 && recien_llegado(rd8)) begin
+          `uvm_info("SCB_DBG", "RBR leido antes de que el DUT guardara el caracter", UVM_HIGH)
+          lvl = 0;
+        end
         // leer con la FIFO vacia no se compara (V-RX-05)
         if (lvl > 0) begin
           exp = rx_q.pop_front();
@@ -399,6 +411,7 @@ class uart_scoreboard extends uvm_scoreboard;
 
     exp.data   = item.data & data_mask();
     exp.pisado = 0;
+    exp.t      = $realtime;
     // fuera de tolerancia o falso inicio, el DUT pudo leer otra cosa
     exp.chk   = !rx_dirty && !(item.err inside {SER_BAUD_OUT, SER_GLITCH_START});
     exp.porque = rx_dirty ? motivo_rx : $sformatf("caracter con %s", item.err.name());
