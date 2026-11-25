@@ -271,9 +271,10 @@ class uart_scoreboard extends uvm_scoreboard;
           return;
         end
         // la FIFO del DUT solo se puede llenar si van 16 escrituras desde que la vimos vacia.
-        // Desde ahi cada escritura pisa la cabeza de ese momento (AMB-10) y ya no sabemos cual sale
+        // Desde ahi cada escritura pisa la cabeza de ese momento (AMB-10) y ya no sabemos cual sale.
+        // tx_q nunca tiene menos que la FIFO real, asi que con menos de 16 en cola tampoco puede estar llena
         tx_desde_vacia++;
-        if (tx_desde_vacia >= 17) ensuciar_tx("FIFO TX llena");
+        if (lvl >= 16 && tx_desde_vacia >= 17) ensuciar_tx("FIFO TX llena");
         if (lvl >= 17 && tx_desde_vacia >= 17) begin
           send_evt(EV_THR_WRITE, 16, rx_q.size(), 1);
           return;
