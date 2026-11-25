@@ -1,6 +1,8 @@
 //////////////////////////////////////////////////////////////////////
-// uart_seqs: todas las secuencias, en orden de dependencia         //
+// uart_seqs: 
+// todas las secuencias, en orden de dependencia         
 //////////////////////////////////////////////////////////////////////
+
 `include "sequences/uart_base_vseq.sv"
 `include "sequences/uart_program_vseq.sv"
 `include "sequences/uart_tx_vseq.sv"

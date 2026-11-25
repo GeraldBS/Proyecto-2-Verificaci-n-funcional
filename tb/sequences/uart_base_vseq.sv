@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////
-// uart_base_vseq: base de todas las secuencias virtuales          
-// Tiene lo que todas usan, acceso a la configuración por p_sequencer,
-// lecturas y escrituras Wishbone de un registro, esperas medidas en
+// uart_base_vseq:
+// Base de todas las secuencias virtuales, tiene lo que todas usan, acceso a la configuración
+// por p_sequencer, lecturas y escrituras Wishbone de un registro, esperas medidas en
 // ciclos o en Tc y sorteos con los knobs.
 //////////////////////////////////////////////////////////////////////
 
-class uart_base_vseq extends uvm_sequence;
+class uart_base_vseq extends uvm_sequence; // secuencia virtual
   `uvm_object_utils(uart_base_vseq) //objeto
   `uvm_declare_p_sequencer(uart_virtual_sequencer) // secuencia
 
@@ -14,12 +14,19 @@ class uart_base_vseq extends uvm_sequence;
   endfunction
 
   // atajos
-  function uart_env_cfg  cfg();  return p_sequencer.cfg;      endfunction
-  function uart_line_cfg line(); return p_sequencer.cfg.line; endfunction
-  function uart_ctrl_cfg ctrl(); return p_sequencer.cfg.ctrl; endfunction
+  function uart_env_cfg  cfg();
+    return p_sequencer.cfg;
+  endfunction
 
-  // sorteos
-  // true con probabilidad pct/100
+  function uart_line_cfg line();
+    return p_sequencer.cfg.line;
+  endfunction
+
+  function uart_ctrl_cfg ctrl();
+    return p_sequencer.cfg.ctrl;
+  endfunction
+
+  // sorteos, con probabilidad pct/100
   function bit pct(int unsigned p);
     return $urandom_range(99) < p;
   endfunction
@@ -43,10 +50,8 @@ class uart_base_vseq extends uvm_sequence;
     return $urandom_range(255);
   endfunction
 
-  // valor en una de tres bandas [a0:b0], [a1:b1], [a2:b2] recortadas a
-  // [lo:hi]; una banda que queda vacía no se puede elegir
-  function int unsigned pick_band3(int unsigned weights[], int unsigned band_lo[3], int unsigned band_hi[3],
-                                   int unsigned lo, int unsigned hi);
+  // valor de bandas
+  function int unsigned pick_band3(int unsigned weights[], int unsigned band_lo[3], int unsigned band_hi[3], int unsigned lo, int unsigned hi);
     int unsigned usable[] = new[3];   // pesos, con 0 en las bandas que quedan vacías
     int unsigned band, low, high;
     foreach (usable[i]) begin
@@ -61,11 +66,10 @@ class uart_base_vseq extends uvm_sequence;
     return $urandom_range(high, low);
   endfunction
 
-  // ---------------------------------------------------------- esperas
+  // esperas
   task wait_cycles(longint unsigned n);
     if (n == 0) return;
-    // esperas largas con # para no iterar millones de flancos
-    if (n > 64) #((n - 1) * UART_CLK_NS * 1ns);
+    if (n > 64) #((n - 1) * UART_CLK_NS * 1ns); // # permite esperas largas para no iterar millones de flancos
     @(posedge p_sequencer.cfg.wb.vif.clk);
   endtask
 
@@ -73,41 +77,40 @@ class uart_base_vseq extends uvm_sequence;
     wait_cycles(n * line().tc_cycles());
   endtask
 
-  // ---------------------------------------------------------- bus
-  task lock();   p_sequencer.bus_sem.get(1); endtask
-  task unlock(); p_sequencer.bus_sem.put(1); endtask
+  // bus
+  task lock();
+    p_sequencer.bus_sem.get(1);
+  endtask
 
-  // Un acceso Wishbone; con held = 1 la llamada ya tiene el candado.
-  // set_reg_access (de wb_item) pone el sel y el carril según adr. Con
-  // bad_sel_ok = 1 el driver puede cambiar el sel por uno inválido
-  // (AMB-05); solo lo pedimos donde eso no toca MCR ni el divisor.
-  // rdata vuelve con el byte en [7:0], o la palabra completa en Debug.
-  task wb_acc(bit we, bit [4:0] adr, bit [31:0] dat, output bit [31:0] rdata,
-              input bit held = 0, bit bad_sel_ok = 0);
+  task unlock();
+    p_sequencer.bus_sem.put(1);
+  endtask
+
+  // Acceso Wishbone, con held = 1 la llamada ya tiene el candado.
+  task wb_acc(bit we, uart_adr_t adr, bit [31:0] dat, output bit [31:0] rdata, input bit held = 0, bit bad_sel_ok = 0);
     wb_item item = wb_item::type_id::create("wb_item");
     if (!held) lock();
     start_item(item, -1, p_sequencer.wb_sqr);
     item.set_reg_access(adr, we, dat[7:0]);
     item.bad_sel_ok = bad_sel_ok;
     finish_item(item);
-    // it.sel es el que usó el driver, por si lo cambió
+    // item.sel es el que usó el driver, por si lo cambió
     rdata = (adr >= 8) ? item.dat_rd : {24'h0, uart_lane8(item.sel, item.dat_rd)};
     if (!held) unlock();
   endtask
 
-  task wb_write(bit [4:0] adr, bit [7:0] dat, bit held = 0);
+  task wb_write(uart_adr_t adr, bit [7:0] dat, bit held = 0);
     bit [31:0] dummy;
     wb_acc(1, adr, {24'h0, dat}, dummy, held);
   endtask
 
-  task wb_read(bit [4:0] adr, output bit [7:0] dat, input bit held = 0);
+  task wb_read(uart_adr_t adr, output bit [7:0] dat, input bit held = 0);
     bit [31:0] word;
     wb_acc(0, adr, 32'h0, word, held);
     dat = word[7:0];
   endtask
 
-  // escribe el divisor con DLAB = 1 en el orden pedido y deja LCR con
-  // el formato vigente; held porque es una ventana con DLAB = 1
+  // escribe el divisor con DLAB = 1 en el orden pedido y deja LCR con el formato vigente
   task write_divisor(bit held = 0);
     if (!held) lock();
     wb_write(UART_LCR, line().lcr(1'b1), 1);
