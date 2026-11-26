@@ -9,7 +9,7 @@
 // Los anchos salen de uart_defines.v (`UART_ADDR_WIDTH=5, `UART_DATA_WIDTH=32)(DATA_BUS_WIDTH_8 fuera de alcance, revisar Testplan).
 // -----------------------------------------------------------------------------
 `timescale 1ns/1ps
-`include "uart_defines.v"0
+`include "uart_defines.v"
 
 interface wb_if (input logic clk);
 

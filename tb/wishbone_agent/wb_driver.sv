@@ -29,7 +29,16 @@ class wb_driver extends uvm_driver #(wb_item);
 
   // Mide el periodo del reloj y atiende los items del secuenciador
   task run_phase(uvm_phase phase);
+
     realtime t0;   //primer flanco de reloj
+    
+    vif.drv_cb.cyc     <= 1'b0;
+    vif.drv_cb.stb     <= 1'b0;
+    vif.drv_cb.we      <= 1'b0;
+    vif.drv_cb.adr     <= '0;
+    vif.drv_cb.sel     <= '0;
+    vif.drv_cb.dat_m2s <= '0;
+
     @(posedge vif.clk);
     t0 = $realtime;
     @(posedge vif.clk);
@@ -94,12 +103,14 @@ class wb_driver extends uvm_driver #(wb_item);
     @(vif.drv_cb);
   endtask
 
-  // Espera n ciclos de reloj; rst_seen = 1 si el reset estuvo activo en alguno.
   task wait_cycles(int unsigned n, output bit rst_seen);
     rst_seen = 0;
     repeat (n) begin
       @(vif.drv_cb);
-      if (vif.rst) rst_seen = 1;
+      if (vif.rst) begin
+        rst_seen = 1;
+        break;
+      end
     end
   endtask
 
@@ -130,7 +141,7 @@ class wb_driver extends uvm_driver #(wb_item);
 
   function bit [3:0] pick_sel(wb_item item);
     bit [3:0] two_bits[6] = '{4'b0011, 4'b0101, 4'b0110, 4'b1001, 4'b1010, 4'b1100};   // combinaciones con dos bits activos
-    if (!item.bad_sel_ok || item.adr[4:2] > 3'd1) return item.sel;
+    if (!item.bad_sel_ok || item.adr > 5'd7) return item.sel;
     if ($urandom_range(99) >= cfg.bad_sel_pct) return item.sel;
     item.sel_injected = 1;
     case ($urandom_range(2))
