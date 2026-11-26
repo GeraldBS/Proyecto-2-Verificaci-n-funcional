@@ -9,30 +9,30 @@ class wb_item extends uvm_sequence_item;
   `uvm_object_utils(wb_item)   // registra en factory
 
   // bus 
-  rand bit [`UART_ADDR_WIDTH-1:0] adr;   // dirección = índice del registro
-  rand bit [`UART_DATA_WIDTH-1:0] dat;      // dato de escritura (en su carril)
-  rand bit [3:0]                  sel;   // selección de byte (carril del dato)
-  rand bit                        we;       // 1 = escritura, 0 = lectura
+  rand bit [`UART_ADDR_WIDTH-1:0] adr;        // dirección = índice del registro
+  rand bit [`UART_DATA_WIDTH-1:0] dat;        // dato de escritura (en su carril)
+  rand bit [3:0]                  sel;        // selección de byte (carril del dato)
+  rand bit                        we;         // 1 = escritura, 0 = lectura
 
   // Resultado (lo llena el driver o el monitor) 
-  bit [`UART_DATA_WIDTH-1:0] dat_rd;        // dato leído (wb_dat_o con el ack)
-  bit                        aborted;       
-  bit                        timeout;       // no llegó ack a tiempo
-  bit                        sel_injected;  // el driver cambió sel por uno inválido
-  realtime                   t_start;   // empieza el acceso
-  realtime                   t_end;   // termina el acceso
+  bit [`UART_DATA_WIDTH-1:0] dat_rd;          // dato leído (wb_dat_o con el ack)
+  bit                        aborted;         // el driver abortó el acceso por reset
+  bit                        timeout;         // no llegó ack a tiempo
+  bit                        sel_injected;    // el driver cambió sel por uno inválido
+  realtime                   t_start;         // empieza el acceso
+  realtime                   t_end;           // termina el acceso
 
   // Controles para el driver 
-  int unsigned gap       = '1;              // ciclos de pausa antes del acceso
-  int unsigned stb_delay = '1;              // ciclos que stb se retrasa respecto a cyc
-  bit          bad_sel_ok = 0;
+  int unsigned gap       = '1;                // ciclos de pausa antes del acceso
+  int unsigned stb_delay = '1;                // ciclos que stb se retrasa respecto a cyc
+  bit          bad_sel_ok = 0;                
 
   // Constructor
   function new(string name = "wb_item");
     super.new(name);
   endfunction
 
-  function bit gap_is_auto();       
+  function bit gap_is_auto();          
     return (gap == '1);       
   endfunction
 
@@ -51,7 +51,8 @@ class wb_item extends uvm_sequence_item;
 
   // Dirección de un registro Debug 
   function bit is_debug_adr();
-    return (adr[4:2] == 3'd2) || (adr[4:2] == 3'd3);
+    return (adr == 5'd8) || (adr == 5'd12); // // Solo direcciones exactas de registros Debug en modo 32 bits Debug 1 (8) y Debug 2 (12)
+    //return (adr[4:2] == 3'd2) || (adr[4:2] == 3'd3);
   endfunction
 
   // sel inválido 
