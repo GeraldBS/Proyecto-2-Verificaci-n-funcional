@@ -86,7 +86,7 @@ class ral_smoke_test extends uvm_test;
   `uvm_component_utils(ral_smoke_test)
 
   wb_agent_cfg       wb_cfg;
-  wb_agent           wb_agt;
+  uart_wb_agent      wb_agt;
   uart_reg_block     regm;
   uart_reg_adapter   adapter;
   uart_reg_predictor predictor;
@@ -104,7 +104,7 @@ class ral_smoke_test extends uvm_test;
 
     uvm_config_db#(wb_agent_cfg)::set(this, "wb_agt*", "cfg", wb_cfg);
 
-    wb_agt    = wb_agent::type_id::create("wb_agt", this);
+    wb_agt    = uart_wb_agent::type_id::create("wb_agt", this);
     regm      = uart_reg_block::type_id::create("regm");
     adapter   = uart_reg_adapter::type_id::create("adapter");
     predictor = uart_reg_predictor::type_id::create("predictor", this);
