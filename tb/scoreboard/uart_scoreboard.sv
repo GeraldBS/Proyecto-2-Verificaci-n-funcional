@@ -32,6 +32,7 @@ class uart_scoreboard extends uvm_scoreboard;
   bit       dlab_bit;        // Rastreo del bit DLAB para resolver direcciones
   bit [7:0] lcr_val;         // LCR y MCR segun lo que paso por el bus
   bit [7:0] mcr_val;
+  bit [15:0] dl_val;         // DLM y DLL segun el bus, con 0 el RTL nunca genera enable y no hay baudios
   bit       tx_dirty;        // hubo reconfig, limpieza o reset con trafico, no se compara hasta el fin del episodio
   bit       rx_dirty;
   bit       rx_seen;         // ya llego algun caracter por srx en este episodio
@@ -104,6 +105,7 @@ class uart_scoreboard extends uvm_scoreboard;
     dlab_bit = 1'b0;
     lcr_val  = 8'h03;  // valor de reset del RTL
     mcr_val  = 8'h00;
+    dl_val   = 16'h0000;  // el RTL arranca con DL en 0 hasta que lo configuren
     tx_desde_vacia = 0;
     thr_en_loop = 0;
     mdm_pend = 1;   // MCR vuelve a 0 y los pines tienen que seguirlo
@@ -274,6 +276,8 @@ class uart_scoreboard extends uvm_scoreboard;
       if (dlab_bit && (reg_idx == UART_DLL || reg_idx == UART_DLM)) begin
         ensuciar_tx("escritura de DL");
         ensuciar_rx("escritura de DL");
+        if (reg_idx == UART_DLL) dl_val[7:0]  = dat8;
+        else                     dl_val[15:8] = dat8;
       end
 
       // escritura en THR (DLAB = 0)
@@ -300,6 +304,11 @@ class uart_scoreboard extends uvm_scoreboard;
         end
         exp.chk    = !tx_dirty;   // pudo cambiar justo arriba
         exp.porque = motivo_tx;
+        // con DL = 0 el caracter se queda en la FIFO y nunca sale por stx
+        if (dl_val == 0) begin
+          exp.chk    = 0;
+          exp.porque = "DL = 0";
+        end
         tx_q.push_back(exp);
         `uvm_info("SCB_DBG", $sformatf("THR %02h, en cola %0d, chk %0b", exp.data, tx_q.size(), exp.chk), UVM_HIGH)
         send_evt(EV_THR_WRITE, lvl, rx_q.size(), 0);
@@ -395,6 +404,13 @@ class uart_scoreboard extends uvm_scoreboard;
     `uvm_info("SCB_DBG", $sformatf("srx %02h err %s, en cola %0d", item.data, item.err.name(), lvl), UVM_HIGH)
     if (mcr_val[4]) return;   // en loopback el DUT ignora srx
     rx_seen = 1;
+
+    // con DL = 0 el receptor del DUT no avanza y el caracter nunca entra a la FIFO
+    if (dl_val == 0) begin
+      n_skip++;
+      sin_comparar["DL = 0"]++;
+      return;
+    end
 
     // el RTL guarda el del overrun encima del mas viejo aunque no lo cuente
     if (lvl >= 16) begin
