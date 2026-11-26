@@ -54,7 +54,7 @@ class ral_smoke_seq extends uvm_sequence #(uvm_sequence_item);
 
     // 4) Verificacion de MCR (WO): escribir por frontdoor y comprobar por backdoor
     regm.mcr.write(status, 8'h15, UVM_FRONTDOOR, regm.dlab0_map, this);
-    regm.mcr.read(status, bd_val, UVM_BACKDOOR, null, this);
+    regm.mcr.peek(status, bd_val, "", this);
     if (bd_val !== 8'h15)
       `uvm_error("RAL_SMOKE", $sformatf("MCR backdoor esperado 0x15, obtenido 0x%0h", bd_val))
     else
