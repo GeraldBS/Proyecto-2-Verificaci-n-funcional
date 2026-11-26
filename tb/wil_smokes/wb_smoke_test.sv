@@ -63,6 +63,14 @@ class wb_smoke_seq extends wb_base_seq;
 
   task body();
     bit [31:0] rd;
+    bit [7:0]  exp_scr = 8'h00;
+    bit [7:0]  exp_lcr = 8'h03;
+    bit [7:0]  exp_ier = 8'h00;
+    int        reg_pick;
+    bit        do_wr;
+    bit [7:0]  wdata;
+    int        rst_w;
+    real       rst_ph;
 
     // 1. Valores de reset (8 bits y Debug 32 bits)
     wb_read(3,  rd); check_eq("LCR_RST",  rd, 32'h0000_0003);
@@ -71,39 +79,76 @@ class wb_smoke_seq extends wb_base_seq;
     wb_read(8,  rd); check_eq("DBG1_RST", rd, 32'h0003_1060, 32'h0FFF_FFFF);
     wb_read(12, rd); check_eq("DBG2_RST", rd, 32'h00C0_0000);
 
-    // 2. Escritura y lectura basica
-    wb_write(7, 8'hA5);
-    wb_read(7, rd);  check_eq("SCRATCH", rd, 32'h0000_00A5);
+    // 2. Trafico aleatorio restringido (DLAB = 0) con autochequeo
+    repeat (40) begin
+      void'(std::randomize(reg_pick, do_wr, wdata) with {
+        reg_pick inside {1, 3, 7};
+      });
 
-    wb_write(3, 8'h1B);
-    wb_read(3, rd);  check_eq("LCR_WR",  rd, 32'h0000_001B);
+      if (do_wr) begin
+        case (reg_pick)
+          1: begin
+            wb_write(1, wdata);
+            exp_ier = wdata & 8'h0F;
+          end
+          3: begin
+            wdata[7] = 1'b0;
+            wb_write(3, wdata);
+            exp_lcr = wdata;
+          end
+          7: begin
+            wb_write(7, wdata);
+            exp_scr = wdata;
+          end
+        endcase
+      end
+      else begin
+        wb_read(reg_pick, rd);
+        case (reg_pick)
+          1: check_eq("RAND_IER", rd, {24'h0, exp_ier});
+          3: check_eq("RAND_LCR", rd, {24'h0, exp_lcr});
+          7: check_eq("RAND_SCR", rd, {24'h0, exp_scr});
+        endcase
+      end
+    end
 
-    // 3. Acceso con DLAB = 1 (DLM y DLL)
-    wb_write(3, 8'h9B);
-    wb_write(1, 8'h01);
-    wb_write(0, 8'h23);
-    wb_read(1, rd);  check_eq("DLM", rd, 32'h0000_0001);
-    wb_read(0, rd);  check_eq("DLL", rd, 32'h0000_0023);
-    wb_write(3, 8'h1B);
+    // 3. Divisor aleatorio con DLAB = 1 (DLM y DLL)
+    repeat (5) begin
+      bit [7:0] dlm_v, dll_v;
+      void'(std::randomize(dlm_v, dll_v));
+      wb_write(3, exp_lcr | 8'h80);
+      wb_write(1, dlm_v);
+      wb_write(0, dll_v);
+      wb_read(1, rd); check_eq("RAND_DLM", rd, {24'h0, dlm_v});
+      wb_read(0, rd); check_eq("RAND_DLL", rd, {24'h0, dll_v});
+      wb_write(3, exp_lcr);
+    end
 
-    // 4. Disparar int_o (THRE) y limpiarla leyendo IIR
+    // 4. Asegurar al menos un flanco de subida y bajada en int_o (THRE)
+    wb_write(1, 8'h00);
+    wb_idle(2);
     wb_write(1, 8'h02);
     wb_idle(4);
     wb_read(2, rd);
     wb_write(1, 8'h00);
     wb_idle(4);
 
-    // 5. Probar wb_sel_i ilegal (AMB-05)
-    p_sequencer.cfg.bad_sel_pct = 100;
-    wb_write(7, 8'h5A, 1'b1);
-    wb_read(7, rd, 1'b1);
+    // 5. Rafaga aleatoria con wb_sel_i ilegal (AMB-05)
+    p_sequencer.cfg.bad_sel_pct = 50;
+    repeat (10) begin
+      void'(std::randomize(do_wr, wdata));
+      if (do_wr) wb_write(7, wdata, 1'b1);
+      else       wb_read(7, rd, 1'b1);
+    end
     p_sequencer.cfg.bad_sel_pct = 0;
 
-    // 6. Reset asincrono y recuperacion
-    p_sequencer.async_reset(3, 7.0);
+    // 6. Reset asincrono con ancho y fase aleatorios + recuperacion
+    rst_w  = $urandom_range(5, 1);
+    rst_ph = $urandom_range(19, 1);
+    p_sequencer.async_reset(rst_w, rst_ph);
     wb_idle(2);
-    wb_read(3, rd);  check_eq("LCR_POST_RST", rd, 32'h0000_0003);
-    wb_read(7, rd);  check_eq("SCR_POST_RST", rd, 32'h0000_0000);
+    wb_read(3, rd); check_eq("LCR_POST_RST", rd, 32'h0000_0003);
+    wb_read(7, rd); check_eq("SCR_POST_RST", rd, 32'h0000_0000);
   endtask
 endclass : wb_smoke_seq
 
