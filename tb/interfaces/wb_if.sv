@@ -6,16 +6,15 @@
 //   dat_m2s : dato del maestro (ambiente) hacia el esclavo (DUT)  -> wb_dat_i
 //   dat_s2m : dato del esclavo (DUT) hacia el maestro (ambiente)  -> wb_dat_o
 //
-// Los anchos salen de uart_defines.v, de modo que la misma interfaz sirve
-// para el bus de 32 bits (por defecto) y para +define+DATA_BUS_WIDTH_8.
+// Los anchos salen de uart_defines.v (`UART_ADDR_WIDTH=5, `UART_DATA_WIDTH=32)(DATA_BUS_WIDTH_8 fuera de alcance, revisar Testplan).
 // -----------------------------------------------------------------------------
 `timescale 1ns/1ps
-`include "uart_defines.v"
+`include "uart_defines.v"0
 
 interface wb_if (input logic clk);
 
   logic                         rst;      // reset asíncrono, activo en alto
-  logic [`UART_ADDR_WIDTH-1:0]  adr;
+  logic [`UART_ADDR_WIDTH-1:0]  adr;      
   logic [`UART_DATA_WIDTH-1:0]  dat_m2s;
   logic [`UART_DATA_WIDTH-1:0]  dat_s2m;
   logic [3:0]                   sel;
@@ -39,7 +38,7 @@ interface wb_if (input logic clk);
     input rst, adr, dat_m2s, dat_s2m, sel, we, stb, cyc, ack, irq;
   endclocking
 
-  modport drv (clocking drv_cb, input rst);
+  modport drv (clocking drv_cb, inout rst); // inout rst: wb_driver lo lea (para abortar accesos) y también lo maneja durante los resets en medio del episodio de prueba.
   modport mon (clocking mon_cb);
 
 endinterface : wb_if
