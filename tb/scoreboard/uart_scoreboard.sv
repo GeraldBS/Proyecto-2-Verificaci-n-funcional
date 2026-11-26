@@ -33,7 +33,7 @@ class uart_scoreboard extends uvm_scoreboard;
   bit [7:0] lcr_val;         // LCR y MCR segun lo que paso por el bus
   bit [7:0] mcr_val;
   bit [15:0] dl_val;         // DLM y DLL segun el bus, con 0 el RTL nunca genera enable y no hay baudios
-  bit       tx_dirty;        // hubo reconfig, limpieza o reset con trafico, no se compara hasta el fin del episodio
+  bit       tx_dirty;       // hubo reconfig, limpieza o reset con trafico, no se compara hasta el fin del episodio
   bit       rx_dirty;
   bit       rx_seen;         // ya llego algun caracter por srx en este episodio
   bit       rst_tx_busy, rst_rx_busy;
@@ -44,6 +44,7 @@ class uart_scoreboard extends uvm_scoreboard;
   int       tx_desde_vacia;         // escrituras en THR desde que LSR dijo FIFO TX vacia
   bit       tx_resync_ok;           // se dejo de comparar solo por FIFO llena, con TEMT se vuelve a comparar
   bit       thr_en_loop;            // se escribio THR en loopback y puede seguir en la FIFO TX
+  bit       temt_visto;             // la ultima lectura de LSR tenia TEMT y despues no se escribio THR
   bit [1:0] pin_mdm;                // rts y dtr que vio el monitor de modem la ultima vez
   bit       pin_visto;              // el monitor solo manda cuando algo cambia, antes de eso no sabemos los pines
   bit       mdm_pend;               // cambio MCR o los pines, falta revisar
@@ -82,16 +83,28 @@ class uart_scoreboard extends uvm_scoreboard;
     uvm_event ep_end = uvm_event_pool::get_global("uart_ep_end");
     forever begin
       ep_end.wait_trigger();
+      // si la secuencia no llego a ver TEMT lo que quedo en la FIFO TX sale en el siguiente episodio
+      if (!temt_visto && !tx_dirty) begin
+        ensuciar_tx("episodio terminado sin TEMT");
+        if (tx_dirty) tx_resync_ok = 1;   // con el proximo TEMT ya se puede volver a comparar
+      end
       check_left("fin de episodio");
-      tx_q.delete();
       rx_q.delete();
-      tx_dirty = 0;
       rx_dirty = 0;
       rx_seen  = 0;
-      motivo_tx = "";
       motivo_rx = "";
-      tx_desde_vacia = 0;   // antes de terminar el episodio ya se espero TEMT
-      thr_en_loop = 0;
+      if (temt_visto) begin
+        tx_q.delete();
+        tx_dirty = 0;
+        motivo_tx = "";
+        tx_desde_vacia = 0;
+        thr_en_loop = 0;
+      end else if (thr_en_loop) begin
+        // lo de loopback todavia puede caer en la FIFO RX ya empezado el otro episodio
+        rx_dirty  = 1;
+        rx_seen   = 1;
+        motivo_rx = "loopback del episodio anterior";
+      end
       revisar_mdm();
     end
   endtask
@@ -108,6 +121,7 @@ class uart_scoreboard extends uvm_scoreboard;
     dl_val   = 16'h0000;  // el RTL arranca con DL en 0 hasta que lo configuren
     tx_desde_vacia = 0;
     thr_en_loop = 0;
+    temt_visto = 1;   // con el reset las FIFO quedan vacias
     mdm_pend = 1;   // MCR vuelve a 0 y los pines tienen que seguirlo
   endfunction
 
@@ -282,6 +296,7 @@ class uart_scoreboard extends uvm_scoreboard;
 
       // escritura en THR (DLAB = 0)
       if (reg_idx == UART_THR && !dlab_bit) begin
+        temt_visto = 0;
         lvl = tx_q.size();
         exp.data  = dat8 & data_mask();
         exp.chk   = !tx_dirty;
@@ -344,6 +359,7 @@ class uart_scoreboard extends uvm_scoreboard;
 
   // LSR[5] y LSR[6] solo bajan con una escritura en THR, si se leen en 1 la FIFO TX sigue vacia
   function void leer_lsr(bit [7:0] lsr);
+    temt_visto = lsr[6];
     if (mcr_val[4]) begin   // en loopback tx_q no se usa
       if (lsr[6]) thr_en_loop = 0;   // ya salio todo por dentro
       return;
