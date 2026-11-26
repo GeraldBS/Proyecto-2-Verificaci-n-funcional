@@ -149,6 +149,45 @@ class wb_smoke_seq extends wb_base_seq;
     wb_idle(2);
     wb_read(3, rd); check_eq("LCR_POST_RST", rd, 32'h0000_0003);
     wb_read(7, rd); check_eq("SCR_POST_RST", rd, 32'h0000_0000);
+
+  // --- Caso 1: wb_sel_i invalido (sel_injected) sin colgarse ---
+    p_sequencer.cfg.bad_sel_pct = 100;
+    repeat (4) begin
+      void'(std::randomize(wdata));
+      wb_write(7, wdata, 1'b1);
+      wb_read(7, rd, 1'b1);
+    end
+    p_sequencer.cfg.bad_sel_pct = 0;
+    wb_idle(2);
+
+    // --- Caso 2: Reset asincrono en medio de un acceso (aborted) ---
+    fork
+      begin
+        wb_write(7, 8'h3C);
+      end
+      begin
+        #5; // cae en medio del ciclo activo
+        p_sequencer.async_reset(3, 5.0);
+      end
+    join
+    wb_idle(2);
+    wb_read(3, rd);
+    check_eq("LCR_AFTER_ABORT_RST", rd, 32'h0000_0003);
+
+    // --- Caso 3: Condicion de timeout ---
+    // Ajusta la direccion o el knob de timeout segun como lo hayas implementado en wb_driver/wb_if
+    fork
+      begin
+        wb_read(32'h1F, rd);
+      end
+      begin
+        #2000ns;
+        `uvm_error("SMOKE_TMO", "El acceso de timeout no libero o no completo a tiempo")
+      end
+    join_any
+    disable fork;
+    wb_idle(2);
+
   endtask
 endclass : wb_smoke_seq
 
