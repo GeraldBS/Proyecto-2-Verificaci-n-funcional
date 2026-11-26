@@ -1,0 +1,47 @@
+Design Hierarchy
+
+
+----------------
+SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT        
+ 91.08  98.44  95.92  95.13  74.36  95.14  87.50 tb_top 
+  
+  ----------------
+  SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT     
+   91.08  98.44  95.92  95.13  74.36  95.14  87.50 dut 
+    
+    ----------------
+    SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT      
+     99.64 100.00 --      98.92 --     100.00 --     dbg  
+     92.89  99.38  97.26  95.92  76.47  95.42 --     regs 
+      
+      ----------------
+      SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT                   
+       75.66  88.89 --      71.43 --      66.67 --     i_uart_sync_flops 
+       93.46  99.42 100.00  96.31  78.26  93.33 --     receiver          
+        
+        ----------------
+        SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT         
+        100.00 100.00 --     100.00 --     100.00 --     fifo_rx 
+          
+          ----------------
+          SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT       
+          100.00 100.00 --     100.00 --     100.00 --     rfifo 
+      
+      ----------------
+      SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT             
+       92.61  99.00 100.00 100.00  72.73  91.30 --     transmitter 
+        
+        ----------------
+        SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT         
+         97.62 100.00 --     100.00 --      92.86 --     fifo_tx 
+          
+          ----------------
+          SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT       
+          100.00 100.00 --     100.00 --     100.00 --     tfifo 
+    
+    ----------------
+    SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT              
+     87.22  86.67  82.35  75.40 --      91.67 100.00 u_ser_sva    
+     88.42  85.71  88.89  97.47 --     100.00  70.00 u_wb_sva     
+     87.19  98.08 --      98.36  60.00  92.31 --     wb_interface 
+

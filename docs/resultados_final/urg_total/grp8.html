@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="Author" content="<username>"> <meta name="GENERATOR" content="urg/version [en] (platform name) [urg]">
+<title>Unified Coverage Report :: Group :: uart_pkg::uart_cov::cg_reg_access</title>
+<link type="text/css" rel="stylesheet" href="css/.urg.css">
+<link type="text/css" rel="stylesheet" href="css/.layout.css">
+<link type="text/css" rel="stylesheet" href="css/.breadcrumb.css">
+<script type="text/javascript" src="js/.jquery.js"></script>
+<script type="text/javascript" src="js/.jquery-ui.js"></script>
+<script type="text/javascript" src="js/.sortable.js"></script>
+<script type="text/javascript" src="js/.layout.js"></script>
+<script type="text/javascript" src="js/.breadcrumb.js"></script>
+<script type="text/javascript">
+var layout, westLayout, centerLayout;
+$(document).ready(function () {
+  if ($("#north-bread-crumb")) {
+    $("#north-bread-crumb").jBreadCrumb({easing:'swing'})
+  }
+  layout = $("body").layout({ 
+    resizable: true,
+    spacing_open: 4,
+    spacing_closed: 4,
+    north: {
+      size: 76
+    },
+    south: {
+      size: 45,
+      initClosed: true
+    },
+    west: {
+      size: 500,
+      resizable: true,
+      initClosed: false
+    }
+  });
+  centerLayout = $('div.ui-layout-center').layout({
+    north__paneSelector: ".ui-layout-center-inner-north",
+    center__paneSelector: ".ui-layout-center-inner-center", 
+    north__size: 50,
+    spacing_open: 4,
+    spacing_closed: 4
+  });
+});
+</script>
+</head>
+<body onLoad="initPage();"><div class="ui-layout-north">
+<div class="logo"></div>
+<center class="pagetitle">Group : uart_pkg::uart_cov::cg_reg_access</center>
+<div align="center"><a href="dashboard.html" ><b>dashboard</b></a> | <a href="hierarchy.html" ><b>hierarchy</b></a> | <a href="modlist.html" ><b>modlist</b></a> | <a href="groups.html" ><b>groups</b></a> | <a href="tests.html" ><b>tests</b></a> | <a href="asserts.html" ><b>asserts</b></a></div>
+
+</div>
+<div class="ui-layout-west">
+<div>
+<div class=modhdr>
+<br clear=all>
+<span class=titlename>Group : <a href="#"  onclick="showContent('uart_pkg::uart_cov::cg_reg_access')">uart_pkg::uart_cov::cg_reg_access</a></span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td><b>SCORE</b></td><td>WEIGHT</td><td>GOAL</td><td>AT LEAST</td><td>AUTO BIN MAX</td><td>PRINT MISSING</td></tr><tr>
+<td class="s9 cl rt"> 94.05</td>
+<td class="wht cl rt">1     </td>
+<td class="wht cl rt">100   </td>
+<td class="wht cl rt">1     </td>
+<td class="wht cl rt">64    </td>
+<td class="wht cl rt">64    </td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Source File(s) : </span>
+<br clear=all>
+<a href="javascript:void(0);"  onclick="openSrcFile('/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv')">/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv</a><br clear=all>
+<br clear=all>
+</div>
+<hr>
+<br clear=all>
+<span class=repname>Summary for Group   uart_pkg::uart_cov::cg_reg_access
+</span>
+<br clear=all>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">CATEGORY</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td></tr><tr class="s9">
+<td><a href="#var_tbl_uart_pkg::uart_cov::cg_reg_access" >Variables</a></td>
+<td class="rt">21</td>
+<td class="rt">1</td>
+<td class="rt">20</td>
+<td class="rt">96.43 </td>
+</tr><tr class="s9">
+<td><a href="#crs_tbl_uart_pkg::uart_cov::cg_reg_access" >Crosses</a></td>
+<td class="rt">52</td>
+<td class="rt">3</td>
+<td class="rt">49</td>
+<td class="rt">89.29 </td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class="repname" id="var_tbl_uart_pkg::uart_cov::cg_reg_access">Variables for Group  uart_pkg::uart_cov::cg_reg_access
+</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">VARIABLE</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td><td>GOAL</td><td>WEIGHT</td><td>AT LEAST</td><td>AUTO BIN MAX</td><td>COMMENT</td></tr><tr class="s10">
+<td><a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_addr"  onclick="checkLink(this)" target="detailFrame">cp_addr</a></td>
+<td class="rt">10</td>
+<td class="rt">0</td>
+<td class="rt">10</td>
+<td class="rt">100.00</td>
+<td class="rt">100</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+<td class="rt">0</td>
+<td></td>
+</tr><tr class="s10">
+<td><a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_rw"  onclick="checkLink(this)" target="detailFrame">cp_rw</a></td>
+<td class="rt">2</td>
+<td class="rt">0</td>
+<td class="rt">2</td>
+<td class="rt">100.00</td>
+<td class="rt">100</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+<td class="rt">0</td>
+<td></td>
+</tr><tr class="s10">
+<td><a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_dlab"  onclick="checkLink(this)" target="detailFrame">cp_dlab</a></td>
+<td class="rt">2</td>
+<td class="rt">0</td>
+<td class="rt">2</td>
+<td class="rt">100.00</td>
+<td class="rt">100</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+<td class="rt">2</td>
+<td></td>
+</tr><tr class="s8">
+<td><a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_sel"  onclick="checkLink(this)" target="detailFrame">cp_sel</a></td>
+<td class="rt">7</td>
+<td class="rt">1</td>
+<td class="rt">6</td>
+<td class="rt">85.71 </td>
+<td class="rt">100</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+<td class="rt">0</td>
+<td></td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class="repname" id="crs_tbl_uart_pkg::uart_cov::cg_reg_access">Crosses for Group  uart_pkg::uart_cov::cg_reg_access
+</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">CROSS</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td><td>GOAL</td><td>WEIGHT</td><td>AT LEAST</td><td>PRINT MISSING</td><td>COMMENT</td></tr><tr class="s10">
+<td><a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_addr_rw_dlab"  onclick="checkLink(this)" target="detailFrame">cx_addr_rw_dlab</a></td>
+<td class="rt">38</td>
+<td class="rt">0</td>
+<td class="rt">38</td>
+<td class="rt">100.00</td>
+<td class="rt">100</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+<td class="rt">0</td>
+<td></td>
+</tr><tr class="s7">
+<td><a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_sel_rw"  onclick="checkLink(this)" target="detailFrame">cx_sel_rw</a></td>
+<td class="rt">14</td>
+<td class="rt">3</td>
+<td class="rt">11</td>
+<td class="rt">78.57 </td>
+<td class="rt">100</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+<td class="rt">0</td>
+<td></td>
+</tr></table><br clear=all>
+</div>
+</div>
+<div class="ui-layout-center">
+<div class="ui-layout-center-inner-center">
+<div>
+<br clear=all>
+<a name="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_addr"></a><span class="repname" id="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_addr">Summary for Variable cp_addr</span>
+<br clear=all>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">CATEGORY</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td></tr><tr class="s10">
+<td>User Defined Bins</td>
+<td class="rt">10</td>
+<td class="rt">0</td>
+<td class="rt">10</td>
+<td class="rt">100.00</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>User Defined Bins for cp_addr</span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Bins</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>COUNT</td><td>AT LEAST</td></tr><tr class="s10">
+<td>dbg2</td>
+<td class="rt">1318</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg1</td>
+<td class="rt">1326</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_00</td>
+<td class="rt">46306</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_01</td>
+<td class="rt">3459</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_02</td>
+<td class="rt">5933</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_03</td>
+<td class="rt">3803</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_04</td>
+<td class="rt">2352</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_05</td>
+<td class="rt">27261</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_06</td>
+<td class="rt">4099</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_07</td>
+<td class="rt">1308</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+<hr>
+<br clear=all>
+<a name="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_rw"></a><span class="repname" id="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_rw">Summary for Variable cp_rw</span>
+<br clear=all>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">CATEGORY</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td></tr><tr class="s10">
+<td>User Defined Bins</td>
+<td class="rt">2</td>
+<td class="rt">0</td>
+<td class="rt">2</td>
+<td class="rt">100.00</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>User Defined Bins for cp_rw</span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Bins</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>COUNT</td><td>AT LEAST</td></tr><tr class="s10">
+<td>escribe</td>
+<td class="rt">33992</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>lee</td>
+<td class="rt">63173</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+<hr>
+<br clear=all>
+<a name="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_dlab"></a><span class="repname" id="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_dlab">Summary for Variable cp_dlab</span>
+<br clear=all>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">CATEGORY</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td></tr><tr class="s10">
+<td>Automatically Generated Bins</td>
+<td class="rt">2</td>
+<td class="rt">0</td>
+<td class="rt">2</td>
+<td class="rt">100.00</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Automatically Generated Bins for cp_dlab</span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Bins</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>COUNT</td><td>AT LEAST</td></tr><tr class="s10">
+<td>auto[0]</td>
+<td class="rt">93668</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>auto[1]</td>
+<td class="rt">3497</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+<hr>
+<br clear=all>
+<a name="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_sel"></a><span class="repname" id="inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_sel">Summary for Variable cp_sel</span>
+<br clear=all>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">CATEGORY</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td></tr><tr class="s8">
+<td>User Defined Bins</td>
+<td class="rt">7</td>
+<td class="rt">1</td>
+<td class="rt">6</td>
+<td class="rt">85.71 </td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>User Defined Bins for cp_sel</span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Uncovered bins</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>COUNT</td><td>AT LEAST</td><td>NUMBER</td></tr><tr class="s3">
+<td>varios</td>
+<td class="rt">0</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Covered bins</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>COUNT</td><td>AT LEAST</td></tr><tr class="s10">
+<td>ninguno</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>todos</td>
+<td class="rt">2644</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_1</td>
+<td class="rt">5111</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_2</td>
+<td class="rt">10031</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_4</td>
+<td class="rt">30720</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_8</td>
+<td class="rt">48658</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+<hr>
+<br clear=all>
+<a name="inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_addr_rw_dlab"></a><span class="repname" id="inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_addr_rw_dlab">Summary for Cross cx_addr_rw_dlab</span>
+<br clear=all>
+<br clear=all>
+Samples crossed: cp_addr cp_rw cp_dlab<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">CATEGORY</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td><td>MISSING</td></tr><tr class="s10">
+<td>TOTAL</td>
+<td class="rt">38</td>
+<td class="rt">0</td>
+<td class="rt">38</td>
+<td class="rt">100.00</td>
+<td></td>
+</tr><tr class="s10">
+<td>Automatically Generated Cross Bins</td>
+<td class="rt">38</td>
+<td class="rt">0</td>
+<td class="rt">38</td>
+<td class="rt">100.00</td>
+<td></td>
+</tr><tr class="wht">
+<td>User Defined Cross Bins</td>
+<td class="rt">0</td>
+<td class="rt">0</td>
+<td class="rt">0</td>
+<td></td>
+<td></td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Automatically Generated Cross Bins for cx_addr_rw_dlab</span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Bins</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">cp_addr</td><td nowrap width=40 class="alfsrt">cp_rw</td><td class="alfsrt">cp_dlab</td><td>COUNT</td><td>AT LEAST</td></tr><tr class="s10">
+<td>dbg2</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">30</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg2</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">11</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg2</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">1262</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg2</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">15</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg1</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">37</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg1</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">18</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg1</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">1267</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>dbg1</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">4</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_00</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">25682</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_00</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">1077</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_00</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">19540</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_00</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">7</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_01</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">1101</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_01</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">1077</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_01</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">1274</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_01</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">7</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_02</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">1224</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_02</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">4704</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_02</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">5</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_03</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">1317</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_03</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">1210</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_03</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">1261</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_03</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">15</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_04</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">1080</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_04</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">1267</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_04</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">5</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_05</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">42</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_05</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">11</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_05</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">27202</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_05</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">6</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_06</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">26</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_06</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">12</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_06</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">4058</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_06</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">3</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_07</td>
+<td>escribe</td>
+<td>auto[0]</td>
+<td class="rt">29</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_07</td>
+<td>escribe</td>
+<td>auto[1]</td>
+<td class="rt">8</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_07</td>
+<td>lee</td>
+<td>auto[0]</td>
+<td class="rt">1265</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>regs_07</td>
+<td>lee</td>
+<td>auto[1]</td>
+<td class="rt">6</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>User Defined Cross Bins for cx_addr_rw_dlab</span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Excluded/Illegal bins</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>COUNT</td><td class="alfsrt">STATUS</td></tr><tr class="wht">
+<td>fcr_mcr_dlab</td>
+<td class="rt">0</td>
+<td>Excluded</td>
+</tr></table><br clear=all>
+<hr>
+<br clear=all>
+<a name="inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_sel_rw"></a><span class="repname" id="inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_sel_rw">Summary for Cross cx_sel_rw</span>
+<br clear=all>
+<br clear=all>
+Samples crossed: cp_sel cp_rw<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">CATEGORY</td><td>EXPECTED</td><td>UNCOVERED</td><td>COVERED</td><td>PERCENT</td><td>MISSING</td></tr><tr class="s7">
+<td>Automatically Generated Cross Bins</td>
+<td class="rt">14</td>
+<td class="rt">3</td>
+<td class="rt">11</td>
+<td class="rt">78.57 </td>
+<td class="rt">3</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Automatically Generated Cross Bins for cx_sel_rw</span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Element holes</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">cp_sel</td><td nowrap width=40 class="alfsrt">cp_rw</td><td>COUNT</td><td>AT LEAST</td><td>NUMBER</td></tr><tr class="s3">
+<td>[varios]</td>
+<td align=center>*</td>
+<td align=center nowrap>--</td>
+<td align=center nowrap>--</td>
+<td class="rt">2</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Uncovered bins</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">cp_sel</td><td nowrap width=40 class="alfsrt">cp_rw</td><td>COUNT</td><td>AT LEAST</td><td>NUMBER</td></tr><tr class="s3">
+<td>[ninguno]</td>
+<td>[escribe]</td>
+<td class="rt">0</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Covered bins</span>
+<br clear=all>
+<table align=left class="sortable">
+<tr class="sortablehead">
+<td class="alfsrt">cp_sel</td><td nowrap width=40 class="alfsrt">cp_rw</td><td>COUNT</td><td>AT LEAST</td></tr><tr class="s10">
+<td>ninguno</td>
+<td>lee</td>
+<td class="rt">1</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>todos</td>
+<td>escribe</td>
+<td class="rt">96</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>todos</td>
+<td>lee</td>
+<td class="rt">2548</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_1</td>
+<td>escribe</td>
+<td class="rt">2564</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_1</td>
+<td>lee</td>
+<td class="rt">2547</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_2</td>
+<td>escribe</td>
+<td class="rt">1262</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_2</td>
+<td>lee</td>
+<td class="rt">8769</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_4</td>
+<td>escribe</td>
+<td class="rt">2231</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_4</td>
+<td>lee</td>
+<td class="rt">28489</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_8</td>
+<td>escribe</td>
+<td class="rt">27839</td>
+<td class="rt">1</td>
+</tr><tr class="s10">
+<td>carril_8</td>
+<td>lee</td>
+<td class="rt">20819</td>
+<td class="rt">1</td>
+</tr></table><br clear=all>
+</div>
+</div>
+<div class="ui-layout-center-inner-north">
+<div id="center-bread-crumb" class="breadCrumb module urg-margin-bottom">
+  <ul>
+    <li>
+      <a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_addr">Variable : cp_addr</a>    </li>
+    <li>
+      <a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_rw">Variable : cp_rw</a>    </li>
+    <li>
+      <a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_dlab">Variable : cp_dlab</a>    </li>
+    <li>
+      <a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cp_sel">Variable : cp_sel</a>    </li>
+    <li>
+      <a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_addr_rw_dlab">Cross : cx_addr_rw_dlab</a>    </li>
+    <li>
+      <a href="#inst_tag_uart_pkg::uart_cov::cg_reg_access.cx_sel_rw">Cross : cx_sel_rw</a>    </li>
+  </ul>
+</div>
+</div>
+</div>
+<div class="ui-layout-south">
+<table align=center><tr><td class="s0 cl">0%</td>
+<td class="s1 cl">10%</td>
+<td class="s2 cl">20%</td>
+<td class="s3 cl">30%</td>
+<td class="s4 cl">40%</td>
+<td class="s5 cl">50%</td>
+<td class="s6 cl">60%</td>
+<td class="s7 cl">70%</td>
+<td class="s8 cl">80%</td>
+<td class="s9 cl">90%</td>
+<td class="s10 cl">100%</td></tr></table></div>
+</body>
+</html>

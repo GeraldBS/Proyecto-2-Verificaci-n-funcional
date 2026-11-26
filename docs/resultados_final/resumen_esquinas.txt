@@ -1,0 +1,13 @@
+Resumen de la regresión (Wed Nov 25 19:47:04 CST 2026)
+pasaron: 315
+fallaron:
+  logs/int_priority_23.log
+  logs/multi_ep_14.log
+  logs/reg_noise_7.log
+  logs/reset_storm_14.log
+  logs/reset_storm_19.log
+diferencias conocidas del DUT (DUT_BUG): 2441
+cobertura fusionada (urg):
+Total Coverage Summary 
+SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT GROUP  
+ 94.57  98.96  96.73  96.71  87.18  95.74  91.67  94.97 

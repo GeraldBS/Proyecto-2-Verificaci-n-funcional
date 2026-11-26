@@ -1,0 +1,24 @@
+Design Module List
+
+Total Module Definition Coverage Summary 
+SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT 
+ 94.48  98.96  96.73  96.64  87.18  95.72  91.67 
+
+
+Total modules in report: 13
+-------------------------------------------------------------------------------
+SCORE  LINE   COND   TOGGLE FSM    BRANCH ASSERT NAME             
+ 75.66  88.89 --      71.43 --      66.67 --     uart_sync_flops  
+ 88.63 100.00 --      98.36  60.00  96.15 --     uart_wb          
+ 90.52  85.71  88.89  97.98 --     100.00  80.00 uart_wb_sva      
+ 90.65  93.33  82.35  85.89 --      91.67 100.00 uart_ser_sva     
+ 94.22  98.65 100.00 100.00  81.82  90.62 --     uart_transmitter 
+ 95.75  99.10 100.00  92.17  95.65  91.80 --     uart_receiver    
+ 98.47 100.00  98.10  97.05 --      98.73 --     uart_regs        
+ 99.50 100.00 --      98.99 --     --     --     uart_top         
+ 99.64 100.00 --      98.92 --     100.00 --     uart_debug_if    
+100.00 100.00 --     100.00 --     100.00 --     raminfr          
+100.00 100.00 --     100.00 --     100.00 --     uart_rfifo       
+100.00 100.00 --     100.00 --     100.00 --     uart_tfifo       
+--     --     --     --     --     --     --     tb_top           
+

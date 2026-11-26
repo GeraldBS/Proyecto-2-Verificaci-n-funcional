@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="Author" content="<username>"> <meta name="GENERATOR" content="urg/version [en] (platform name) [urg]">
+<title>Unified Coverage Report :: Module :: uart_transmitter</title>
+<link type="text/css" rel="stylesheet" href="css/.urg.css">
+<link type="text/css" rel="stylesheet" href="css/.layout.css">
+<link type="text/css" rel="stylesheet" href="css/.breadcrumb.css">
+<script type="text/javascript" src="js/.jquery.js"></script>
+<script type="text/javascript" src="js/.jquery-ui.js"></script>
+<script type="text/javascript" src="js/.sortable.js"></script>
+<script type="text/javascript" src="js/.layout.js"></script>
+<script type="text/javascript" src="js/.breadcrumb.js"></script>
+<script type="text/javascript">
+var layout, westLayout, centerLayout;
+$(document).ready(function () {
+  if ($("#north-bread-crumb")) {
+    $("#north-bread-crumb").jBreadCrumb({easing:'swing'})
+  }
+  layout = $("body").layout({ 
+    resizable: true,
+    spacing_open: 4,
+    spacing_closed: 4,
+    north: {
+      size: 76
+    },
+    south: {
+      size: 45,
+      initClosed: true
+    },
+    west: {
+      size: 500,
+      resizable: true,
+      initClosed: false
+    }
+  });
+  centerLayout = $('div.ui-layout-center').layout({
+    north__paneSelector: ".ui-layout-center-inner-north",
+    center__paneSelector: ".ui-layout-center-inner-center", 
+    north__size: 50,
+    spacing_open: 4,
+    spacing_closed: 4
+  });
+});
+</script>
+</head>
+<body onLoad="initPage();"><div class="ui-layout-north">
+<div class="logo"></div>
+<center class="pagetitle">Module Definition</center>
+<div align="center"><a href="dashboard.html" ><b>dashboard</b></a> | <a href="hierarchy.html" ><b>hierarchy</b></a> | <a href="modlist.html" ><b>modlist</b></a> | <a href="groups.html" ><b>groups</b></a> | <a href="tests.html" ><b>tests</b></a> | <a href="asserts.html" ><b>asserts</b></a></div>
+
+</div>
+<div class="ui-layout-west">
+<div name='tag_uart_transmitter'>
+<div class=modhdr>
+<br clear=all>
+<span class=titlename>Module : <a href="#"  onclick="showContent('tag_uart_transmitter')">uart_transmitter</a></span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="s9 cl rt"> 92.40</td>
+<td class="s9 cl rt"><a href="mod13.html#Line" > 98.65</a></td>
+<td class="s10 cl rt"><a href="mod13.html#Cond" >100.00</a></td>
+<td class="s10 cl rt"><a href="mod13.html#Toggle" >100.00</a></td>
+<td class="s7 cl rt"><a href="mod13.html#FSM" > 72.73</a></td>
+<td class="s9 cl rt"><a href="mod13.html#Branch" > 90.62</a></td>
+<td class="wht cl rt"></td>
+</tr></table><br clear=all>
+<span class=repname>Source File(s) : </span>
+<br clear=all>
+<a href="javascript:void(0);"  onclick="openSrcFile('/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../rtl/uart_transmitter.v')">/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../rtl/uart_transmitter.v</a><br clear=all>
+<br clear=all>
+<span class=repname>Module self-instances :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="wht cl wordwrap"><a href="mod13.html#inst_tag_14"  onclick="showContent('inst_tag_14')">tb_top.dut.regs.transmitter</a></td>
+<td class="s9 cl rt"> 92.40</td>
+<td class="s9 cl rt"><a href="mod13.html#Line" > 98.65</a></td>
+<td class="s10 cl rt"><a href="mod13.html#Cond" >100.00</a></td>
+<td class="s10 cl rt"><a href="mod13.html#Toggle" >100.00</a></td>
+<td class="s7 cl rt"><a href="mod13.html#FSM" > 72.73</a></td>
+<td class="s9 cl rt"><a href="mod13.html#Branch" > 90.62</a></td>
+<td class="wht cl rt"></td>
+</tr></table></div>
+</div>
+<br clear=all>
+<div name='tag_uart_transmitter'>
+<hr>
+<a name="inst_tag_14"></a>
+<div class=modhdr>
+<br clear=all>
+<span class=titlename>Module Instance : <a href="hierarchy.html#tag_urg_inst_14" >tb_top.dut.regs.transmitter</a></span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Instance :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="s9 cl rt"> 92.40</td>
+<td class="s9 cl rt"><a href="mod13.html#Line" > 98.65</a></td>
+<td class="s10 cl rt"><a href="mod13.html#Cond" >100.00</a></td>
+<td class="s10 cl rt"><a href="mod13.html#Toggle" >100.00</a></td>
+<td class="s7 cl rt"><a href="mod13.html#FSM" > 72.73</a></td>
+<td class="s9 cl rt"><a href="mod13.html#Branch" > 90.62</a></td>
+<td class="wht cl rt"></td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Instance's subtree :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="s9 cl rt"> 92.61</td>
+<td class="s9 cl rt"> 99.00</td>
+<td class="s10 cl rt">100.00</td>
+<td class="s10 cl rt">100.00</td>
+<td class="s7 cl rt"> 72.73</td>
+<td class="s9 cl rt"> 91.30</td>
+<td class="wht cl rt"></td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Parent : </span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td><td class="alfsrt">NAME</td></tr><tr>
+<td class="s9 cl rt"> 97.49</td>
+<td class="s10 cl rt">100.00</td>
+<td class="s9 cl rt"> 97.14</td>
+<td class="s9 cl rt"> 94.09</td>
+<td class="wht cl rt"></td>
+<td class="s9 cl rt"> 98.73</td>
+<td class="wht cl rt"></td>
+<td><a href="mod16.html#inst_tag_17" >regs</a></td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Subtrees :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="wht cl wordwrap"><a href="mod19.html#inst_tag_20" id="tag_urg_inst_20">fifo_tx</a></td>
+<td class="s9 cl rt"> 97.62</td>
+<td class="s10 cl rt">100.00</td>
+<td class="wht cl rt"></td>
+<td class="s10 cl rt">100.00</td>
+<td class="wht cl rt"></td>
+<td class="s9 cl rt"> 92.86</td>
+<td class="wht cl rt"></td>
+</tr></table><br clear=all>
+</div>
+</div>
+<hr>
+Since this is the module's only instance, the coverage report is the same as for the module.</div>
+<div class="ui-layout-center">
+<div class="ui-layout-center-inner-center">
+<div name='tag_uart_transmitter'>
+<a name="Line"></a>
+Line Coverage for Module : <a href="mod13.html" >uart_transmitter</a><br clear=all>
+<table class="noborder">
+<col width="122">
+<col span="4" width="82">
+<tr><th></th><th>Line No.</th><th>Total</th><th>Covered</th><th>Percent</th></tr>
+<tr class="s9"><td class="lf">TOTAL</td><td></td><td>74</td><td>73</td><td>98.65</td></tr>
+<tr class="s9"><td class="lf">ALWAYS</td><td>212</td><td>74</td><td>73</td><td>98.65</td></tr>
+</table>
+<pre class="code"><br clear=all>
+211                     begin
+212        1/1            if (wb_rst_i)
+213                       begin
+214        1/1          	tstate       &lt;= #1 s_idle;
+215        1/1          	stx_o_tmp       &lt;= #1 1'b1;
+216        1/1          	counter   &lt;= #1 5'b0;
+217        1/1          	shift_out   &lt;= #1 7'b0;
+218        1/1          	bit_out     &lt;= #1 1'b0;
+219        1/1          	parity_xor  &lt;= #1 1'b0;
+220        1/1          	tf_pop      &lt;= #1 1'b0;
+221        1/1          	bit_counter &lt;= #1 3'b0;
+222                       end
+223                       else
+224        1/1            if (enable)
+225                       begin
+226        1/1          	case (tstate)
+227        1/1          	s_idle	 :	if (~|tf_count) // if tf_count==0
+228                     			begin
+229        1/1          				tstate &lt;= #1 s_idle;
+230        1/1          				stx_o_tmp &lt;= #1 1'b1;
+231                     			end
+232                     			else
+233                     			begin
+234        1/1          				tf_pop &lt;= #1 1'b0;
+235        1/1          				stx_o_tmp  &lt;= #1 1'b1;
+236        1/1          				tstate  &lt;= #1 s_pop_byte;
+237                     			end
+238                     	s_pop_byte :	begin
+239        1/1          				tf_pop &lt;= #1 1'b1;
+240        1/1          				case (lcr[/*`UART_LC_BITS*/1:0])  // number of bits in a word
+241                     				2'b00 : begin
+242        1/1          					bit_counter &lt;= #1 3'b100;
+243        1/1          					parity_xor  &lt;= #1 ^tf_data_out[4:0];
+244                     				     end
+245                     				2'b01 : begin
+246        1/1          					bit_counter &lt;= #1 3'b101;
+247        1/1          					parity_xor  &lt;= #1 ^tf_data_out[5:0];
+248                     				     end
+249                     				2'b10 : begin
+250        1/1          					bit_counter &lt;= #1 3'b110;
+251        1/1          					parity_xor  &lt;= #1 ^tf_data_out[6:0];
+252                     				     end
+253                     				2'b11 : begin
+254        1/1          					bit_counter &lt;= #1 3'b111;
+255        1/1          					parity_xor  &lt;= #1 ^tf_data_out[7:0];
+256                     				     end
+                   <font color = "red">==>  MISSING_DEFAULT</font>
+257                     				endcase
+258        1/1          				{shift_out[6:0], bit_out} &lt;= #1 tf_data_out;
+259        1/1          				tstate &lt;= #1 s_send_start;
+260                     			end
+261                     	s_send_start :	begin
+262        1/1          				tf_pop &lt;= #1 1'b0;
+263        1/1          				if (~|counter)
+264        1/1          					counter &lt;= #1 5'b01111;
+265                     				else
+266        1/1          				if (counter == 5'b00001)
+267                     				begin
+268        1/1          					counter &lt;= #1 0;
+269        1/1          					tstate &lt;= #1 s_send_byte;
+270                     				end
+271                     				else
+272        1/1          					counter &lt;= #1 counter - 1'b1;
+273        1/1          				stx_o_tmp &lt;= #1 1'b0;
+274                     			end
+275                     	s_send_byte :	begin
+276        1/1          				if (~|counter)
+277        1/1          					counter &lt;= #1 5'b01111;
+278                     				else
+279        1/1          				if (counter == 5'b00001)
+280                     				begin
+281        1/1          					if (bit_counter &gt; 3'b0)
+282                     					begin
+283        1/1          						bit_counter &lt;= #1 bit_counter - 1'b1;
+284        1/1          						{shift_out[5:0],bit_out  } &lt;= #1 {shift_out[6:1], shift_out[0]};
+285        1/1          						tstate &lt;= #1 s_send_byte;
+286                     					end
+287                     					else   // end of byte
+288        1/1          					if (~lcr[`UART_LC_PE])
+289                     					begin
+290        1/1          						tstate &lt;= #1 s_send_stop;
+291                     					end
+292                     					else
+293                     					begin
+294        1/1          						case ({lcr[`UART_LC_EP],lcr[`UART_LC_SP]})
+295        1/1          						2'b00:	bit_out &lt;= #1 ~parity_xor;
+296        1/1          						2'b01:	bit_out &lt;= #1 1'b1;
+297        1/1          						2'b10:	bit_out &lt;= #1 parity_xor;
+298        1/1          						2'b11:	bit_out &lt;= #1 1'b0;
+                   <font color = "red">==>  MISSING_DEFAULT</font>
+299                     						endcase
+300        1/1          						tstate &lt;= #1 s_send_parity;
+301                     					end
+302        1/1          					counter &lt;= #1 0;
+303                     				end
+304                     				else
+305        1/1          					counter &lt;= #1 counter - 1'b1;
+306        1/1          				stx_o_tmp &lt;= #1 bit_out; // set output pin
+307                     			end
+308                     	s_send_parity :	begin
+309        1/1          				if (~|counter)
+310        1/1          					counter &lt;= #1 5'b01111;
+311                     				else
+312        1/1          				if (counter == 5'b00001)
+313                     				begin
+314        1/1          					counter &lt;= #1 4'b0;
+315        1/1          					tstate &lt;= #1 s_send_stop;
+316                     				end
+317                     				else
+318        1/1          					counter &lt;= #1 counter - 1'b1;
+319        1/1          				stx_o_tmp &lt;= #1 bit_out;
+320                     			end
+321                     	s_send_stop :  begin
+322        1/1          				if (~|counter)
+323                     				  begin
+324        1/1          						casex ({lcr[`UART_LC_SB],lcr[`UART_LC_BITS]})
+325        1/1            						3'b0xx:	  counter &lt;= #1 5'b01101;     // 1 stop bit ok igor
+326        1/1            						3'b100:	  counter &lt;= #1 5'b10101;     // 1.5 stop bit
+327        1/1            						default:	  counter &lt;= #1 5'b11101;     // 2 stop bits
+328                     						endcase
+329                     					end
+330                     				else
+331        1/1          				if (counter == 5'b00001)
+332                     				begin
+333        1/1          					counter &lt;= #1 0;
+334        1/1          					tstate &lt;= #1 s_idle;
+335                     				end
+336                     				else
+337        1/1          					counter &lt;= #1 counter - 1'b1;
+338        1/1          				stx_o_tmp &lt;= #1 1'b1;
+339                     			end
+340                     
+341                     		default : // should never get here
+342        <font color = "red">0/1     ==>  			tstate &lt;= #1 s_idle;</font>
+343                     	endcase
+344                       end // end if enable
+345                       else
+346        1/1              tf_pop &lt;= #1 1'b0;  // tf_pop must be 1 cycle width
+</pre>
+<hr>
+<a name="Cond"></a>
+Cond Coverage for Module : <a href="mod13.html" >uart_transmitter</a><br clear=all>
+<table class="noborder">
+<col width="122">
+<col span="3" width="82">
+<tr><th></th><th>Total</th><th>Covered</th><th>Percent</th></tr>
+<tr class="s10"><td class="lf">Conditions</td><td>2</td><td>2</td><td>100.00</td></tr>
+<tr class="s10"><td class="lf">Logical</td><td>2</td><td>2</td><td>100.00</td></tr>
+<tr class="wht"><td class="lf">Non-Logical</td><td>0</td><td>0</td><td></td></tr>
+<tr class="wht"><td class="lf">Event</td><td>0</td><td>0</td><td></td></tr>
+</table>
+<br clear=all>
+<pre class="code"> LINE       349
+ EXPRESSION (lcr[6] ? 1'b0 : stx_o_tmp)
+             ---1--
+</pre>
+<table class="noborder">
+<col width="40">
+<tr><th>-1-</th><th>Status</th></tr>
+<tr class="uGreen"><td>0</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td class="lf">Covered</td></tr>
+</table>
+<hr>
+<a name="Toggle"></a>
+Toggle Coverage for Module : <a href="mod13.html" >uart_transmitter</a><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80>Total</th><th nowrap width=80>Covered</th><th nowrap width=80>Percent</th></tr><tr class="s10">
+<td>Totals</td>
+<td class="rt">21</td>
+<td class="rt">21</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td>Total Bits</td>
+<td class="rt">134</td>
+<td class="rt">134</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td nowrap>Total Bits 0->1</td>
+<td class="rt">67</td>
+<td class="rt">67</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td nowrap>Total Bits 1->0</td>
+<td class="rt">67</td>
+<td class="rt">67</td>
+<td class="rt">100.00</td>
+</tr></table><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80></th><th nowrap width=80></th><th nowrap width=80></th></tr><tr class="s10">
+<td>Ports</td>
+<td class="rt">11</td>
+<td class="rt">11</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td>Port Bits</td>
+<td class="rt">62</td>
+<td class="rt">62</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td nowrap>Port Bits 0->1</td>
+<td class="rt">31</td>
+<td class="rt">31</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td nowrap>Port Bits 1->0</td>
+<td class="rt">31</td>
+<td class="rt">31</td>
+<td class="rt">100.00</td>
+</tr></table><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80></th><th nowrap width=80></th><th nowrap width=80></th></tr><tr class="s10">
+<td>Signals</td>
+<td class="rt">10</td>
+<td class="rt">10</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td>Signal Bits</td>
+<td class="rt">72</td>
+<td class="rt">72</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td nowrap>Signal Bits 0->1</td>
+<td class="rt">36</td>
+<td class="rt">36</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td nowrap>Signal Bits 1->0</td>
+<td class="rt">36</td>
+<td class="rt">36</td>
+<td class="rt">100.00</td>
+</tr></table><br clear=all>
+<table align=left class="sortable noborder">
+<caption><b>Port Details</b></caption>
+<tr class="sortablehead">
+<td class="alfsrt">Name</td><td class="alfsrt">Toggle</td><td class="alfsrt">Toggle 1->0</td><td class="alfsrt">Toggle 0->1</td><td class="alfsrt">Direction</td></tr><tr>
+<td>clk</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>wb_rst_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>lcr[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>tf_push</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>wb_dat_i[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>enable</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>tx_reset</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>lsr_mask</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>stx_pad_o</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>OUTPUT</td>
+</tr><tr>
+<td>tstate[2:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>OUTPUT</td>
+</tr><tr>
+<td>tf_count[4:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>OUTPUT</td>
+</tr></table><br clear=all>
+<table align=left class="sortable noborder">
+<caption><b>Signal Details</b></caption>
+<tr class="sortablehead">
+<td class="alfsrt">Name</td><td class="alfsrt">Toggle</td><td class="alfsrt">Toggle 1->0</td><td class="alfsrt">Toggle 0->1</td></tr><tr>
+<td>counter[4:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>bit_counter[2:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>shift_out[6:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>stx_o_tmp</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>parity_xor</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>tf_pop</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>bit_out</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>tf_data_in[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>tf_data_out[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>tf_overrun</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr></table><br clear=all>
+<hr>
+<a name="FSM"></a>
+FSM Coverage for Module : <a href="mod13.html" >uart_transmitter</a><br clear=all>
+<table align=left class="noborder">
+<caption><b>Summary for FSM :: tstate</b></caption>
+<tr>
+<th nowrap width=120></th><th nowrap width=80>Total</th><th nowrap width=80>Covered</th><th nowrap width=80>Percent</th><th nowrap width=200></th></tr><tr class="wht">
+<td>States</td>
+<td class="rt">6</td>
+<td class="rt">6</td>
+<td class="rt">100.00</td>
+<td>(Not included in score)</td>
+</tr><tr class="s7">
+<td>Transitions</td>
+<td class="rt">11</td>
+<td class="rt">8</td>
+<td class="rt">72.73 </td>
+<td></td>
+</tr><tr class="wht">
+<td>Sequences</td>
+<td class="rt">0</td>
+<td class="rt">0</td>
+<td></td>
+<td></td>
+</tr></table><br clear=all>
+<b>State, Transition and Sequence Details for FSM :: tstate</b><hr>
+<table align=left class="sortable noborder">
+<tr class="sortablehead">
+<td class="alfsrt">states</td><td>Line No.</td><td class="alfsrt">Covered</td></tr><tr class="uGreen">
+<td nowrap>s_idle</td>
+<td class="rt">214</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_pop_byte</td>
+<td class="rt">236</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_byte</td>
+<td class="rt">269</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_parity</td>
+<td class="rt">300</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_start</td>
+<td class="rt">259</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_stop</td>
+<td class="rt">290</td>
+<td>Covered</td>
+</tr></table><br clear=all>
+<br clear=all>
+<table align=left class="sortable noborder">
+<tr class="sortablehead">
+<td class="alfsrt">transitions</td><td>Line No.</td><td class="alfsrt">Covered</td></tr><tr class="uGreen">
+<td nowrap>s_idle->s_pop_byte</td>
+<td class="rt">236</td>
+<td>Covered</td>
+</tr><tr class="uRed">
+<td nowrap>s_pop_byte->s_idle</td>
+<td class="rt">214</td>
+<td>Not&nbsp;Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_pop_byte->s_send_start</td>
+<td class="rt">259</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_byte->s_idle</td>
+<td class="rt">214</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_byte->s_send_parity</td>
+<td class="rt">300</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_byte->s_send_stop</td>
+<td class="rt">290</td>
+<td>Covered</td>
+</tr><tr class="uRed">
+<td nowrap>s_send_parity->s_idle</td>
+<td class="rt">214</td>
+<td>Not&nbsp;Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_parity->s_send_stop</td>
+<td class="rt">315</td>
+<td>Covered</td>
+</tr><tr class="uRed">
+<td nowrap>s_send_start->s_idle</td>
+<td class="rt">214</td>
+<td>Not&nbsp;Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_start->s_send_byte</td>
+<td class="rt">269</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td nowrap>s_send_stop->s_idle</td>
+<td class="rt">214</td>
+<td>Covered</td>
+</tr></table><br clear=all>
+<br clear=all>
+<hr>
+<a name="Branch"></a>
+Branch Coverage for Module : <a href="mod13.html" >uart_transmitter</a><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80>Line No.</th><th nowrap width=80>Total</th><th nowrap width=80>Covered</th><th nowrap width=80>Percent</th></tr><tr class="s9">
+<td>Branches</td>
+<td></td>
+<td class="rt">32</td>
+<td class="rt">29</td>
+<td class="rt">90.62 </td>
+</tr><tr class="s10">
+<td>TERNARY</td>
+<td class="rt">349</td>
+<td class="rt">2</td>
+<td class="rt">2</td>
+<td class="rt">100.00</td>
+</tr><tr class="s9">
+<td>IF</td>
+<td class="rt">212</td>
+<td class="rt">30</td>
+<td class="rt">27</td>
+<td class="rt">90.00 </td>
+</tr></table><br clear=all>
+<pre class="code"><br clear=all>
+349        assign stx_pad_o = lcr[`UART_LC_BC] ? 1'b0 : stx_o_tmp;    // Break condition
+                                               <font color = "green">-1-</font>  
+                                               <font color = "green">==></font>  
+                                               <font color = "green">==></font>  
+</pre>
+<br clear=all>
+<span class=repname>Branches:</span>
+<br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=80>-1-</th><th nowrap width=80>Status</th></tr><tr class="uGreen">
+<td align=center>1</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td>Covered</td>
+</tr></table><br clear=all>
+<pre class="code"><br clear=all>
+212          if (wb_rst_i)
+             <font color = "green">-1-</font>  
+213          begin
+214        	tstate       <= #1 s_idle;
+           <font color = "green">	==></font>
+215        	stx_o_tmp       <= #1 1'b1;
+216        	counter   <= #1 5'b0;
+217        	shift_out   <= #1 7'b0;
+218        	bit_out     <= #1 1'b0;
+219        	parity_xor  <= #1 1'b0;
+220        	tf_pop      <= #1 1'b0;
+221        	bit_counter <= #1 3'b0;
+222          end
+223          else
+224          if (enable)
+             <font color = "green">-2-</font>  
+225          begin
+226        	case (tstate)
+           	<font color = "red">-3-</font>  
+227        	s_idle	 :	if (~|tf_count) // if tf_count==0
+           	      	  	<font color = "green">-4-</font>  
+228        			begin
+229        				tstate <= #1 s_idle;
+           <font color = "green">				==></font>
+230        				stx_o_tmp <= #1 1'b1;
+231        			end
+232        			else
+233        			begin
+234        				tf_pop <= #1 1'b0;
+           <font color = "green">				==></font>
+235        				stx_o_tmp  <= #1 1'b1;
+236        				tstate  <= #1 s_pop_byte;
+237        			end
+238        	s_pop_byte :	begin
+239        				tf_pop <= #1 1'b1;
+240        				case (lcr[/*`UART_LC_BITS*/1:0])  // number of bits in a word
+           				<font color = "red">-5-</font>  
+241        				2'b00 : begin
+242        					bit_counter <= #1 3'b100;
+           <font color = "green">					==></font>
+243        					parity_xor  <= #1 ^tf_data_out[4:0];
+244        				     end
+245        				2'b01 : begin
+246        					bit_counter <= #1 3'b101;
+           <font color = "green">					==></font>
+247        					parity_xor  <= #1 ^tf_data_out[5:0];
+248        				     end
+249        				2'b10 : begin
+250        					bit_counter <= #1 3'b110;
+           <font color = "green">					==></font>
+251        					parity_xor  <= #1 ^tf_data_out[6:0];
+252        				     end
+253        				2'b11 : begin
+254        					bit_counter <= #1 3'b111;
+           <font color = "green">					==></font>
+255        					parity_xor  <= #1 ^tf_data_out[7:0];
+256        				     end
+           				     MISSING_DEFAULT
+           <font color = "red">				     ==></font>
+257        				endcase
+258        				{shift_out[6:0], bit_out} <= #1 tf_data_out;
+259        				tstate <= #1 s_send_start;
+260        			end
+261        	s_send_start :	begin
+262        				tf_pop <= #1 1'b0;
+263        				if (~|counter)
+           				<font color = "green">-6-</font>  
+264        					counter <= #1 5'b01111;
+           <font color = "green">					==></font>
+265        				else
+266        				if (counter == 5'b00001)
+           				<font color = "green">-7-</font>  
+267        				begin
+268        					counter <= #1 0;
+           <font color = "green">					==></font>
+269        					tstate <= #1 s_send_byte;
+270        				end
+271        				else
+272        					counter <= #1 counter - 1'b1;
+           <font color = "green">					==></font>
+273        				stx_o_tmp <= #1 1'b0;
+274        			end
+275        	s_send_byte :	begin
+276        				if (~|counter)
+           				<font color = "green">-8-</font>  
+277        					counter <= #1 5'b01111;
+           <font color = "green">					==></font>
+278        				else
+279        				if (counter == 5'b00001)
+           				<font color = "green">-9-</font>  
+280        				begin
+281        					if (bit_counter > 3'b0)
+           					<font color = "green">-10-</font>  
+282        					begin
+283        						bit_counter <= #1 bit_counter - 1'b1;
+           <font color = "green">						==></font>
+284        						{shift_out[5:0],bit_out  } <= #1 {shift_out[6:1], shift_out[0]};
+285        						tstate <= #1 s_send_byte;
+286        					end
+287        					else   // end of byte
+288        					if (~lcr[`UART_LC_PE])
+           					<font color = "green">-11-</font>  
+289        					begin
+290        						tstate <= #1 s_send_stop;
+           <font color = "green">						==></font>
+291        					end
+292        					else
+293        					begin
+294        						case ({lcr[`UART_LC_EP],lcr[`UART_LC_SP]})
+           						<font color = "red">-12-</font>  
+295        						2'b00:	bit_out <= #1 ~parity_xor;
+           <font color = "green">						==></font>
+296        						2'b01:	bit_out <= #1 1'b1;
+           <font color = "green">						==></font>
+297        						2'b10:	bit_out <= #1 parity_xor;
+           <font color = "green">						==></font>
+298        						2'b11:	bit_out <= #1 1'b0;
+           <font color = "green">						==></font>
+           						MISSING_DEFAULT
+           <font color = "red">						==></font>
+299        						endcase
+300        						tstate <= #1 s_send_parity;
+301        					end
+302        					counter <= #1 0;
+303        				end
+304        				else
+305        					counter <= #1 counter - 1'b1;
+           <font color = "green">					==></font>
+306        				stx_o_tmp <= #1 bit_out; // set output pin
+307        			end
+308        	s_send_parity :	begin
+309        				if (~|counter)
+           				<font color = "green">-13-</font>  
+310        					counter <= #1 5'b01111;
+           <font color = "green">					==></font>
+311        				else
+312        				if (counter == 5'b00001)
+           				<font color = "green">-14-</font>  
+313        				begin
+314        					counter <= #1 4'b0;
+           <font color = "green">					==></font>
+315        					tstate <= #1 s_send_stop;
+316        				end
+317        				else
+318        					counter <= #1 counter - 1'b1;
+           <font color = "green">					==></font>
+319        				stx_o_tmp <= #1 bit_out;
+320        			end
+321        	s_send_stop :  begin
+322        				if (~|counter)
+           				<font color = "green">-15-</font>  
+323        				  begin
+324        						casex ({lcr[`UART_LC_SB],lcr[`UART_LC_BITS]})
+           						<font color = "green">-16-</font>  
+325          						3'b0xx:	  counter <= #1 5'b01101;     // 1 stop bit ok igor
+           <font color = "green">  						==></font>
+326          						3'b100:	  counter <= #1 5'b10101;     // 1.5 stop bit
+           <font color = "green">  						==></font>
+327          						default:	  counter <= #1 5'b11101;     // 2 stop bits
+           <font color = "green">  						==></font>
+328        						endcase
+329        					end
+330        				else
+331        				if (counter == 5'b00001)
+           				<font color = "green">-17-</font>  
+332        				begin
+333        					counter <= #1 0;
+           <font color = "green">					==></font>
+334        					tstate <= #1 s_idle;
+335        				end
+336        				else
+337        					counter <= #1 counter - 1'b1;
+           <font color = "green">					==></font>
+338        				stx_o_tmp <= #1 1'b1;
+339        			end
+340        
+341        		default : // should never get here
+342        			tstate <= #1 s_idle;
+           <font color = "red">			==></font>
+343        	endcase
+344          end // end if enable
+345          else
+346            tf_pop <= #1 1'b0;  // tf_pop must be 1 cycle width
+           <font color = "green">    ==></font>
+</pre>
+<br clear=all>
+<span class=repname>Branches:</span>
+<br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=80>-1-</th><th nowrap width=80>-2-</th><th nowrap width=80>-3-</th><th nowrap width=80>-4-</th><th nowrap width=80>-5-</th><th nowrap width=80>-6-</th><th nowrap width=80>-7-</th><th nowrap width=80>-8-</th><th nowrap width=80>-9-</th><th nowrap width=80>-10-</th><th nowrap width=80>-11-</th><th nowrap width=80>-12-</th><th nowrap width=80>-13-</th><th nowrap width=80>-14-</th><th nowrap width=80>-15-</th><th nowrap width=80>-16-</th><th nowrap width=80>-17-</th><th nowrap width=80>Status</th></tr><tr class="uGreen">
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_idle </td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_idle </td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_pop_byte </td>
+<td align=center nowrap>-</td>
+<td align=center>2'b00 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_pop_byte </td>
+<td align=center nowrap>-</td>
+<td align=center>2'b01 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_pop_byte </td>
+<td align=center nowrap>-</td>
+<td align=center>2'b10 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_pop_byte </td>
+<td align=center nowrap>-</td>
+<td align=center>2'b11 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uRed">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_pop_byte </td>
+<td align=center nowrap>-</td>
+<td align=center>MISSING_DEFAULT</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Not Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_start </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_start </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_start </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center>2'b00 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center>2'b01 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center>2'b10 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center>2'b11 </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uRed">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center>MISSING_DEFAULT</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Not Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_byte </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_parity </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_parity </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_parity </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_stop </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td align=center>3'b0xx </td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_stop </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td align=center>3'b100 </td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_stop </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td align=center>default</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_stop </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>s_send_stop </td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td>Covered</td>
+</tr><tr class="uRed">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>default</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Not Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr></table><br clear=all>
+</div>
+</div>
+<div class="ui-layout-center-inner-north">
+<div id="center-bread-crumb" class="breadCrumb module urg-margin-bottom">
+  <ul name="inst_tag_14">
+    <li>
+      <a href="#Line">Line</a>    </li>
+    <li>
+      <a href="#Cond">Cond</a>    </li>
+    <li>
+      <a href="#Toggle">Toggle</a>    </li>
+    <li>
+      <a href="#FSM">FSM</a>    </li>
+    <li>
+      <a href="#Branch">Branch</a>    </li>
+  </ul>
+  <ul name="tag_uart_transmitter">
+    <li>
+      <a href="#Line">Line</a>    </li>
+    <li>
+      <a href="#Cond">Cond</a>    </li>
+    <li>
+      <a href="#Toggle">Toggle</a>    </li>
+    <li>
+      <a href="#FSM">FSM</a>    </li>
+    <li>
+      <a href="#Branch">Branch</a>    </li>
+  </ul>
+</div>
+</div>
+</div>
+<div class="ui-layout-south">
+<table align=center><tr><td class="s0 cl">0%</td>
+<td class="s1 cl">10%</td>
+<td class="s2 cl">20%</td>
+<td class="s3 cl">30%</td>
+<td class="s4 cl">40%</td>
+<td class="s5 cl">50%</td>
+<td class="s6 cl">60%</td>
+<td class="s7 cl">70%</td>
+<td class="s8 cl">80%</td>
+<td class="s9 cl">90%</td>
+<td class="s10 cl">100%</td></tr></table></div>
+</body>
+</html>

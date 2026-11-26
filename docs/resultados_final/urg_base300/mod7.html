@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="Author" content="<username>"> <meta name="GENERATOR" content="urg/version [en] (platform name) [urg]">
+<title>Unified Coverage Report :: Module :: uart_ser_sva</title>
+<link type="text/css" rel="stylesheet" href="css/.urg.css">
+<link type="text/css" rel="stylesheet" href="css/.layout.css">
+<link type="text/css" rel="stylesheet" href="css/.breadcrumb.css">
+<script type="text/javascript" src="js/.jquery.js"></script>
+<script type="text/javascript" src="js/.jquery-ui.js"></script>
+<script type="text/javascript" src="js/.sortable.js"></script>
+<script type="text/javascript" src="js/.layout.js"></script>
+<script type="text/javascript" src="js/.breadcrumb.js"></script>
+<script type="text/javascript">
+var layout, westLayout, centerLayout;
+$(document).ready(function () {
+  if ($("#north-bread-crumb")) {
+    $("#north-bread-crumb").jBreadCrumb({easing:'swing'})
+  }
+  layout = $("body").layout({ 
+    resizable: true,
+    spacing_open: 4,
+    spacing_closed: 4,
+    north: {
+      size: 76
+    },
+    south: {
+      size: 45,
+      initClosed: true
+    },
+    west: {
+      size: 500,
+      resizable: true,
+      initClosed: false
+    }
+  });
+  centerLayout = $('div.ui-layout-center').layout({
+    north__paneSelector: ".ui-layout-center-inner-north",
+    center__paneSelector: ".ui-layout-center-inner-center", 
+    north__size: 50,
+    spacing_open: 4,
+    spacing_closed: 4
+  });
+});
+</script>
+</head>
+<body onLoad="initPage();"><div class="ui-layout-north">
+<div class="logo"></div>
+<center class="pagetitle">Module Definition</center>
+<div align="center"><a href="dashboard.html" ><b>dashboard</b></a> | <a href="hierarchy.html" ><b>hierarchy</b></a> | <a href="modlist.html" ><b>modlist</b></a> | <a href="groups.html" ><b>groups</b></a> | <a href="tests.html" ><b>tests</b></a> | <a href="asserts.html" ><b>asserts</b></a></div>
+
+</div>
+<div class="ui-layout-west">
+<div name='tag_uart_ser_sva'>
+<div class=modhdr>
+<br clear=all>
+<span class=titlename>Module : <a href="#"  onclick="showContent('tag_uart_ser_sva')">uart_ser_sva</a></span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="s8 cl rt"> 87.22</td>
+<td class="s8 cl rt"><a href="mod7.html#Line" > 86.67</a></td>
+<td class="s8 cl rt"><a href="mod7.html#Cond" > 82.35</a></td>
+<td class="s7 cl rt"><a href="mod7.html#Toggle" > 75.40</a></td>
+<td class="wht cl rt"></td>
+<td class="s9 cl rt"><a href="mod7.html#Branch" > 91.67</a></td>
+<td class="s10 cl rt"><a href="mod7.html#Assert" >100.00</a></td>
+</tr></table><br clear=all>
+<span class=repname>Source File(s) : </span>
+<br clear=all>
+<a href="javascript:void(0);"  onclick="openSrcFile('/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/assertions/uart_ser_sva.sv')">/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/assertions/uart_ser_sva.sv</a><br clear=all>
+<br clear=all>
+<span class=repname>Module self-instances :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="wht cl wordwrap"><a href="mod7.html#inst_tag_8"  onclick="showContent('inst_tag_8')">tb_top.dut.u_ser_sva</a></td>
+<td class="s8 cl rt"> 87.22</td>
+<td class="s8 cl rt"><a href="mod7.html#Line" > 86.67</a></td>
+<td class="s8 cl rt"><a href="mod7.html#Cond" > 82.35</a></td>
+<td class="s7 cl rt"><a href="mod7.html#Toggle" > 75.40</a></td>
+<td class="wht cl rt"></td>
+<td class="s9 cl rt"><a href="mod7.html#Branch" > 91.67</a></td>
+<td class="s10 cl rt"><a href="mod7.html#Assert" >100.00</a></td>
+</tr></table></div>
+</div>
+<br clear=all>
+<div name='tag_uart_ser_sva'>
+<hr>
+<a name="inst_tag_8"></a>
+<div class=modhdr>
+<br clear=all>
+<span class=titlename>Module Instance : <a href="hierarchy.html#tag_urg_inst_8" >tb_top.dut.u_ser_sva</a></span>
+<br clear=all>
+<br clear=all>
+<span class=repname>Instance :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="s8 cl rt"> 87.22</td>
+<td class="s8 cl rt"><a href="mod7.html#Line" > 86.67</a></td>
+<td class="s8 cl rt"><a href="mod7.html#Cond" > 82.35</a></td>
+<td class="s7 cl rt"><a href="mod7.html#Toggle" > 75.40</a></td>
+<td class="wht cl rt"></td>
+<td class="s9 cl rt"><a href="mod7.html#Branch" > 91.67</a></td>
+<td class="s10 cl rt"><a href="mod7.html#Assert" >100.00</a></td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Instance's subtree :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td class="s8 cl rt"> 87.22</td>
+<td class="s8 cl rt"> 86.67</td>
+<td class="s8 cl rt"> 82.35</td>
+<td class="s7 cl rt"> 75.40</td>
+<td class="wht cl rt"></td>
+<td class="s9 cl rt"> 91.67</td>
+<td class="s10 cl rt">100.00</td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Parent : </span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td><td class="alfsrt">NAME</td></tr><tr>
+<td class="s9 cl rt"> 99.50</td>
+<td class="s10 cl rt">100.00</td>
+<td class="wht cl rt"></td>
+<td class="s9 cl rt"> 98.99</td>
+<td class="wht cl rt"></td>
+<td class="wht cl rt"></td>
+<td class="wht cl rt"></td>
+<td><a href="mod20.html#inst_tag_21" >dut</a></td>
+</tr></table><br clear=all>
+<br clear=all>
+<span class=repname>Subtrees :</span>
+<br clear=all>
+<table align=left>
+<tr class="sortablehead">
+<td class="alfsrt">NAME</td><td>SCORE</td><td>LINE</td><td>COND</td><td>TOGGLE</td><td>FSM</td><td>BRANCH</td><td>ASSERT</td></tr><tr>
+<td colspan=8>no children</td>
+</tr></table><br clear=all>
+</div>
+</div>
+<hr>
+Since this is the module's only instance, the coverage report is the same as for the module.</div>
+<div class="ui-layout-center">
+<div class="ui-layout-center-inner-center">
+<div name='tag_uart_ser_sva'>
+<a name="Line"></a>
+Line Coverage for Module : <a href="mod7.html" >uart_ser_sva</a><br clear=all>
+<table class="noborder">
+<col width="122">
+<col span="4" width="82">
+<tr><th></th><th>Line No.</th><th>Total</th><th>Covered</th><th>Percent</th></tr>
+<tr class="s8"><td class="lf">TOTAL</td><td></td><td>30</td><td>26</td><td>86.67</td></tr>
+<tr class="s5"><td class="lf">INITIAL</td><td>50</td><td>2</td><td>1</td><td>50.00</td></tr>
+<tr class="s0"><td class="lf">ROUTINE</td><td>57</td><td>2</td><td>0</td><td>0.00</td></tr>
+<tr class="s7"><td class="lf">ROUTINE</td><td>66</td><td>4</td><td>3</td><td>75.00</td></tr>
+<tr class="s10"><td class="lf">ALWAYS</td><td>100</td><td>16</td><td>16</td><td>100.00</td></tr>
+<tr class="s10"><td class="lf">ALWAYS</td><td>165</td><td>6</td><td>6</td><td>100.00</td></tr>
+</table>
+<pre class="code"><br clear=all>
+49                          string s;
+50         <font color = "red">1/2     ==>      if ($value$plusargs(&quot;UART_SCB_DUT_BUG_SEV=%s&quot;, s)) dut_bug_sev = s;</font>
+                        MISSING_ELSE
+51                        end
+52                      
+53                        int unsigned n_fail = 0;       // aserciones falladas 
+54                        int unsigned n_dut_bug = 0;    // diferencias conocidas del DUT
+55                      
+56                        function automatic void rep_err(string id, string msg);
+57         <font color = "red">0/1     ==>      n_fail++;</font>
+58                      `ifdef UART_SVA_NO_UVM
+59                          $display(&quot;[SVA_FAIL] %s: %s (t=%0t)&quot;, id, msg, $time);
+60                      `else
+61         <font color = "red">0/1     ==>      uvm_pkg::uvm_report_error(id, msg, uvm_pkg::UVM_NONE);</font>
+62                      `endif
+63                        endfunction
+64                      
+65                        function automatic void rep_dut_bug(string id, string msg);
+66         1/1              n_dut_bug++;
+67                      `ifdef UART_SVA_NO_UVM
+68                          $display(&quot;[SVA_DUT_BUG] %s: %s (t=%0t)&quot;, id, msg, $time);
+69                      `else
+70                          // id DUT_BUG para que el test y la regresion las cuenten, el AMB va en el mensaje
+71         <font color = "red">1/2     ==>      if (dut_bug_sev == &quot;error&quot;) uvm_pkg::uvm_report_error  (&quot;DUT_BUG&quot;, {id, &quot;: &quot;, msg}, uvm_pkg::UVM_NONE);</font>
+72         1/1              else                        uvm_pkg::uvm_report_warning(&quot;DUT_BUG&quot;, {id, &quot;: &quot;, msg}, uvm_pkg::UVM_NONE);
+73                      `endif
+74                        endfunction
+75                      
+76                        // A-SER-01
+77                        property p_ser01_idle;
+78                          (!lcr[6] &amp;&amp; (tstate == S_IDLE || tstate == S_POP)) |-&gt; stx_pad_o;
+79                        endproperty
+80                        a_ser01_idle: assert property (p_ser01_idle)
+81                          else rep_err(&quot;A-SER-01&quot;, &quot;stx no está en 1 sin carácter en curso&quot;);
+82                        c_ser01_idle: cover property (!lcr[6] &amp;&amp; tstate == S_IDLE &amp;&amp; stx_pad_o ##1 tstate == S_POP);
+83                      
+84                        
+85                        property p_ser01_dl0;
+86                          ($past(dl == 16'd0) &amp;&amp; stx_pad_o &amp;&amp; !lcr[6]) |=&gt; (stx_pad_o || lcr[6]);
+87                        endproperty
+88                        a_ser01_dl0: assert property (p_ser01_dl0)
+89                          else rep_err(&quot;A-SER-01&quot;, &quot;stx bajó con DL = 0&quot;);
+90                        c_ser01_dl0: cover property ((dl == 16'd0 &amp;&amp; tf_count != 0 &amp;&amp; stx_pad_o) [*8]);
+91                      
+92                       
+93                        // A-SER-02
+94                        logic        stx_q;
+95                        logic [31:0] low_len;     // ciclos seguidos con stx en 0
+96                        logic [15:0] low_dl;      // DL con que empezó la racha
+97                        logic        low_clean;   // racha sin cambios de DL, break ni loopback
+98                      
+99                        always_ff @(posedge wb_clk_i or posedge wb_rst_i) begin
+100        1/1              if (wb_rst_i) begin
+101        1/1                stx_q     &lt;= 1'b1;
+102        1/1                low_len   &lt;= '0;
+103        1/1                low_dl    &lt;= '0;
+104        1/1                low_clean &lt;= 1'b0;
+105                         end else begin
+106        1/1                stx_q &lt;= stx_pad_o;
+107        1/1                if (!stx_pad_o) begin
+108        1/1                  if (stx_q) begin                       // flanco de bajada: empieza el bit de inicio
+109        1/1                    low_len   &lt;= 32'd1;
+110        1/1                    low_dl    &lt;= dl;
+111        1/1                    low_clean &lt;= !lcr[6] &amp;&amp; !mcr[4] &amp;&amp; !start_dlc;
+112                             end else begin
+113        1/1                    low_len &lt;= low_len + 32'd1;
+114                               // escribir DLL reinicia el contador de baudios aunque el valor sea el mismo
+115        2/2                    if (dl != low_dl || lcr[6] || mcr[4] || start_dlc) low_clean &lt;= 1'b0;
+                        MISSING_ELSE
+116                             end
+117        1/1                end else if (stx_q) begin
+118        1/1                  low_len &lt;= '0;                         // se conserva un ciclo para la aserción
+119                           end
+                        MISSING_ELSE
+120                         end
+121                       end
+122                     
+123                       wire stx_rise = stx_pad_o &amp;&amp; !stx_q;
+124                     
+125                       wire low_ok = low_clean &amp;&amp; dl == low_dl &amp;&amp; !lcr[6] &amp;&amp; !mcr[4];
+126                     
+127                       property p_ser02_width;
+128                         (stx_rise &amp;&amp; low_ok &amp;&amp; low_dl != 16'd0) |-&gt;
+129                           (low_len &gt;= 32'd16 * low_dl) &amp;&amp; (low_len % (32'd16 * low_dl) == 0);
+130                       endproperty
+131                       a_ser02_width: assert property (p_ser02_width)
+132                         else rep_err(&quot;A-SER-02&quot;, $sformatf(&quot;racha en 0 de %0d ciclos con DL = %0d (se esperaba un múltiplo de %0d)&quot;,
+133                                                            low_len, low_dl, 16 * low_dl));
+134                       c_ser02_dl1:   cover property (stx_rise &amp;&amp; low_ok &amp;&amp; low_dl == 16'd1);
+135                       c_ser02_dlgt16: cover property (stx_rise &amp;&amp; low_ok &amp;&amp; low_dl &gt; 16'd16);
+136                     
+137                       // A-SER-03
+138                       a_ser03_loop: assert property (mcr[4] |-&gt; stx_pad_o)
+139                         else rep_err(&quot;A-SER-03&quot;, &quot;stx no está en 1 en loopback&quot;);
+140                       c_ser03_loop: cover property (mcr[4] &amp;&amp; tstate != S_IDLE &amp;&amp; stx_pad_o);   // con un carácter en curso
+141                     
+142                       // A-SER-04
+143                       a_ser04_break: assert property ((lcr[6] &amp;&amp; !mcr[4]) |-&gt; !stx_pad_o)
+144                         else rep_err(&quot;A-SER-04&quot;, &quot;stx no está en 0 con LCR[6] = 1&quot;);
+145                       c_ser04_break: cover property ($rose(lcr[6]) &amp;&amp; !mcr[4] &amp;&amp; (tstate == S_START || tstate == S_BYTE || tstate == S_PARITY || tstate == S_STOP));   // break a mitad de carácter
+146                     
+147                       // A-RST-01
+148                       // revisamos un ciclo despues de ver el reset porque el RTL resetea con #1, y si el
+149                       // reset sube justo antes del flanco el valor viejo todavia se muestrea
+150                       property p_rst01;
+151                         @(posedge wb_clk_i) disable iff (1'b0)
+152                           $past(wb_rst_i) |-&gt; (stx_pad_o &amp;&amp; !int_o);
+153                       endproperty
+154                       a_rst01: assert property (p_rst01)
+155                         else rep_err(&quot;A-RST-01&quot;, &quot;stx o int_o incorrectos después del reset&quot;);
+156                       c_rst01: cover property (@(posedge wb_clk_i) disable iff (1'b0) wb_rst_i &amp;&amp; !$past(wb_rst_i) &amp;&amp; $past(tstate) != S_IDLE);   // reset con tráfico
+157                     
+158                       // A-INT-01
+159                       localparam int unsigned INT_WIN = 2;
+160                     
+161                       wire         int_mm_now = (int_o == iir[0]);   // int_o debería ser el complemento de IIR[0]
+162                       logic [7:0]  int_mm_q;                         // ciclos seguidos anteriores con desajuste
+163                     
+164                       always_ff @(posedge wb_clk_i or posedge wb_rst_i) begin
+165        2/2              if (wb_rst_i)                          int_mm_q &lt;= '0;
+166        2/2              else if (!int_mm_now)                  int_mm_q &lt;= '0;
+167        2/2              else if (int_mm_q != 8'hFF)            int_mm_q &lt;= int_mm_q + 8'd1;
+                        MISSING_ELSE
+</pre>
+<hr>
+<a name="Cond"></a>
+Cond Coverage for Module : <a href="mod7.html" >uart_ser_sva</a><br clear=all>
+<table class="noborder">
+<col width="122">
+<col span="3" width="82">
+<tr><th></th><th>Total</th><th>Covered</th><th>Percent</th></tr>
+<tr class="s8"><td class="lf">Conditions</td><td>17</td><td>14</td><td>82.35</td></tr>
+<tr class="s8"><td class="lf">Logical</td><td>17</td><td>14</td><td>82.35</td></tr>
+<tr class="wht"><td class="lf">Non-Logical</td><td>0</td><td>0</td><td></td></tr>
+<tr class="wht"><td class="lf">Event</td><td>0</td><td>0</td><td></td></tr>
+</table>
+<br clear=all>
+<pre class="code"> LINE       111
+ EXPRESSION (((!lcr[6])) &amp;&amp; ((!mcr[4])) &amp;&amp; ((!start_dlc)))
+             -----1-----    -----2-----    -------3------
+</pre>
+<table class="noborder">
+<col span="3" width="40">
+<tr><th>-1-</th><th>-2-</th><th>-3-</th><th>Status</th></tr>
+<tr class="uGreen"><td>0</td><td>1</td><td>1</td><td class="lf">Covered</td></tr>
+<tr class="uRed"><td>1</td><td>0</td><td>1</td><td class="lf">Not Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>1</td><td>0</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>1</td><td>1</td><td class="lf">Covered</td></tr>
+</table>
+<br clear=all>
+<pre class="code"> LINE       115
+ EXPRESSION ((dl != low_dl) || lcr[6] || mcr[4] || start_dlc)
+             -------1------    ---2--    ---3--    ----4----
+</pre>
+<table class="noborder">
+<col span="4" width="40">
+<tr><th>-1-</th><th>-2-</th><th>-3-</th><th>-4-</th><th>Status</th></tr>
+<tr class="uGreen"><td>0</td><td>0</td><td>0</td><td>0</td><td class="lf">Covered</td></tr>
+<tr class="uRed"><td>0</td><td>0</td><td>0</td><td>1</td><td class="lf">Not Covered</td></tr>
+<tr class="uRed"><td>0</td><td>0</td><td>1</td><td>0</td><td class="lf">Not Covered</td></tr>
+<tr class="uGreen"><td>0</td><td>1</td><td>0</td><td>0</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>0</td><td>0</td><td>0</td><td class="lf">Covered</td></tr>
+</table>
+<br clear=all>
+<pre class="code"> LINE       123
+ EXPRESSION (stx_pad_o &amp;&amp; ((!stx_q)))
+             ----1----    -----2----
+</pre>
+<table class="noborder">
+<col span="2" width="40">
+<tr><th>-1-</th><th>-2-</th><th>Status</th></tr>
+<tr class="uGreen"><td>0</td><td>1</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>0</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>1</td><td class="lf">Covered</td></tr>
+</table>
+<br clear=all>
+<pre class="code"> LINE       125
+ EXPRESSION (low_clean &amp;&amp; (dl == low_dl) &amp;&amp; ((!lcr[6])) &amp;&amp; ((!mcr[4])))
+             ----1----    -------2------    -----3-----    -----4-----
+</pre>
+<table class="noborder">
+<col span="4" width="40">
+<tr><th>-1-</th><th>-2-</th><th>-3-</th><th>-4-</th><th>Status</th></tr>
+<tr class="uGreen"><td>0</td><td>1</td><td>1</td><td>1</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>0</td><td>1</td><td>1</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>1</td><td>0</td><td>1</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>1</td><td>1</td><td>0</td><td class="lf">Covered</td></tr>
+<tr class="uGreen"><td>1</td><td>1</td><td>1</td><td>1</td><td class="lf">Covered</td></tr>
+</table>
+<hr>
+<a name="Toggle"></a>
+Toggle Coverage for Module : <a href="mod7.html" >uart_ser_sva</a><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80>Total</th><th nowrap width=80>Covered</th><th nowrap width=80>Percent</th></tr><tr class="s8">
+<td>Totals</td>
+<td class="rt">29</td>
+<td class="rt">26</td>
+<td class="rt">89.66 </td>
+</tr><tr class="s7">
+<td>Total Bits</td>
+<td class="rt">248</td>
+<td class="rt">187</td>
+<td class="rt">75.40 </td>
+</tr><tr class="s7">
+<td nowrap>Total Bits 0->1</td>
+<td class="rt">124</td>
+<td class="rt">94</td>
+<td class="rt">75.81 </td>
+</tr><tr class="s7">
+<td nowrap>Total Bits 1->0</td>
+<td class="rt">124</td>
+<td class="rt">93</td>
+<td class="rt">75.00 </td>
+</tr></table><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80></th><th nowrap width=80></th><th nowrap width=80></th></tr><tr class="s9">
+<td>Ports</td>
+<td class="rt">21</td>
+<td class="rt">20</td>
+<td class="rt">95.24 </td>
+</tr><tr class="s8">
+<td>Port Bits</td>
+<td class="rt">126</td>
+<td class="rt">110</td>
+<td class="rt">87.30 </td>
+</tr><tr class="s8">
+<td nowrap>Port Bits 0->1</td>
+<td class="rt">63</td>
+<td class="rt">55</td>
+<td class="rt">87.30 </td>
+</tr><tr class="s8">
+<td nowrap>Port Bits 1->0</td>
+<td class="rt">63</td>
+<td class="rt">55</td>
+<td class="rt">87.30 </td>
+</tr></table><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80></th><th nowrap width=80></th><th nowrap width=80></th></tr><tr class="s7">
+<td>Signals</td>
+<td class="rt">8</td>
+<td class="rt">6</td>
+<td class="rt">75.00 </td>
+</tr><tr class="s6">
+<td>Signal Bits</td>
+<td class="rt">122</td>
+<td class="rt">77</td>
+<td class="rt">63.11 </td>
+</tr><tr class="s6">
+<td nowrap>Signal Bits 0->1</td>
+<td class="rt">61</td>
+<td class="rt">39</td>
+<td class="rt">63.93 </td>
+</tr><tr class="s6">
+<td nowrap>Signal Bits 1->0</td>
+<td class="rt">61</td>
+<td class="rt">38</td>
+<td class="rt">62.30 </td>
+</tr></table><br clear=all>
+<table align=left class="sortable noborder">
+<caption><b>Port Details</b></caption>
+<tr class="sortablehead">
+<td class="alfsrt">Name</td><td class="alfsrt">Toggle</td><td class="alfsrt">Toggle 1->0</td><td class="alfsrt">Toggle 0->1</td><td class="alfsrt">Direction</td></tr><tr>
+<td>wb_clk_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>wb_rst_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>stx_pad_o</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>srx_pad_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>rts_pad_o</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>dtr_pad_o</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>cts_pad_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>dsr_pad_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>ri_pad_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>dcd_pad_i</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>int_o</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>lcr[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>mcr[4:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>dl[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>dl[15:8]</td>
+<td class="s3 cl">No</td>
+<td class="s3 cl">No</td>
+<td class="s3 cl">No</td>
+<td>INPUT</td>
+</tr><tr>
+<td>iir[3:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>msr[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>tstate[2:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>tf_count[4:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>start_dlc</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>rda_int_pnd</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr><tr>
+<td>rda_int</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td>INPUT</td>
+</tr></table><br clear=all>
+<table align=left class="sortable noborder">
+<caption><b>Signal Details</b></caption>
+<tr class="sortablehead">
+<td class="alfsrt">Name</td><td class="alfsrt">Toggle</td><td class="alfsrt">Toggle 1->0</td><td class="alfsrt">Toggle 0->1</td></tr><tr>
+<td>stx_q</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>low_len[17:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>low_len[31:18]</td>
+<td class="s3 cl">No</td>
+<td class="s3 cl">No</td>
+<td class="s3 cl">No</td>
+</tr><tr>
+<td>low_dl[3:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>low_dl[4]</td>
+<td class="s3 cl">No</td>
+<td class="s3 cl">No</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>low_dl[7:5]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>low_dl[15:8]</td>
+<td class="s3 cl">No</td>
+<td class="s3 cl">No</td>
+<td class="s3 cl">No</td>
+</tr><tr>
+<td>low_clean</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>stx_rise</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>low_ok</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>int_mm_now</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr><tr>
+<td>int_mm_q[7:0]</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+<td class="s9 cl">Yes</td>
+</tr></table><br clear=all>
+<hr>
+<a name="Branch"></a>
+Branch Coverage for Module : <a href="mod7.html" >uart_ser_sva</a><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80>Line No.</th><th nowrap width=80>Total</th><th nowrap width=80>Covered</th><th nowrap width=80>Percent</th></tr><tr class="s9">
+<td>Branches</td>
+<td></td>
+<td class="rt">12</td>
+<td class="rt">11</td>
+<td class="rt">91.67 </td>
+</tr><tr class="s5">
+<td>IF</td>
+<td class="rt">50</td>
+<td class="rt">2</td>
+<td class="rt">1</td>
+<td class="rt">50.00 </td>
+</tr><tr class="s10">
+<td>IF</td>
+<td class="rt">100</td>
+<td class="rt">6</td>
+<td class="rt">6</td>
+<td class="rt">100.00</td>
+</tr><tr class="s10">
+<td>IF</td>
+<td class="rt">165</td>
+<td class="rt">4</td>
+<td class="rt">4</td>
+<td class="rt">100.00</td>
+</tr></table><br clear=all>
+<pre class="code"><br clear=all>
+50             if ($value$plusargs("UART_SCB_DUT_BUG_SEV=%s", s)) dut_bug_sev = s;
+               <font color = "red">-1-</font>  
+           <font color = "red">    ==></font>
+               MISSING_ELSE
+           <font color = "green">    ==></font>
+</pre>
+<br clear=all>
+<span class=repname>Branches:</span>
+<br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=80>-1-</th><th nowrap width=80>Status</th></tr><tr class="uRed">
+<td align=center>1</td>
+<td>Not Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td>Covered</td>
+</tr></table><br clear=all>
+<pre class="code"><br clear=all>
+100            if (wb_rst_i) begin
+               <font color = "green">-1-</font>  
+101              stx_q     <= 1'b1;
+           <font color = "green">      ==></font>
+102              low_len   <= '0;
+103              low_dl    <= '0;
+104              low_clean <= 1'b0;
+105            end else begin
+106              stx_q <= stx_pad_o;
+107              if (!stx_pad_o) begin
+                 <font color = "green">-2-</font>  
+108                if (stx_q) begin                       // flanco de bajada: empieza el bit de inicio
+                   <font color = "green">-3-</font>  
+109                  low_len   <= 32'd1;
+           <font color = "green">          ==></font>
+110                  low_dl    <= dl;
+111                  low_clean <= !lcr[6] && !mcr[4] && !start_dlc;
+112                end else begin
+113                  low_len <= low_len + 32'd1;
+114                  // escribir DLL reinicia el contador de baudios aunque el valor sea el mismo
+115                  if (dl != low_dl || lcr[6] || mcr[4] || start_dlc) low_clean <= 1'b0;
+                     <font color = "green">-4-</font>  
+           <font color = "green">          ==></font>
+                     MISSING_ELSE
+           <font color = "green">          ==></font>
+116                end
+117              end else if (stx_q) begin
+                          <font color = "green">-5-</font>  
+118                low_len <= '0;                         // se conserva un ciclo para la aserción
+           <font color = "green">        ==></font>
+119              end
+                 MISSING_ELSE
+           <font color = "green">      ==></font>
+</pre>
+<br clear=all>
+<span class=repname>Branches:</span>
+<br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=80>-1-</th><th nowrap width=80>-2-</th><th nowrap width=80>-3-</th><th nowrap width=80>-4-</th><th nowrap width=80>-5-</th><th nowrap width=80>Status</th></tr><tr class="uGreen">
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>1</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td align=center>0</td>
+<td>Covered</td>
+</tr></table><br clear=all>
+<pre class="code"><br clear=all>
+165            if (wb_rst_i)                          int_mm_q <= '0;
+               <font color = "green">-1-</font>  
+           <font color = "green">    ==></font>
+166            else if (!int_mm_now)                  int_mm_q <= '0;
+                    <font color = "green">-2-</font>  
+           <font color = "green">    ==></font>
+167            else if (int_mm_q != 8'hFF)            int_mm_q <= int_mm_q + 8'd1;
+                    <font color = "green">-3-</font>  
+           <font color = "green">    ==></font>
+               MISSING_ELSE
+           <font color = "green">    ==></font>
+</pre>
+<br clear=all>
+<span class=repname>Branches:</span>
+<br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=80>-1-</th><th nowrap width=80>-2-</th><th nowrap width=80>-3-</th><th nowrap width=80>Status</th></tr><tr class="uGreen">
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>1</td>
+<td align=center nowrap>-</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center>1</td>
+<td>Covered</td>
+</tr><tr class="uGreen">
+<td align=center>0</td>
+<td align=center>0</td>
+<td align=center>0</td>
+<td>Covered</td>
+</tr></table><br clear=all>
+<hr>
+<a name="Assert"></a>
+Assert Coverage for Module : <a href="mod7.html" >uart_ser_sva</a><br clear=all>
+<table align=left class="noborder">
+<tr>
+<th nowrap width=120></th><th nowrap width=80>Total</th><th nowrap width=80>Attempted</th><th nowrap width=80>Percent</th><th nowrap width=80>Succeeded/Matched</th><th nowrap width=80>Percent</th></tr><tr>
+<td class="wht cl"><a href="#981734849" >Assertions</a></td>
+<td class="wht cl rt">0</td>
+<td class="wht cl rt">0</td>
+<td class="wht cl"></td>
+<td class="wht cl rt">0</td>
+<td class="wht cl"></td>
+</tr><tr>
+<td class="wht cl"><a href="#561513514" >Cover properties</a></td>
+<td class="wht cl rt">14</td>
+<td class="s10 cl rt">14</td>
+<td class="s10 cl rt">100.00</td>
+<td class="s10 cl rt">14</td>
+<td class="s10 cl rt">100.00</td>
+</tr><tr>
+<td class="wht cl"><a href="#1946534971" >Cover sequences</a></td>
+<td class="wht cl rt">0</td>
+<td class="wht cl rt">0</td>
+<td class="wht cl"></td>
+<td class="wht cl rt">0</td>
+<td class="wht cl"></td>
+</tr><tr>
+<td class="wht cl"><b>Total</b></td>
+<td class="wht cl rt">14</td>
+<td class="s10 cl rt">14</td>
+<td class="s10 cl rt">100.00</td>
+<td class="s10 cl rt">14</td>
+<td class="s10 cl rt">100.00</td>
+</tr></table><br clear=all>
+<br clear=all>
+<hr>
+<br clear=all>
+<a name="561513514"></a>
+<b>Cover Directives for Properties: Details</b><br clear=all>
+<br clear=all>
+<table align=left class="sortable noborder">
+<tr class="sortablehead">
+<td class="alfsrt">Name</td><td>Attempts</td><td>Matches</td><td>Incomplete</td></tr><tr>
+<td class="wht cl"><a name="296223346"></a>
+c_env01</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">54739749</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="1972464967"></a>
+c_int_fall</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">1573</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="170711302"></a>
+c_int_lag</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">1472</td>
+<td class="wht cl rt">1</td>
+</tr><tr>
+<td class="wht cl"><a name="1547439957"></a>
+c_int_rise</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">1595</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="78749918"></a>
+c_mdm01_dtr</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">181</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="1386226355"></a>
+c_mdm01_rts</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">172</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="758832188"></a>
+c_mdm02</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">10448530</td>
+<td class="wht cl rt">74</td>
+</tr><tr>
+<td class="wht cl"><a name="1827525544"></a>
+c_rst01</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">19</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="575224690"></a>
+c_ser01_dl0</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">1292</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="1463487442"></a>
+c_ser01_idle</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">8543</td>
+<td class="wht cl rt">272</td>
+</tr><tr>
+<td class="wht cl"><a name="99393712"></a>
+c_ser02_dl1</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">332</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="2049566253"></a>
+c_ser02_dlgt16</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">1995</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="573349316"></a>
+c_ser03_loop</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">8623172</td>
+<td class="wht cl rt">0</td>
+</tr><tr>
+<td class="wht cl"><a name="1849532328"></a>
+c_ser04_break</td>
+<td class="s9 cl rt">54741037</td>
+<td class="s9 cl rt">1</td>
+<td class="wht cl rt">0</td>
+</tr></table><br clear=all>
+</div>
+</div>
+<div class="ui-layout-center-inner-north">
+<div id="center-bread-crumb" class="breadCrumb module urg-margin-bottom">
+  <ul name="inst_tag_8">
+    <li>
+      <a href="#Line">Line</a>    </li>
+    <li>
+      <a href="#Cond">Cond</a>    </li>
+    <li>
+      <a href="#Toggle">Toggle</a>    </li>
+    <li>
+      <a href="#Branch">Branch</a>    </li>
+    <li>
+      <a href="#Assert">Assert</a>    </li>
+  </ul>
+  <ul name="tag_uart_ser_sva">
+    <li>
+      <a href="#Line">Line</a>    </li>
+    <li>
+      <a href="#Cond">Cond</a>    </li>
+    <li>
+      <a href="#Toggle">Toggle</a>    </li>
+    <li>
+      <a href="#Branch">Branch</a>    </li>
+    <li>
+      <a href="#Assert">Assert</a>    </li>
+  </ul>
+</div>
+</div>
+</div>
+<div class="ui-layout-south">
+<table align=center><tr><td class="s0 cl">0%</td>
+<td class="s1 cl">10%</td>
+<td class="s2 cl">20%</td>
+<td class="s3 cl">30%</td>
+<td class="s4 cl">40%</td>
+<td class="s5 cl">50%</td>
+<td class="s6 cl">60%</td>
+<td class="s7 cl">70%</td>
+<td class="s8 cl">80%</td>
+<td class="s9 cl">90%</td>
+<td class="s10 cl">100%</td></tr></table></div>
+</body>
+</html>

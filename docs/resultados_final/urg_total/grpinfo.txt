@@ -1,0 +1,2738 @@
+Group : uart_pkg::uart_cov::cg_int
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_int
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+ 79.79 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_int
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 34       3         31      87.50   
+Crosses   108      19        89      68.23   
+
+
+Variables for Group  uart_pkg::uart_cov::cg_int
+
+
+VARIABLE    EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_iir_id   6        0         6       100.00  100  1      1        0                    
+cp_ier      16       0         16      100.00  100  1      1        16                   
+cp_mode     2        0         2       100.00  100  1      1        0                    
+cp_multi    4        3         1       25.00   100  1      1        0                    
+cp_tl       4        0         4       100.00  100  1      1        4                    
+cp_int_edge 2        0         2       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_int
+
+
+CROSS       EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_id_mode  12       4         8       66.67   100  1      1        0                     
+cx_id_multi 16       15        1       6.25    100  1      1        0                     
+cx_id_tl    24       0         24      100.00  100  1      1        0                     
+cx_id_ier   56       0         56      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_iir_id
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 6        0         6       100.00  
+
+
+User Defined Bins for cp_iir_id
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+msi     471   1        
+thre    652   1        
+timeout 297   1        
+rda     762   1        
+rls     374   1        
+ninguna 2147  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_ier
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 16       0         16      100.00  
+
+
+Automatically Generated Bins for cp_ier
+
+
+Bins
+
+NAME     COUNT AT LEAST 
+auto[0]  1379  1        
+auto[1]  132   1        
+auto[2]  166   1        
+auto[3]  369   1        
+auto[4]  217   1        
+auto[5]  155   1        
+auto[6]  89    1        
+auto[7]  209   1        
+auto[8]  120   1        
+auto[9]  195   1        
+auto[10] 91    1        
+auto[11] 196   1        
+auto[12] 151   1        
+auto[13] 378   1        
+auto[14] 244   1        
+auto[15] 612   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_mode
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_mode
+
+
+Bins
+
+NAME         COUNT AT LEAST 
+auto_SW_IRQ  4293  1        
+auto_SW_POLL 410   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_multi
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        3         1       25.00   
+
+
+User Defined Bins for cp_multi
+
+
+Uncovered bins
+
+NAME COUNT AT LEAST NUMBER 
+mas  0     1        1      
+dos  0     1        1      
+una  0     1        1      
+
+
+Covered bins
+
+NAME COUNT AT LEAST 
+cero 4703  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_tl
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 4        0         4       100.00  
+
+
+Automatically Generated Bins for cp_tl
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 2344  1        
+auto[1] 669   1        
+auto[2] 999   1        
+auto[3] 691   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_int_edge
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_int_edge
+
+
+Bins
+
+NAME COUNT AT LEAST 
+baja 4605  1        
+sube 4620  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_id_mode
+
+
+Samples crossed: cp_iir_id cp_mode
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 12       4         8       66.67   4       
+
+
+Automatically Generated Cross Bins for cx_id_mode
+
+
+Uncovered bins
+
+cp_iir_id             cp_mode        COUNT AT LEAST NUMBER 
+[msi]                 [auto_SW_POLL] 0     1        1      
+[timeout , rda , rls] [auto_SW_POLL] --    --       3      
+
+
+Covered bins
+
+cp_iir_id cp_mode      COUNT AT LEAST 
+msi       auto_SW_IRQ  471   1        
+thre      auto_SW_IRQ  433   1        
+thre      auto_SW_POLL 219   1        
+timeout   auto_SW_IRQ  297   1        
+rda       auto_SW_IRQ  762   1        
+rls       auto_SW_IRQ  374   1        
+ninguna   auto_SW_IRQ  1956  1        
+ninguna   auto_SW_POLL 191   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_id_multi
+
+
+Samples crossed: cp_iir_id cp_multi
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              16       15        1       6.25    15      
+Automatically Generated Cross Bins 16       15        1       6.25    15      
+User Defined Cross Bins            0        0         0                       
+
+
+Automatically Generated Cross Bins for cx_id_multi
+
+
+Uncovered bins
+
+cp_iir_id                          cp_multi          COUNT AT LEAST NUMBER 
+[msi , thre , timeout , rda , rls] [mas , dos , una] --    --       15     
+
+
+Covered bins
+
+cp_iir_id cp_multi COUNT AT LEAST 
+ninguna   cero     2147  1        
+
+
+User Defined Cross Bins for cx_id_multi
+
+
+Excluded/Illegal bins
+
+NAME         COUNT STATUS   
+ninguna_pend 0     Excluded 
+id_sin_pend  0     Excluded 
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_id_tl
+
+
+Samples crossed: cp_iir_id cp_tl
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 24       0         24      100.00          
+
+
+Automatically Generated Cross Bins for cx_id_tl
+
+
+Bins
+
+cp_iir_id cp_tl   COUNT AT LEAST 
+msi       auto[0] 105   1        
+msi       auto[1] 73    1        
+msi       auto[2] 170   1        
+msi       auto[3] 123   1        
+thre      auto[0] 182   1        
+thre      auto[1] 148   1        
+thre      auto[2] 154   1        
+thre      auto[3] 168   1        
+timeout   auto[0] 4     1        
+timeout   auto[1] 59    1        
+timeout   auto[2] 149   1        
+timeout   auto[3] 85    1        
+rda       auto[0] 512   1        
+rda       auto[1] 161   1        
+rda       auto[2] 73    1        
+rda       auto[3] 16    1        
+rls       auto[0] 107   1        
+rls       auto[1] 34    1        
+rls       auto[2] 159   1        
+rls       auto[3] 74    1        
+ninguna   auto[0] 1434  1        
+ninguna   auto[1] 194   1        
+ninguna   auto[2] 294   1        
+ninguna   auto[3] 225   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_id_ier
+
+
+Samples crossed: cp_iir_id cp_ier
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              56       0         56      100.00          
+Automatically Generated Cross Bins 56       0         56      100.00          
+User Defined Cross Bins            0        0         0                       
+
+
+Automatically Generated Cross Bins for cx_id_ier
+
+
+Bins
+
+cp_iir_id cp_ier   COUNT AT LEAST 
+msi       auto[8]  55    1        
+msi       auto[9]  51    1        
+msi       auto[10] 23    1        
+msi       auto[11] 40    1        
+msi       auto[12] 47    1        
+msi       auto[13] 127   1        
+msi       auto[14] 54    1        
+msi       auto[15] 74    1        
+thre      auto[2]  91    1        
+thre      auto[3]  106   1        
+thre      auto[6]  57    1        
+thre      auto[7]  71    1        
+thre      auto[10] 48    1        
+thre      auto[11] 52    1        
+thre      auto[14] 116   1        
+thre      auto[15] 111   1        
+timeout   auto[1]  20    1        
+timeout   auto[3]  56    1        
+timeout   auto[5]  32    1        
+timeout   auto[7]  33    1        
+timeout   auto[9]  23    1        
+timeout   auto[11] 28    1        
+timeout   auto[13] 76    1        
+timeout   auto[15] 29    1        
+rda       auto[1]  74    1        
+rda       auto[3]  138   1        
+rda       auto[5]  65    1        
+rda       auto[7]  61    1        
+rda       auto[9]  51    1        
+rda       auto[11] 48    1        
+rda       auto[13] 52    1        
+rda       auto[15] 273   1        
+rls       auto[4]  137   1        
+rls       auto[5]  10    1        
+rls       auto[6]  11    1        
+rls       auto[7]  15    1        
+rls       auto[12] 54    1        
+rls       auto[13] 31    1        
+rls       auto[14] 40    1        
+rls       auto[15] 76    1        
+ninguna   auto[0]  1379  1        
+ninguna   auto[1]  38    1        
+ninguna   auto[2]  75    1        
+ninguna   auto[3]  69    1        
+ninguna   auto[4]  80    1        
+ninguna   auto[5]  48    1        
+ninguna   auto[6]  21    1        
+ninguna   auto[7]  29    1        
+ninguna   auto[8]  65    1        
+ninguna   auto[9]  70    1        
+ninguna   auto[10] 20    1        
+ninguna   auto[11] 28    1        
+ninguna   auto[12] 50    1        
+ninguna   auto[13] 92    1        
+ninguna   auto[14] 34    1        
+ninguna   auto[15] 49    1        
+
+
+User Defined Cross Bins for cx_id_ier
+
+
+Excluded/Illegal bins
+
+NAME     COUNT STATUS   
+rls_off  0     Excluded 
+rda_off  0     Excluded 
+to_off   0     Excluded 
+thre_off 0     Excluded 
+msi_off  0     Excluded 
+
+
+Group : uart_pkg::uart_cov::cg_reset
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_reset
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+ 83.33 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_reset
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 7        1         6       90.00   
+Crosses   10       3         7       70.00   
+
+
+Variables for Group  uart_pkg::uart_cov::cg_reset
+
+
+VARIABLE EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_when  5        1         4       80.00   100  1      1        0                    
+cp_width 2        0         2       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_reset
+
+
+CROSS    EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_reset 10       3         7       70.00   100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_when
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 5        1         4       80.00   
+
+
+User Defined Bins for cp_when
+
+
+Uncovered bins
+
+NAME      COUNT AT LEAST NUMBER 
+en_acceso 0     1        1      
+
+
+Covered bins
+
+NAME   COUNT AT LEAST 
+ambos  84    1        
+rx     105   1        
+tx     7     1        
+reposo 639   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_width
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_width
+
+
+Bins
+
+NAME   COUNT AT LEAST 
+varios 794   1        
+uno    41    1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_reset
+
+
+Samples crossed: cp_when cp_width
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 10       3         7       70.00   3       
+
+
+Automatically Generated Cross Bins for cx_reset
+
+
+Element holes
+
+cp_when     cp_width COUNT AT LEAST NUMBER 
+[en_acceso] *        --    --       2      
+
+
+Uncovered bins
+
+cp_when cp_width COUNT AT LEAST NUMBER 
+[tx]    [uno]    0     1        1      
+
+
+Covered bins
+
+cp_when cp_width COUNT AT LEAST 
+ambos   varios   67    1        
+ambos   uno      17    1        
+rx      varios   87    1        
+rx      uno      18    1        
+tx      varios   7     1        
+reposo  varios   633   1        
+reposo  uno      6     1        
+
+
+Group : uart_pkg::uart_cov::cg_rx
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_rx
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+ 87.47 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_rx
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 30       2         28      85.94   
+Crosses   90       9         81      91.56   
+
+
+Variables for Group  uart_pkg::uart_cov::cg_rx
+
+
+VARIABLE      EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_err        8        1         7       87.50   100  1      1        0                    
+cp_par        5        0         5       100.00  100  1      1        0                    
+cp_wls        4        0         4       100.00  100  1      1        4                    
+cp_data       2        0         2       100.00  100  1      1        0                    
+cp_short_stop 1        1         0       0.00    100  1      1        0                    
+cp_level      5        0         5       100.00  100  1      1        0                    
+cp_tl         4        0         4       100.00  100  1      1        0                    
+cp_rd_empty   1        0         1       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_rx
+
+
+CROSS       EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_err_par  39       5         34      87.18   100  1      1        0                     
+cx_err_wls  32       4         28      87.50   100  1      1        0                     
+cx_level_tl 19       0         19      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_err
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 8        1         7       87.50   
+
+
+User Defined Bins for cp_err
+
+
+Uncovered bins
+
+NAME        COUNT AT LEAST NUMBER 
+glitch_desc 0     1        1      
+
+
+Covered bins
+
+NAME          COUNT AT LEAST 
+baud_out      343   1        
+baud_in       784   1        
+glitch_inicio 145   1        
+brk           591   1        
+trama         753   1        
+paridad       630   1        
+ok            9213  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_par
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 5        0         5       100.00  
+
+
+Automatically Generated Bins for cp_par
+
+
+Bins
+
+NAME            COUNT AT LEAST 
+auto_PAR_NONE   2126  1        
+auto_PAR_ODD    2059  1        
+auto_PAR_EVEN   2984  1        
+auto_PAR_STICK1 1885  1        
+auto_PAR_STICK0 3405  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_wls
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 4        0         4       100.00  
+
+
+Automatically Generated Bins for cp_wls
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 2849  1        
+auto[1] 3015  1        
+auto[2] 3779  1        
+auto[3] 2816  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_data
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_data
+
+
+Excluded/Illegal bins
+
+NAME COUNT STATUS   
+otro 11089 Excluded 
+
+
+Covered bins
+
+NAME COUNT AT LEAST 
+xff  174   1        
+x00  1196  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_short_stop
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 1        1         0       0.00    
+
+
+User Defined Bins for cp_short_stop
+
+
+Uncovered bins
+
+NAME     COUNT AT LEAST NUMBER 
+solo_uno 0     1        1      
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_level
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 5        0         5       100.00  
+
+
+User Defined Bins for cp_level
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+overrun 875   1        
+quince  102   1        
+en_tl   3404  1        
+bajo_tl 4845  1        
+vacia   2994  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_tl
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_tl
+
+
+Bins
+
+NAME COUNT AT LEAST 
+tl14 3508  1        
+tl8  2769  1        
+tl4  2245  1        
+tl1  3698  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rd_empty
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 1        0         1       100.00  
+
+
+User Defined Bins for cp_rd_empty
+
+
+Bins
+
+NAME  COUNT AT LEAST 
+vacia 6706  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_err_par
+
+
+Samples crossed: cp_err cp_par
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              39       5         34      87.18   5       
+Automatically Generated Cross Bins 39       5         34      87.18   5       
+User Defined Cross Bins            0        0         0                       
+
+
+Automatically Generated Cross Bins for cx_err_par
+
+
+Element holes
+
+cp_err        cp_par COUNT AT LEAST NUMBER 
+[glitch_desc] *      --    --       5      
+
+
+Covered bins
+
+cp_err        cp_par          COUNT AT LEAST 
+baud_out      auto_PAR_NONE   64    1        
+baud_out      auto_PAR_ODD    45    1        
+baud_out      auto_PAR_EVEN   80    1        
+baud_out      auto_PAR_STICK1 50    1        
+baud_out      auto_PAR_STICK0 104   1        
+baud_in       auto_PAR_NONE   138   1        
+baud_in       auto_PAR_ODD    108   1        
+baud_in       auto_PAR_EVEN   204   1        
+baud_in       auto_PAR_STICK1 127   1        
+baud_in       auto_PAR_STICK0 207   1        
+glitch_inicio auto_PAR_NONE   25    1        
+glitch_inicio auto_PAR_ODD    16    1        
+glitch_inicio auto_PAR_EVEN   18    1        
+glitch_inicio auto_PAR_STICK1 20    1        
+glitch_inicio auto_PAR_STICK0 66    1        
+brk           auto_PAR_NONE   124   1        
+brk           auto_PAR_ODD    74    1        
+brk           auto_PAR_EVEN   148   1        
+brk           auto_PAR_STICK1 92    1        
+brk           auto_PAR_STICK0 153   1        
+trama         auto_PAR_NONE   111   1        
+trama         auto_PAR_ODD    116   1        
+trama         auto_PAR_EVEN   199   1        
+trama         auto_PAR_STICK1 96    1        
+trama         auto_PAR_STICK0 231   1        
+paridad       auto_PAR_ODD    140   1        
+paridad       auto_PAR_EVEN   172   1        
+paridad       auto_PAR_STICK1 99    1        
+paridad       auto_PAR_STICK0 219   1        
+ok            auto_PAR_NONE   1664  1        
+ok            auto_PAR_ODD    1560  1        
+ok            auto_PAR_EVEN   2163  1        
+ok            auto_PAR_STICK1 1401  1        
+ok            auto_PAR_STICK0 2425  1        
+
+
+User Defined Cross Bins for cx_err_par
+
+
+Excluded/Illegal bins
+
+NAME        COUNT STATUS   
+sin_paridad 0     Excluded 
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_err_wls
+
+
+Samples crossed: cp_err cp_wls
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 32       4         28      87.50   4       
+
+
+Automatically Generated Cross Bins for cx_err_wls
+
+
+Element holes
+
+cp_err        cp_wls COUNT AT LEAST NUMBER 
+[glitch_desc] *      --    --       4      
+
+
+Covered bins
+
+cp_err        cp_wls  COUNT AT LEAST 
+baud_out      auto[0] 65    1        
+baud_out      auto[1] 75    1        
+baud_out      auto[2] 114   1        
+baud_out      auto[3] 89    1        
+baud_in       auto[0] 139   1        
+baud_in       auto[1] 207   1        
+baud_in       auto[2] 228   1        
+baud_in       auto[3] 210   1        
+glitch_inicio auto[0] 27    1        
+glitch_inicio auto[1] 34    1        
+glitch_inicio auto[2] 46    1        
+glitch_inicio auto[3] 38    1        
+brk           auto[0] 128   1        
+brk           auto[1] 125   1        
+brk           auto[2] 206   1        
+brk           auto[3] 132   1        
+trama         auto[0] 179   1        
+trama         auto[1] 169   1        
+trama         auto[2] 240   1        
+trama         auto[3] 165   1        
+paridad       auto[0] 146   1        
+paridad       auto[1] 156   1        
+paridad       auto[2] 175   1        
+paridad       auto[3] 153   1        
+ok            auto[0] 2165  1        
+ok            auto[1] 2249  1        
+ok            auto[2] 2770  1        
+ok            auto[3] 2029  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_level_tl
+
+
+Samples crossed: cp_level cp_tl
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              19       0         19      100.00          
+Automatically Generated Cross Bins 19       0         19      100.00          
+User Defined Cross Bins            0        0         0                       
+
+
+Automatically Generated Cross Bins for cx_level_tl
+
+
+Bins
+
+cp_level cp_tl COUNT AT LEAST 
+overrun  tl14  246   1        
+overrun  tl8   344   1        
+overrun  tl4   92    1        
+overrun  tl1   193   1        
+quince   tl14  26    1        
+quince   tl8   33    1        
+quince   tl4   15    1        
+quince   tl1   28    1        
+en_tl    tl14  35    1        
+en_tl    tl8   375   1        
+en_tl    tl4   655   1        
+en_tl    tl1   2339  1        
+bajo_tl  tl14  2409  1        
+bajo_tl  tl8   1463  1        
+bajo_tl  tl4   973   1        
+vacia    tl14  792   1        
+vacia    tl8   554   1        
+vacia    tl4   510   1        
+vacia    tl1   1138  1        
+
+
+User Defined Cross Bins for cx_level_tl
+
+
+Excluded/Illegal bins
+
+NAME     COUNT STATUS   
+tl1_bajo 0     Excluded 
+
+
+Group : uart_pkg::uart_cov::cg_reg_access
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_reg_access
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+ 94.05 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_reg_access
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 21       1         20      96.43   
+Crosses   52       3         49      89.29   
+
+
+Variables for Group  uart_pkg::uart_cov::cg_reg_access
+
+
+VARIABLE EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_addr  10       0         10      100.00  100  1      1        0                    
+cp_rw    2        0         2       100.00  100  1      1        0                    
+cp_dlab  2        0         2       100.00  100  1      1        2                    
+cp_sel   7        1         6       85.71   100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_reg_access
+
+
+CROSS           EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_addr_rw_dlab 38       0         38      100.00  100  1      1        0                     
+cx_sel_rw       14       3         11      78.57   100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_addr
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 10       0         10      100.00  
+
+
+User Defined Bins for cp_addr
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+dbg2    1318  1        
+dbg1    1326  1        
+regs_00 46306 1        
+regs_01 3459  1        
+regs_02 5933  1        
+regs_03 3803  1        
+regs_04 2352  1        
+regs_05 27261 1        
+regs_06 4099  1        
+regs_07 1308  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rw
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_rw
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+escribe 33992 1        
+lee     63173 1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_dlab
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_dlab
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 93668 1        
+auto[1] 3497  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_sel
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 7        1         6       85.71   
+
+
+User Defined Bins for cp_sel
+
+
+Uncovered bins
+
+NAME   COUNT AT LEAST NUMBER 
+varios 0     1        1      
+
+
+Covered bins
+
+NAME     COUNT AT LEAST 
+ninguno  1     1        
+todos    2644  1        
+carril_1 5111  1        
+carril_2 10031 1        
+carril_4 30720 1        
+carril_8 48658 1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_addr_rw_dlab
+
+
+Samples crossed: cp_addr cp_rw cp_dlab
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              38       0         38      100.00          
+Automatically Generated Cross Bins 38       0         38      100.00          
+User Defined Cross Bins            0        0         0                       
+
+
+Automatically Generated Cross Bins for cx_addr_rw_dlab
+
+
+Bins
+
+cp_addr cp_rw   cp_dlab COUNT AT LEAST 
+dbg2    escribe auto[0] 30    1        
+dbg2    escribe auto[1] 11    1        
+dbg2    lee     auto[0] 1262  1        
+dbg2    lee     auto[1] 15    1        
+dbg1    escribe auto[0] 37    1        
+dbg1    escribe auto[1] 18    1        
+dbg1    lee     auto[0] 1267  1        
+dbg1    lee     auto[1] 4     1        
+regs_00 escribe auto[0] 25682 1        
+regs_00 escribe auto[1] 1077  1        
+regs_00 lee     auto[0] 19540 1        
+regs_00 lee     auto[1] 7     1        
+regs_01 escribe auto[0] 1101  1        
+regs_01 escribe auto[1] 1077  1        
+regs_01 lee     auto[0] 1274  1        
+regs_01 lee     auto[1] 7     1        
+regs_02 escribe auto[0] 1224  1        
+regs_02 lee     auto[0] 4704  1        
+regs_02 lee     auto[1] 5     1        
+regs_03 escribe auto[0] 1317  1        
+regs_03 escribe auto[1] 1210  1        
+regs_03 lee     auto[0] 1261  1        
+regs_03 lee     auto[1] 15    1        
+regs_04 escribe auto[0] 1080  1        
+regs_04 lee     auto[0] 1267  1        
+regs_04 lee     auto[1] 5     1        
+regs_05 escribe auto[0] 42    1        
+regs_05 escribe auto[1] 11    1        
+regs_05 lee     auto[0] 27202 1        
+regs_05 lee     auto[1] 6     1        
+regs_06 escribe auto[0] 26    1        
+regs_06 escribe auto[1] 12    1        
+regs_06 lee     auto[0] 4058  1        
+regs_06 lee     auto[1] 3     1        
+regs_07 escribe auto[0] 29    1        
+regs_07 escribe auto[1] 8     1        
+regs_07 lee     auto[0] 1265  1        
+regs_07 lee     auto[1] 6     1        
+
+
+User Defined Cross Bins for cx_addr_rw_dlab
+
+
+Excluded/Illegal bins
+
+NAME         COUNT STATUS   
+fcr_mcr_dlab 0     Excluded 
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_sel_rw
+
+
+Samples crossed: cp_sel cp_rw
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 14       3         11      78.57   3       
+
+
+Automatically Generated Cross Bins for cx_sel_rw
+
+
+Element holes
+
+cp_sel   cp_rw COUNT AT LEAST NUMBER 
+[varios] *     --    --       2      
+
+
+Uncovered bins
+
+cp_sel    cp_rw     COUNT AT LEAST NUMBER 
+[ninguno] [escribe] 0     1        1      
+
+
+Covered bins
+
+cp_sel   cp_rw   COUNT AT LEAST 
+ninguno  lee     1     1        
+todos    escribe 96    1        
+todos    lee     2548  1        
+carril_1 escribe 2564  1        
+carril_1 lee     2547  1        
+carril_2 escribe 1262  1        
+carril_2 lee     8769  1        
+carril_4 escribe 2231  1        
+carril_4 lee     28489 1        
+carril_8 escribe 27839 1        
+carril_8 lee     20819 1        
+
+
+Group : uart_pkg::uart_cov::cg_reconfig
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_reconfig
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_reconfig
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 7        0         7       100.00  
+Crosses   12       0         12      100.00  
+
+
+Variables for Group  uart_pkg::uart_cov::cg_reconfig
+
+
+VARIABLE   EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_reg     4        0         4       100.00  100  1      1        0                    
+cp_traffic 3        0         3       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_reconfig
+
+
+CROSS       EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_reconfig 12       0         12      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_reg
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_reg
+
+
+Bins
+
+NAME COUNT AT LEAST 
+mcr  267   1        
+fcr  385   1        
+dl   264   1        
+lcr  818   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_traffic
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 3        0         3       100.00  
+
+
+User Defined Bins for cp_traffic
+
+
+Bins
+
+NAME  COUNT AT LEAST 
+ambos 414   1        
+rx    645   1        
+tx    675   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_reconfig
+
+
+Samples crossed: cp_reg cp_traffic
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 12       0         12      100.00          
+
+
+Automatically Generated Cross Bins for cx_reconfig
+
+
+Bins
+
+cp_reg cp_traffic COUNT AT LEAST 
+mcr    ambos      60    1        
+mcr    rx         101   1        
+mcr    tx         106   1        
+fcr    ambos      109   1        
+fcr    rx         145   1        
+fcr    tx         131   1        
+dl     ambos      55    1        
+dl     rx         99    1        
+dl     tx         110   1        
+lcr    ambos      190   1        
+lcr    rx         300   1        
+lcr    tx         328   1        
+
+
+Group : uart_pkg::uart_cov::cg_tx
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_tx
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_tx
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 11       0         11      100.00  
+Crosses   24       0         24      100.00  
+
+
+Variables for Group  uart_pkg::uart_cov::cg_tx
+
+
+VARIABLE EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_level 6        0         6       100.00  100  1      1        0                    
+cp_wls   4        0         4       100.00  100  1      1        4                    
+cp_break 1        0         1       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_tx
+
+
+CROSS    EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_level 24       0         24      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_level
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 6        0         6       100.00  
+
+
+User Defined Bins for cp_level
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+perdida 3074  1        
+quince  744   1        
+media   6729  1        
+poca    7514  1        
+uno     1594  1        
+vacia   5885  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_wls
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 4        0         4       100.00  
+
+
+Automatically Generated Bins for cp_wls
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 7418  1        
+auto[1] 4918  1        
+auto[2] 6624  1        
+auto[3] 6722  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_break
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 1        0         1       100.00  
+
+
+User Defined Bins for cp_break
+
+
+Bins
+
+NAME COUNT AT LEAST 
+brk  42    1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_level
+
+
+Samples crossed: cp_level cp_wls
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 24       0         24      100.00          
+
+
+Automatically Generated Cross Bins for cx_level
+
+
+Bins
+
+cp_level cp_wls  COUNT AT LEAST 
+perdida  auto[0] 969   1        
+perdida  auto[1] 467   1        
+perdida  auto[2] 836   1        
+perdida  auto[3] 802   1        
+quince   auto[0] 199   1        
+quince   auto[1] 129   1        
+quince   auto[2] 209   1        
+quince   auto[3] 207   1        
+media    auto[0] 1779  1        
+media    auto[1] 1309  1        
+media    auto[2] 1819  1        
+media    auto[3] 1822  1        
+poca     auto[0] 1985  1        
+poca     auto[1] 1500  1        
+poca     auto[2] 1998  1        
+poca     auto[3] 2031  1        
+uno      auto[0] 419   1        
+uno      auto[1] 318   1        
+uno      auto[2] 418   1        
+uno      auto[3] 439   1        
+vacia    auto[0] 2050  1        
+vacia    auto[1] 1156  1        
+vacia    auto[2] 1312  1        
+vacia    auto[3] 1367  1        
+
+
+Group : uart_pkg::uart_cov::cg_fifo_ctrl
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_fifo_ctrl
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_fifo_ctrl
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 12       0         12      100.00  
+Crosses   32       0         32      100.00  
+
+
+Variables for Group  uart_pkg::uart_cov::cg_fifo_ctrl
+
+
+VARIABLE   EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_tl      4        0         4       100.00  100  1      1        0                    
+cp_rx_clr  2        0         2       100.00  100  1      1        2                    
+cp_tx_clr  2        0         2       100.00  100  1      1        2                    
+cp_traffic 4        0         4       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_fifo_ctrl
+
+
+CROSS     EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_clr    16       0         16      100.00  100  1      1        0                     
+cx_clr_tr 16       0         16      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_tl
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_tl
+
+
+Bins
+
+NAME COUNT AT LEAST 
+tl14 322   1        
+tl8  322   1        
+tl4  240   1        
+tl1  340   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rx_clr
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_rx_clr
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 542   1        
+auto[1] 682   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_tx_clr
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_tx_clr
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 666   1        
+auto[1] 558   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_traffic
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_traffic
+
+
+Bins
+
+NAME   COUNT AT LEAST 
+ambos  109   1        
+rx     145   1        
+tx     131   1        
+reposo 839   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_clr
+
+
+Samples crossed: cp_tl cp_rx_clr cp_tx_clr
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 16       0         16      100.00          
+
+
+Automatically Generated Cross Bins for cx_clr
+
+
+Bins
+
+cp_tl cp_rx_clr cp_tx_clr COUNT AT LEAST 
+tl14  auto[0]   auto[0]   99    1        
+tl14  auto[0]   auto[1]   70    1        
+tl14  auto[1]   auto[0]   78    1        
+tl14  auto[1]   auto[1]   75    1        
+tl8   auto[0]   auto[0]   78    1        
+tl8   auto[0]   auto[1]   56    1        
+tl8   auto[1]   auto[0]   95    1        
+tl8   auto[1]   auto[1]   93    1        
+tl4   auto[0]   auto[0]   51    1        
+tl4   auto[0]   auto[1]   46    1        
+tl4   auto[1]   auto[0]   76    1        
+tl4   auto[1]   auto[1]   67    1        
+tl1   auto[0]   auto[0]   91    1        
+tl1   auto[0]   auto[1]   51    1        
+tl1   auto[1]   auto[0]   98    1        
+tl1   auto[1]   auto[1]   100   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_clr_tr
+
+
+Samples crossed: cp_rx_clr cp_tx_clr cp_traffic
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 16       0         16      100.00          
+
+
+Automatically Generated Cross Bins for cx_clr_tr
+
+
+Bins
+
+cp_rx_clr cp_tx_clr cp_traffic COUNT AT LEAST 
+auto[0]   auto[0]   ambos      15    1        
+auto[0]   auto[0]   rx         43    1        
+auto[0]   auto[0]   tx         30    1        
+auto[0]   auto[0]   reposo     231   1        
+auto[0]   auto[1]   ambos      27    1        
+auto[0]   auto[1]   rx         28    1        
+auto[0]   auto[1]   tx         22    1        
+auto[0]   auto[1]   reposo     146   1        
+auto[1]   auto[0]   ambos      34    1        
+auto[1]   auto[0]   rx         41    1        
+auto[1]   auto[0]   tx         34    1        
+auto[1]   auto[0]   reposo     238   1        
+auto[1]   auto[1]   ambos      33    1        
+auto[1]   auto[1]   rx         33    1        
+auto[1]   auto[1]   tx         45    1        
+auto[1]   auto[1]   reposo     224   1        
+
+
+Group : uart_pkg::uart_cov::cg_dl
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_dl
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_dl
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 9        0         9       100.00  
+Crosses   10       0         10      100.00  
+
+
+Variables for Group  uart_pkg::uart_cov::cg_dl
+
+
+VARIABLE EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_dl    7        0         7       100.00  100  1      1        0                    
+cp_order 2        0         2       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_dl
+
+
+CROSS       EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_dl_order 10       0         10      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_dl
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 7        0         7       100.00  
+
+
+User Defined Bins for cp_dl
+
+
+Bins
+
+NAME   COUNT AT LEAST 
+maximo 2     1        
+b4096  3     1        
+b256   6     1        
+b17    94    1        
+rapido 925   1        
+uno    42    1        
+cero   5     1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_order
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_order
+
+
+Bins
+
+NAME        COUNT AT LEAST 
+lsb_primero 107   1        
+msb_primero 970   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_dl_order
+
+
+Samples crossed: cp_dl cp_order
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              10       0         10      100.00          
+Automatically Generated Cross Bins 10       0         10      100.00          
+User Defined Cross Bins            0        0         0                       
+
+
+Automatically Generated Cross Bins for cx_dl_order
+
+
+Bins
+
+cp_dl  cp_order    COUNT AT LEAST 
+maximo lsb_primero 1     1        
+maximo msb_primero 1     1        
+b4096  lsb_primero 1     1        
+b4096  msb_primero 2     1        
+b256   lsb_primero 1     1        
+b256   msb_primero 5     1        
+b17    lsb_primero 22    1        
+b17    msb_primero 72    1        
+rapido lsb_primero 76    1        
+rapido msb_primero 849   1        
+
+
+User Defined Cross Bins for cx_dl_order
+
+
+Excluded/Illegal bins
+
+NAME     COUNT STATUS   
+dlm_cero 0     Excluded 
+
+
+Group : uart_pkg::uart_cov::cg_modem
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_modem
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_modem
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 32       0         32      100.00  
+Crosses   48       0         48      100.00  
+
+
+Variables for Group  uart_pkg::uart_cov::cg_modem
+
+
+VARIABLE    EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_sig      4        0         4       100.00  100  1      1        0                    
+cp_edge     2        0         2       100.00  100  1      1        0                    
+cp_loop     2        0         2       100.00  100  1      1        2                    
+cp_delta    4        0         4       100.00  100  1      1        0                    
+cp_teri     2        0         2       100.00  100  1      1        0                    
+cp_out      16       0         16      100.00  100  1      1        16                   
+cp_out_loop 2        0         2       100.00  100  1      1        2                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_modem
+
+
+CROSS  EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_sig 16       0         16      100.00  100  1      1        0                     
+cx_out 32       0         32      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_sig
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_sig
+
+
+Bins
+
+NAME COUNT AT LEAST 
+dcd  921   1        
+ri   882   1        
+dsr  946   1        
+cts  1015  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_edge
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_edge
+
+
+Bins
+
+NAME COUNT AT LEAST 
+baja 2383  1        
+sube 1381  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_loop
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_loop
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 3185  1        
+auto[1] 579   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_delta
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_delta
+
+
+Bins
+
+NAME COUNT AT LEAST 
+ddcd 562   1        
+teri 561   1        
+ddsr 611   1        
+dcts 639   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_teri
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_teri
+
+
+Bins
+
+NAME        COUNT AT LEAST 
+con_ri_baja 346   1        
+con_ri_sube 215   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_out
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 16       0         16      100.00  
+
+
+Automatically Generated Bins for cp_out
+
+
+Bins
+
+NAME     COUNT AT LEAST 
+auto[0]  82    1        
+auto[1]  82    1        
+auto[2]  58    1        
+auto[3]  96    1        
+auto[4]  69    1        
+auto[5]  79    1        
+auto[6]  23    1        
+auto[7]  107   1        
+auto[8]  42    1        
+auto[9]  81    1        
+auto[10] 50    1        
+auto[11] 70    1        
+auto[12] 59    1        
+auto[13] 100   1        
+auto[14] 45    1        
+auto[15] 37    1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_out_loop
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_out_loop
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 878   1        
+auto[1] 202   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_sig
+
+
+Samples crossed: cp_sig cp_edge cp_loop
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 16       0         16      100.00          
+
+
+Automatically Generated Cross Bins for cx_sig
+
+
+Bins
+
+cp_sig cp_edge cp_loop COUNT AT LEAST 
+dcd    baja    auto[0] 486   1        
+dcd    baja    auto[1] 105   1        
+dcd    sube    auto[0] 280   1        
+dcd    sube    auto[1] 50    1        
+ri     baja    auto[0] 465   1        
+ri     baja    auto[1] 91    1        
+ri     sube    auto[0] 281   1        
+ri     sube    auto[1] 45    1        
+dsr    baja    auto[0] 510   1        
+dsr    baja    auto[1] 85    1        
+dsr    sube    auto[0] 316   1        
+dsr    sube    auto[1] 35    1        
+cts    baja    auto[0] 522   1        
+cts    baja    auto[1] 119   1        
+cts    sube    auto[0] 325   1        
+cts    sube    auto[1] 49    1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_out
+
+
+Samples crossed: cp_out cp_out_loop
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 32       0         32      100.00          
+
+
+Automatically Generated Cross Bins for cx_out
+
+
+Bins
+
+cp_out   cp_out_loop COUNT AT LEAST 
+auto[0]  auto[0]     74    1        
+auto[0]  auto[1]     8     1        
+auto[1]  auto[0]     51    1        
+auto[1]  auto[1]     31    1        
+auto[2]  auto[0]     50    1        
+auto[2]  auto[1]     8     1        
+auto[3]  auto[0]     74    1        
+auto[3]  auto[1]     22    1        
+auto[4]  auto[0]     53    1        
+auto[4]  auto[1]     16    1        
+auto[5]  auto[0]     54    1        
+auto[5]  auto[1]     25    1        
+auto[6]  auto[0]     18    1        
+auto[6]  auto[1]     5     1        
+auto[7]  auto[0]     97    1        
+auto[7]  auto[1]     10    1        
+auto[8]  auto[0]     27    1        
+auto[8]  auto[1]     15    1        
+auto[9]  auto[0]     65    1        
+auto[9]  auto[1]     16    1        
+auto[10] auto[0]     44    1        
+auto[10] auto[1]     6     1        
+auto[11] auto[0]     60    1        
+auto[11] auto[1]     10    1        
+auto[12] auto[0]     51    1        
+auto[12] auto[1]     8     1        
+auto[13] auto[0]     92    1        
+auto[13] auto[1]     8     1        
+auto[14] auto[0]     37    1        
+auto[14] auto[1]     8     1        
+auto[15] auto[0]     31    1        
+auto[15] auto[1]     6     1        
+
+
+Group : uart_pkg::uart_cov::cg_err
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_err
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_err
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 24       0         24      100.00  
+Crosses   35       0         35      100.00  
+
+
+Variables for Group  uart_pkg::uart_cov::cg_err
+
+
+VARIABLE    EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_dr       2        0         2       100.00  100  1      1        2                    
+cp_oe       2        0         2       100.00  100  1      1        2                    
+cp_pe       2        0         2       100.00  100  1      1        2                    
+cp_fe       2        0         2       100.00  100  1      1        2                    
+cp_bi       2        0         2       100.00  100  1      1        2                    
+cp_thre     2        0         2       100.00  100  1      1        2                    
+cp_temt     2        0         2       100.00  100  1      1        2                    
+cp_fifo_err 2        0         2       100.00  100  1      1        2                    
+cp_tl       4        0         4       100.00  100  1      1        0                    
+cp_wls      4        0         4       100.00  100  1      1        4                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_err
+
+
+CROSS     EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_oe_tl  8        0         8       100.00  100  1      1        0                     
+cx_pe_wls 8        0         8       100.00  100  1      1        0                     
+cx_fe_wls 8        0         8       100.00  100  1      1        0                     
+cx_bi_wls 8        0         8       100.00  100  1      1        0                     
+cx_tx     3        0         3       100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_dr
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_dr
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 8454  1        
+auto[1] 18748 1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_oe
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_oe
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 26635 1        
+auto[1] 567   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_pe
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_pe
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 26576 1        
+auto[1] 626   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_fe
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_fe
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 26528 1        
+auto[1] 674   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_bi
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_bi
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 26690 1        
+auto[1] 512   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_thre
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_thre
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 14185 1        
+auto[1] 13017 1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_temt
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_temt
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 15099 1        
+auto[1] 12103 1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_fifo_err
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_fifo_err
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 25693 1        
+auto[1] 1509  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_tl
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_tl
+
+
+Bins
+
+NAME COUNT AT LEAST 
+tl14 6716  1        
+tl8  5751  1        
+tl4  5454  1        
+tl1  9281  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_wls
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 4        0         4       100.00  
+
+
+Automatically Generated Bins for cp_wls
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 8233  1        
+auto[1] 6133  1        
+auto[2] 6469  1        
+auto[3] 6367  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_oe_tl
+
+
+Samples crossed: cp_oe cp_tl
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 8        0         8       100.00          
+
+
+Automatically Generated Cross Bins for cx_oe_tl
+
+
+Bins
+
+cp_oe   cp_tl COUNT AT LEAST 
+auto[0] tl14  6588  1        
+auto[0] tl8   5526  1        
+auto[0] tl4   5348  1        
+auto[0] tl1   9173  1        
+auto[1] tl14  128   1        
+auto[1] tl8   225   1        
+auto[1] tl4   106   1        
+auto[1] tl1   108   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_pe_wls
+
+
+Samples crossed: cp_pe cp_wls
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 8        0         8       100.00          
+
+
+Automatically Generated Cross Bins for cx_pe_wls
+
+
+Bins
+
+cp_pe   cp_wls  COUNT AT LEAST 
+auto[0] auto[0] 8098  1        
+auto[0] auto[1] 5961  1        
+auto[0] auto[2] 6319  1        
+auto[0] auto[3] 6198  1        
+auto[1] auto[0] 135   1        
+auto[1] auto[1] 172   1        
+auto[1] auto[2] 150   1        
+auto[1] auto[3] 169   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_fe_wls
+
+
+Samples crossed: cp_fe cp_wls
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 8        0         8       100.00          
+
+
+Automatically Generated Cross Bins for cx_fe_wls
+
+
+Bins
+
+cp_fe   cp_wls  COUNT AT LEAST 
+auto[0] auto[0] 8075  1        
+auto[0] auto[1] 5968  1        
+auto[0] auto[2] 6281  1        
+auto[0] auto[3] 6204  1        
+auto[1] auto[0] 158   1        
+auto[1] auto[1] 165   1        
+auto[1] auto[2] 188   1        
+auto[1] auto[3] 163   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_bi_wls
+
+
+Samples crossed: cp_bi cp_wls
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 8        0         8       100.00          
+
+
+Automatically Generated Cross Bins for cx_bi_wls
+
+
+Bins
+
+cp_bi   cp_wls  COUNT AT LEAST 
+auto[0] auto[0] 8118  1        
+auto[0] auto[1] 6009  1        
+auto[0] auto[2] 6313  1        
+auto[0] auto[3] 6250  1        
+auto[1] auto[0] 115   1        
+auto[1] auto[1] 124   1        
+auto[1] auto[2] 156   1        
+auto[1] auto[3] 117   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_tx
+
+
+Samples crossed: cp_thre cp_temt
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              3        0         3       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            0        0         0                       
+
+
+Automatically Generated Cross Bins for cx_tx
+
+
+Bins
+
+cp_thre cp_temt COUNT AT LEAST 
+auto[0] auto[0] 14185 1        
+auto[1] auto[0] 914   1        
+auto[1] auto[1] 12103 1        
+
+
+User Defined Cross Bins for cx_tx
+
+
+Excluded/Illegal bins
+
+NAME          COUNT STATUS  
+temt_sin_thre 0     Illegal 
+
+
+Group : uart_pkg::uart_cov::cg_line_cfg
+
+===============================================================================
+Group : uart_pkg::uart_cov::cg_line_cfg
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/mnt/vol_NFS_rh003/Est_Veri_II2026/BLANCO_SAENZ_GERALD_VeriII26/p2_equipo/sim/../tb/coverage/uart_cov.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   uart_pkg::uart_cov::cg_line_cfg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 24       0         24      100.00  
+Crosses   94       0         94      100.00  
+
+
+Variables for Group  uart_pkg::uart_cov::cg_line_cfg
+
+
+VARIABLE   EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_dir     2        0         2       100.00  100  1      1        0                    
+cp_wls     4        0         4       100.00  100  1      1        0                    
+cp_stb     2        0         2       100.00  100  1      1        0                    
+cp_par     5        0         5       100.00  100  1      1        0                    
+cp_loop    2        0         2       100.00  100  1      1        2                    
+cp_dl_band 5        0         5       100.00  100  1      1        0                    
+cp_data    4        0         4       100.00  100  1      1        0                    
+
+
+Crosses for Group  uart_pkg::uart_cov::cg_line_cfg
+
+
+CROSS   EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cx_fmt  80       0         80      100.00  100  1      1        0                     
+cx_loop 4        0         4       100.00  100  1      1        0                     
+cx_dl   10       0         10      100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_dir
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_dir
+
+
+Bins
+
+NAME            COUNT AT LEAST 
+auto_SER_DIR_TX 17478 1        
+auto_SER_DIR_RX 9997  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_wls
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_wls
+
+
+Bins
+
+NAME COUNT AT LEAST 
+b8   6892  1        
+b7   7787  1        
+b6   5826  1        
+b5   6970  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_stb
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_stb
+
+
+Bins
+
+NAME COUNT AT LEAST 
+dos  14110 1        
+uno  13365 1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_par
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 5        0         5       100.00  
+
+
+Automatically Generated Bins for cp_par
+
+
+Bins
+
+NAME            COUNT AT LEAST 
+auto_PAR_NONE   4765  1        
+auto_PAR_ODD    4746  1        
+auto_PAR_EVEN   7184  1        
+auto_PAR_STICK1 4030  1        
+auto_PAR_STICK0 6750  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_loop
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_loop
+
+
+Bins
+
+NAME    COUNT AT LEAST 
+auto[0] 27470 1        
+auto[1] 5     1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_dl_band
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 5        0         5       100.00  
+
+
+User Defined Bins for cp_dl_band
+
+
+Bins
+
+NAME   COUNT AT LEAST 
+b4096  17    1        
+b256   17    1        
+b17    2055  1        
+rapido 24479 1        
+uno    806   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_data
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 4        0         4       100.00  
+
+
+User Defined Bins for cp_data
+
+
+Excluded/Illegal bins
+
+NAME COUNT STATUS   
+otro 24283 Excluded 
+
+
+Covered bins
+
+NAME COUNT AT LEAST 
+xaa  407   1        
+x55  783   1        
+xff  417   1        
+x00  1585  1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_fmt
+
+
+Samples crossed: cp_wls cp_stb cp_par cp_dir
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 80       0         80      100.00          
+
+
+Automatically Generated Cross Bins for cx_fmt
+
+
+Bins
+
+cp_wls cp_stb cp_par          cp_dir          COUNT AT LEAST 
+b8     dos    auto_PAR_NONE   auto_SER_DIR_TX 210   1        
+b8     dos    auto_PAR_NONE   auto_SER_DIR_RX 146   1        
+b8     dos    auto_PAR_ODD    auto_SER_DIR_TX 188   1        
+b8     dos    auto_PAR_ODD    auto_SER_DIR_RX 108   1        
+b8     dos    auto_PAR_EVEN   auto_SER_DIR_TX 137   1        
+b8     dos    auto_PAR_EVEN   auto_SER_DIR_RX 74    1        
+b8     dos    auto_PAR_STICK1 auto_SER_DIR_TX 445   1        
+b8     dos    auto_PAR_STICK1 auto_SER_DIR_RX 411   1        
+b8     dos    auto_PAR_STICK0 auto_SER_DIR_TX 1167  1        
+b8     dos    auto_PAR_STICK0 auto_SER_DIR_RX 412   1        
+b8     uno    auto_PAR_NONE   auto_SER_DIR_TX 399   1        
+b8     uno    auto_PAR_NONE   auto_SER_DIR_RX 157   1        
+b8     uno    auto_PAR_ODD    auto_SER_DIR_TX 490   1        
+b8     uno    auto_PAR_ODD    auto_SER_DIR_RX 192   1        
+b8     uno    auto_PAR_EVEN   auto_SER_DIR_TX 768   1        
+b8     uno    auto_PAR_EVEN   auto_SER_DIR_RX 310   1        
+b8     uno    auto_PAR_STICK1 auto_SER_DIR_TX 477   1        
+b8     uno    auto_PAR_STICK1 auto_SER_DIR_RX 217   1        
+b8     uno    auto_PAR_STICK0 auto_SER_DIR_TX 372   1        
+b8     uno    auto_PAR_STICK0 auto_SER_DIR_RX 212   1        
+b7     dos    auto_PAR_NONE   auto_SER_DIR_TX 648   1        
+b7     dos    auto_PAR_NONE   auto_SER_DIR_RX 473   1        
+b7     dos    auto_PAR_ODD    auto_SER_DIR_TX 564   1        
+b7     dos    auto_PAR_ODD    auto_SER_DIR_RX 228   1        
+b7     dos    auto_PAR_EVEN   auto_SER_DIR_TX 1002  1        
+b7     dos    auto_PAR_EVEN   auto_SER_DIR_RX 689   1        
+b7     dos    auto_PAR_STICK1 auto_SER_DIR_TX 362   1        
+b7     dos    auto_PAR_STICK1 auto_SER_DIR_RX 138   1        
+b7     dos    auto_PAR_STICK0 auto_SER_DIR_TX 384   1        
+b7     dos    auto_PAR_STICK0 auto_SER_DIR_RX 306   1        
+b7     uno    auto_PAR_NONE   auto_SER_DIR_TX 314   1        
+b7     uno    auto_PAR_NONE   auto_SER_DIR_RX 139   1        
+b7     uno    auto_PAR_ODD    auto_SER_DIR_TX 225   1        
+b7     uno    auto_PAR_ODD    auto_SER_DIR_RX 177   1        
+b7     uno    auto_PAR_EVEN   auto_SER_DIR_TX 298   1        
+b7     uno    auto_PAR_EVEN   auto_SER_DIR_RX 140   1        
+b7     uno    auto_PAR_STICK1 auto_SER_DIR_TX 254   1        
+b7     uno    auto_PAR_STICK1 auto_SER_DIR_RX 201   1        
+b7     uno    auto_PAR_STICK0 auto_SER_DIR_TX 738   1        
+b7     uno    auto_PAR_STICK0 auto_SER_DIR_RX 507   1        
+b6     dos    auto_PAR_NONE   auto_SER_DIR_TX 443   1        
+b6     dos    auto_PAR_NONE   auto_SER_DIR_RX 306   1        
+b6     dos    auto_PAR_ODD    auto_SER_DIR_TX 401   1        
+b6     dos    auto_PAR_ODD    auto_SER_DIR_RX 236   1        
+b6     dos    auto_PAR_EVEN   auto_SER_DIR_TX 551   1        
+b6     dos    auto_PAR_EVEN   auto_SER_DIR_RX 246   1        
+b6     dos    auto_PAR_STICK1 auto_SER_DIR_TX 263   1        
+b6     dos    auto_PAR_STICK1 auto_SER_DIR_RX 202   1        
+b6     dos    auto_PAR_STICK0 auto_SER_DIR_TX 152   1        
+b6     dos    auto_PAR_STICK0 auto_SER_DIR_RX 114   1        
+b6     uno    auto_PAR_NONE   auto_SER_DIR_TX 264   1        
+b6     uno    auto_PAR_NONE   auto_SER_DIR_RX 131   1        
+b6     uno    auto_PAR_ODD    auto_SER_DIR_TX 384   1        
+b6     uno    auto_PAR_ODD    auto_SER_DIR_RX 264   1        
+b6     uno    auto_PAR_EVEN   auto_SER_DIR_TX 340   1        
+b6     uno    auto_PAR_EVEN   auto_SER_DIR_RX 365   1        
+b6     uno    auto_PAR_STICK1 auto_SER_DIR_TX 286   1        
+b6     uno    auto_PAR_STICK1 auto_SER_DIR_RX 149   1        
+b6     uno    auto_PAR_STICK0 auto_SER_DIR_TX 286   1        
+b6     uno    auto_PAR_STICK0 auto_SER_DIR_RX 443   1        
+b5     dos    auto_PAR_NONE   auto_SER_DIR_TX 367   1        
+b5     dos    auto_PAR_NONE   auto_SER_DIR_RX 226   1        
+b5     dos    auto_PAR_ODD    auto_SER_DIR_TX 370   1        
+b5     dos    auto_PAR_ODD    auto_SER_DIR_RX 203   1        
+b5     dos    auto_PAR_EVEN   auto_SER_DIR_TX 666   1        
+b5     dos    auto_PAR_EVEN   auto_SER_DIR_RX 191   1        
+b5     dos    auto_PAR_STICK1 auto_SER_DIR_TX 225   1        
+b5     dos    auto_PAR_STICK1 auto_SER_DIR_RX 99    1        
+b5     dos    auto_PAR_STICK0 auto_SER_DIR_TX 448   1        
+b5     dos    auto_PAR_STICK0 auto_SER_DIR_RX 309   1        
+b5     uno    auto_PAR_NONE   auto_SER_DIR_TX 318   1        
+b5     uno    auto_PAR_NONE   auto_SER_DIR_RX 224   1        
+b5     uno    auto_PAR_ODD    auto_SER_DIR_TX 456   1        
+b5     uno    auto_PAR_ODD    auto_SER_DIR_RX 260   1        
+b5     uno    auto_PAR_EVEN   auto_SER_DIR_TX 1055  1        
+b5     uno    auto_PAR_EVEN   auto_SER_DIR_RX 352   1        
+b5     uno    auto_PAR_STICK1 auto_SER_DIR_TX 190   1        
+b5     uno    auto_PAR_STICK1 auto_SER_DIR_RX 111   1        
+b5     uno    auto_PAR_STICK0 auto_SER_DIR_TX 571   1        
+b5     uno    auto_PAR_STICK0 auto_SER_DIR_RX 329   1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_loop
+
+
+Samples crossed: cp_dir cp_loop
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 4        0         4       100.00          
+
+
+Automatically Generated Cross Bins for cx_loop
+
+
+Bins
+
+cp_dir          cp_loop COUNT AT LEAST 
+auto_SER_DIR_TX auto[0] 17475 1        
+auto_SER_DIR_TX auto[1] 3     1        
+auto_SER_DIR_RX auto[0] 9995  1        
+auto_SER_DIR_RX auto[1] 2     1        
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cx_dl
+
+
+Samples crossed: cp_dl_band cp_dir
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+Automatically Generated Cross Bins 10       0         10      100.00          
+
+
+Automatically Generated Cross Bins for cx_dl
+
+
+Bins
+
+cp_dl_band cp_dir          COUNT AT LEAST 
+b4096      auto_SER_DIR_TX 7     1        
+b4096      auto_SER_DIR_RX 10    1        
+b256       auto_SER_DIR_TX 7     1        
+b256       auto_SER_DIR_RX 10    1        
+b17        auto_SER_DIR_TX 1322  1        
+b17        auto_SER_DIR_RX 733   1        
+rapido     auto_SER_DIR_TX 15600 1        
+rapido     auto_SER_DIR_RX 8879  1        
+uno        auto_SER_DIR_TX 542   1        
+uno        auto_SER_DIR_RX 264   1        
+
+

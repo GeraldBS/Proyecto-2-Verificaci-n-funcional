@@ -1,0 +1,58 @@
+Assertions
+
+
+Assertions by Category
+           ASSERT PROPERTIES SEQUENCES
+Total           0         24         0
+Category 0      0         24         0
+
+-------------------------------------------------------------------------------
+
+Assertions by Severity
+           ASSERT PROPERTIES SEQUENCES
+Total           0         24         0
+Severity 0      0         24         0
+
+-------------------------------------------------------------------------------
+
+Summary for Cover Properties
+             NUMBER PERCENT
+Total Number     24  100.00
+Uncovered         2    8.33
+Matches          22   91.67
+
+-------------------------------------------------------------------------------
+
+Detail Report for Cover Properties
+
+Cover Properties Uncovered:
+         COVER PROPERTIES         CATEGORY SEVERITY  ATTEMPTS MATCHES INCOMPLETE
+tb_top.dut.u_wb_sva.c_wb05_f_8bit        0        0 645234891       0          0
+tb_top.dut.u_wb_sva.c_wb05_two           0        0 645234891       0          0
+
+Cover Properties Matches:
+          COVER PROPERTIES           CATEGORY SEVERITY  ATTEMPTS  MATCHES  INCOMPLETE
+tb_top.dut.u_ser_sva.c_env01                0        0 645234891 645231770          0
+tb_top.dut.u_ser_sva.c_int_fall             0        0 645234891      4525          0
+tb_top.dut.u_ser_sva.c_int_lag              0        0 645234891      4109          6
+tb_top.dut.u_ser_sva.c_int_rise             0        0 645234891      4620          0
+tb_top.dut.u_ser_sva.c_mdm01_dtr            0        0 645234891       655          0
+tb_top.dut.u_ser_sva.c_mdm01_rts            0        0 645234891       506          0
+tb_top.dut.u_ser_sva.c_mdm02                0        0 645234891  25579419        129
+tb_top.dut.u_ser_sva.c_rst01                0        0 645234891       109          0
+tb_top.dut.u_ser_sva.c_ser01_dl0            0        0 645234891    286233         21
+tb_top.dut.u_ser_sva.c_ser01_idle           0        0 645234891     21037        577
+tb_top.dut.u_ser_sva.c_ser02_dl1            0        0 645234891      1346          0
+tb_top.dut.u_ser_sva.c_ser02_dlgt16         0        0 645234891      3377          0
+tb_top.dut.u_ser_sva.c_ser03_loop           0        0 645234891  21615059          0
+tb_top.dut.u_ser_sva.c_ser04_break          0        0 645234891         3          0
+tb_top.dut.u_wb_sva.c_wb01_rd               0        0 645234891     63173          0
+tb_top.dut.u_wb_sva.c_wb01_wait             0        0 645234891     97165          0
+tb_top.dut.u_wb_sva.c_wb01_wr               0        0 645234891     33992          0
+tb_top.dut.u_wb_sva.c_wb02_ack2             0        0 645234891     97165          0
+tb_top.dut.u_wb_sva.c_wb03_ack              0        0 645234891     97165          0
+tb_top.dut.u_wb_sva.c_wb04_full             0        0 645234891     59636          0
+tb_top.dut.u_wb_sva.c_wb04_rbr_empty        0        0 645234891     11926          0
+tb_top.dut.u_wb_sva.c_wb05_zero             0        0 645234891         2          0
+
+
