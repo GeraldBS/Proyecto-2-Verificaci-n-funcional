@@ -29,7 +29,10 @@ module uart_wb_sva (
   // Máximo de ciclos entre stb y ack
   localparam int unsigned ACK_MAX = 4;
 
+  int unsigned n_fail = 0;       // aserciones falladas
+
   function automatic void rep_err(string id, string msg);
+    n_fail++;
 `ifdef UART_SVA_NO_UVM
     $display("[SVA_FAIL] %s: %s (t=%0t)", id, msg, $time);
 `else
