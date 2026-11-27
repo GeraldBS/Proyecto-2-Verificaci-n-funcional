@@ -24,7 +24,7 @@ class uart_model_evt extends uvm_object;
     `uvm_field_int(rst_cycles, UVM_ALL_ON | UVM_DEC)
   `uvm_object_utils_end
 
-  function new(string name = "uart_model_evt");
+  function new(string name = "uart_model_evt"); // constructor
     super.new(name);
   endfunction
 

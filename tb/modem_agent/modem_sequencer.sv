@@ -1,5 +1,5 @@
 
-class modem_sequencer extends uvm_sequencer #(mdm_item);
+class modem_sequencer extends uvm_sequencer #(mdm_item); // hereda de uvm
 
   `uvm_component_utils(modem_sequencer) //Macro de registro en la Factory
 

@@ -43,8 +43,7 @@ class ser_driver extends uvm_driver #(ser_item);
     int bit_ticks;
     int parity_calc;
 
-    // Calcular la duración real del bit (16 * DL ciclos, ajustado por baud_dev)
-    // baud_dev viene en décimas de % (ej. 25 = 2.5%). 
+    // Calcular la duración real del bit (16 * DL ciclos, ajustado por baud_dev) baud_dev viene en décimas de % (ej. 25 = 2.5%). 
     bit_ticks = cfg.line.bit_cycles();
     if (item.baud_dev != 0) begin
       bit_ticks = bit_ticks + (bit_ticks * item.baud_dev / 1000); 
@@ -105,7 +104,7 @@ class ser_driver extends uvm_driver #(ser_item);
     end
 
     // (Stop Bits)
-    // Inyección del error de trama (Frame Error): Manda un 0 en vez de un 1
+    // Inyección del error de trama, Manda un 0 en vez de un 1
     if (item.err == SER_FRAME) begin
       cfg.vif.srx = 1'b0;
     end else begin
