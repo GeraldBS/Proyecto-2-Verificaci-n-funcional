@@ -7,7 +7,7 @@ class modem_monitor extends uvm_monitor;
 
   modem_agent_cfg cfg;
 
-  function new(string name = "modem_monitor", uvm_component parent);
+  function new(string name = "modem_monitor", uvm_component parent); // constructor
     super.new(name, parent);
     ap = new("ap", this);
   endfunction

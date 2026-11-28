@@ -1,4 +1,3 @@
-
 `uvm_analysis_imp_decl(_wb)
 `uvm_analysis_imp_decl(_rst)
 `uvm_analysis_imp_decl(_int)
@@ -59,10 +58,12 @@ class uart_scoreboard extends uvm_scoreboard;
   uvm_analysis_imp_mdm #(mdm_item, uart_scoreboard)      mdm_imp;
   uvm_analysis_port    #(uart_model_evt)                 ap;
 
+  // constructor
   function new(string name = "uart_scoreboard", uvm_component parent);
     super.new(name, parent);
   endfunction
 
+  // toma la cfg, crea los puertos TLM y deja el modelo en su estado de reset
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     if (!uvm_config_db#(uart_scb_cfg)::get(this, "", "cfg", cfg)) begin
@@ -109,6 +110,7 @@ class uart_scoreboard extends uvm_scoreboard;
     end
   endtask
 
+  // vacia las colas y deja los registros copiados con su valor de reset
   function void reset_model();
     tx_q.delete();
     rx_q.delete();
@@ -125,6 +127,7 @@ class uart_scoreboard extends uvm_scoreboard;
     mdm_pend = 1;   // MCR vuelve a 0 y los pines tienen que seguirlo
   endfunction
 
+  // mascara de los bits de dato validos segun LCR[1:0] (5 a 8 bits)
   function bit [7:0] data_mask();
     return 8'hFF >> (3 - lcr_val[1:0]);
   endfunction
@@ -135,8 +138,15 @@ class uart_scoreboard extends uvm_scoreboard;
     return ((rd8 & data_mask()) !== rx_q[0].data) && ($realtime - rx_q[0].t < ventana);
   endfunction
 
-  function bit tx_busy(); return tx_q.size() > 0; endfunction
-  function bit rx_busy(); return rx_q.size() > 0; endfunction
+  // hay caracteres esperando salir por stx
+  function bit tx_busy(); 
+    return tx_q.size() > 0; 
+  endfunction
+
+  // hay caracteres esperando ser leidos de RBR
+  function bit rx_busy();
+    return rx_q.size() > 0; 
+  endfunction
 
   // lo que quedo esperando al final es que nunca llego
   function void check_left(string donde);
@@ -169,6 +179,7 @@ class uart_scoreboard extends uvm_scoreboard;
     `uvm_info("SCB", {"TX no predecible hasta el fin del episodio: ", porque}, UVM_MEDIUM)
   endfunction
 
+  // igual que ensuciar_tx pero para los caracteres de RX
   function void ensuciar_rx(string porque);
     if (!(rx_busy() || rx_seen) || rx_dirty) return;
     rx_dirty  = 1;
@@ -180,17 +191,20 @@ class uart_scoreboard extends uvm_scoreboard;
     `uvm_info("SCB", {"RX no predecible hasta el fin del episodio: ", porque}, UVM_MEDIUM)
   endfunction
 
+  // cuenta un caracter que no se comparo, por su motivo
   function void contar_skip(uart_exp_t exp);
     n_skip++;
     if (exp.porque == "") exp.porque = "chequeo apagado en la cfg";
     sin_comparar[exp.porque]++;
   endfunction
 
+  // reporta una diferencia conocida del DUT con la severidad de la cfg
   function void dut_bug(string amb, string msg);
     if (cfg.dut_bug_sev == UVM_ERROR) `uvm_error("DUT_BUG", {amb, ": ", msg})
     else                              `uvm_warning("DUT_BUG", {amb, ": ", msg})
   endfunction
 
+  // publica un evento del modelo hacia la cobertura
   function void send_evt(uart_evt_e kind, int unsigned tx_lvl, int unsigned rx_lvl, bit lost);
     uart_model_evt evt = uart_model_evt::type_id::create("evt");
     evt.kind     = kind;
@@ -202,8 +216,7 @@ class uart_scoreboard extends uvm_scoreboard;
     ap.write(evt);
   endfunction
 
-  // Manejo del Reset
-
+  // Manejo del Reset: al subir reinicia el modelo, al bajar manda EV_RESET con el ancho
   virtual function void write_rst(wb_rst_item item);
     uart_model_evt evt;
 
@@ -230,8 +243,7 @@ class uart_scoreboard extends uvm_scoreboard;
     end
   endfunction
 
-  // 2. Manejo del Bus Wishbone (CPU accediendo a registros)
-
+  // 2. Manejo del Bus Wishbone, sigue LCR, MCR, FCR y DL, encola THR y compara RBR
   virtual function void write_wb(wb_item item);
     bit [4:0] reg_idx;
     bit [7:0] dat8, rd8;
@@ -456,7 +468,7 @@ class uart_scoreboard extends uvm_scoreboard;
   // (write_int se mantiene vacía por ahora)
   virtual function void write_int(uart_int_item item); endfunction
 
-  // se revisa en el siguiente acceso al bus, este monitor y el de Wishbone no siempre llegan en orden
+  // guarda los pines rts y dtr; se revisan en el siguiente acceso al bus, este monitor y el de Wishbone no siempre llegan en orden
   virtual function void write_mdm(mdm_item item);
     if (!pin_visto || {item.rts, item.dtr} != pin_mdm) mdm_pend = 1;
     pin_mdm   = {item.rts, item.dtr};
@@ -478,12 +490,14 @@ class uart_scoreboard extends uvm_scoreboard;
     end
   endfunction
 
+  // al terminar la corrida revisa lo que quedo sin salir o sin leer y los pines del modem
   virtual function void check_phase(uvm_phase phase);
     super.check_phase(phase);
     check_left("fin de la prueba");
     revisar_mdm();
   endfunction
 
+  // imprime los conteos de lo comparado, lo que no se pudo comparar y los motivos
   virtual function void report_phase(uvm_phase phase);
     super.report_phase(phase);
     `uvm_info("SCB", $sformatf("TX bien: %0d, RX bien: %0d, sin comparar: %0d, errores: %0d",

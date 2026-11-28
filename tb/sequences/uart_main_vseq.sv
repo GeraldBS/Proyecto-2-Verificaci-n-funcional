@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////////////////////////////////
+// uart_main_vseq:
+// Secuencia principal de la prueba: revisa los valores de reset con el RAL y corre n_episodios.
+// Cada episodio sortea y programa el UART, lanza TX, RX, módem, software y eventos en paralelo
+// con un límite de tiempo, y después drena; si hubo reset, reprograma y manda unos caracteres.
+//////////////////////////////////////////////////////////////////////////////
+
 class uart_main_vseq extends uart_base_vseq;
   `uvm_object_utils(uart_main_vseq)
 
@@ -10,7 +17,7 @@ class uart_main_vseq extends uart_base_vseq;
     wait (p_sequencer.cfg.wb.vif.rst === 1'b0);
     wait_cycles(2);
 
-    if (p_sequencer.regm != null) begin   // la revision de reset va siempre
+    if (p_sequencer.regm != null) begin   // la revisión de reset va siempre
       rs = uvm_reg_hw_reset_seq::type_id::create("rs");
       rs.model = p_sequencer.regm;
       rs.start(null, this);
@@ -35,15 +42,17 @@ class uart_main_vseq extends uart_base_vseq;
     bit               timed_out = 0;
     bit               slow;
     bit               sweep = cfg().frame_sweep;
+    uart_ctrl_cfg     c;
 
     p_sequencer.traffic_done = 0;
     p_sequencer.rst_hit      = 0;
     if (!line().randomize()) `uvm_fatal("RAND", "no se pudo aleatorizar uart_line_cfg")
-    if (!ctrl().randomize() with { sweep -> loop == 0; })   // en loopback no habria RX en el barrido
+    c = ctrl();   // handle local: el with { } no resuelve nombres sobre el resultado de una función
+    if (!c.randomize() with { local::sweep -> loop == 0; })   // en loopback no habría RX en el barrido
       `uvm_fatal("RAND", "no se pudo aleatorizar uart_ctrl_cfg")
     prog.start(p_sequencer, this); // los agentes ven el formato nuevo por la referencia compartida
 
-    // con DL >= 256 un caracter dura demasiado, asi que poco trafico
+    // con DL >= 256 un carácter dura demasiado, así que poco tráfico
     slow = (line().dl >= cfg().ser.slow_dl);
     tx.n_bursts    = slow ? 1 : $urandom_range(cfg().tx_bursts_max, 0);
     tx.max_len     = slow ? 2 : 0;
@@ -60,7 +69,6 @@ class uart_main_vseq extends uart_base_vseq;
     evt.do_reconfig = pct(cfg().reconfig_pct);
     evt.do_fifo_clr = pct(cfg().fifo_clr_mid_pct);
     evt.do_reset    = pct(cfg().rst_pct);
-    evt.window_tc   = 1 + rx.n_chars + tx.n_bursts * 8;
 
     // el barrido necesita TX y RX en cada formato, con un error de paridad y uno de trama
     if (cfg().frame_sweep) begin
@@ -69,6 +77,7 @@ class uart_main_vseq extends uart_base_vseq;
       rx.force_errs   = 1;
       evt.do_reconfig = 0;   // si no, el formato cambia a medias
     end
+    evt.window_tc = 1 + rx.n_chars + tx.n_bursts * 8;   // después del barrido, con la cantidad final de tráfico
 
     `uvm_info("EP", $sformatf("episodio %0d: tx %0d ráfagas, rx %0d caracteres, módem %0d cambios, %s%s%s%s",
               p_sequencer.episode, tx.n_bursts, rx.n_chars, mdm.n_changes, sw.mode.name(),
@@ -107,8 +116,8 @@ class uart_main_vseq extends uart_base_vseq;
     drain();
   endtask
 
-  // despues del reset el UART vuelve a valores por defecto, lo reprogramamos
-  // igual que antes y mandamos 1 o 2 caracteres para ver que se recupero
+  // después del reset el UART vuelve a valores por defecto, lo reprogramamos
+  // igual que antes y mandamos 1 o 2 caracteres para ver que se recuperó
   task after_reset();
     uart_program_vseq prog = uart_program_vseq::type_id::create("prog_rst");
     uart_tx_vseq      tx   = uart_tx_vseq::type_id::create("tx_rst");
@@ -126,20 +135,18 @@ class uart_main_vseq extends uart_base_vseq;
       tx.start(p_sequencer, this);
       rx.start(p_sequencer, this);
     join
-    `uvm_info("EP", "UART reprogramado despues del reset", UVM_MEDIUM)
+    `uvm_info("EP", "UART reprogramado después del reset", UVM_MEDIUM)
   endtask
 
   // espera que salga lo transmitido, vacía la FIFO RX y lee LSR, MSR e IIR
   task drain();
     bit [7:0] lsr, dummy;
-    if (line().dl != 0 && !ctrl().loop) begin
-      for (int i = 0; i < 64; i++) begin   // TEMT, con limite por si el UART se traba
+    if (line().dl != 0) begin   // con DL = 0 el UART no transmite, no hay nada que esperar
+      for (int i = 0; i < 64; i++) begin   // TEMT, con límite por si el UART se traba
         wb_read(UART_LSR, lsr);
         if (lsr[6]) break;
         wait_tc(1);
       end
-    end else if (ctrl().loop) begin
-      wait_tc(2);   // en loopback lo transmitido vuelve por el receptor
     end
     for (int i = 0; i < 17; i++) begin
       wb_read(UART_LSR, lsr);

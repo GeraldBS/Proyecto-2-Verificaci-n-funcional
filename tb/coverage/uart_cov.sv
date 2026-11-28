@@ -1,27 +1,33 @@
-//////////////////////////////////////////////////////////////////////
-// uart_cov: cobertura funcional (sección 13 del plan)              //
-//////////////////////////////////////////////////////////////////////
-// Recibe lo que ven los monitores y los eventos del modelo, nunca lo
-// que mandan los drivers. Lleva una copia de DLAB e IER según las
-// escrituras que pasaron por el bus, porque el ruido de registros
-// puede cambiar IER sin pasar por uart_ctrl_cfg.
-// Algunos covergroups se muestrean desde dos lugares; para eso tienen
-// sample() con un argumento "kind" y cada coverpoint se filtra con iff.
-//////////////////////////////////////////////////////////////////////
-// Los sufijos _wb, _tx, _rx, _mdm e _int ya los declara uart_scoreboard,
-// que se incluye antes en uart_pkg; aquí solo falta el de los eventos.
-`uvm_analysis_imp_decl(_evt)
+//////////////////////////////////////////////////////////////////////////////
+// uart_cov:
+// Recibe lo que ven los monitores y los eventos del modelo. Lleva copia de DLAB e IER según las escrituras
+// del bus, porque el ruido de registros cambia IER sin pasar por uart_ctrl_cfg. 
+//////////////////////////////////////////////////////////////////////////////
 
-typedef enum {CK_CHAR, CK_PUSH, CK_RDEMPTY, CK_BREAK, CK_LEVEL, CK_EDGE, CK_IIR, CK_CHG, CK_MSR, CK_MCR} uart_cov_kind_e;
+`uvm_analysis_imp_decl(_evt)   // los sufijos _wb, _tx, _rx, _mdm e _int ya los declara uart_scoreboard
 
-class uart_cov extends uvm_component;
+typedef enum { // para cg_tx, cg_rx, cg_int y cg_modem
+  CK_CHAR,
+  CK_PUSH,
+  CK_RDEMPTY, 
+  CK_BREAK, 
+  CK_LEVEL, 
+  CK_EDGE, 
+  CK_IIR, 
+  CK_CHG, 
+  CK_MSR, 
+  CK_MCR
+} uart_cov_kind_e;
+
+class uart_cov extends uvm_component; // cobertura funcional del DUT
   `uvm_component_utils(uart_cov)
 
-  uvm_analysis_imp_wb  #(wb_item,        uart_cov) wb_imp;
-  uvm_analysis_imp_tx  #(ser_item,       uart_cov) tx_imp;
-  uvm_analysis_imp_rx  #(ser_item,       uart_cov) rx_imp;
-  uvm_analysis_imp_mdm #(mdm_item,       uart_cov) mdm_imp;
-  uvm_analysis_imp_int #(uart_int_item,  uart_cov) int_imp;
+  // In
+  uvm_analysis_imp_wb  #(wb_item, uart_cov) wb_imp;
+  uvm_analysis_imp_tx  #(ser_item, uart_cov) tx_imp;
+  uvm_analysis_imp_rx  #(ser_item, uart_cov) rx_imp;
+  uvm_analysis_imp_mdm #(mdm_item, uart_cov) mdm_imp;
+  uvm_analysis_imp_int #(uart_int_item, uart_cov) int_imp;
   uvm_analysis_imp_evt #(uart_model_evt, uart_cov) evt_imp;
 
   uart_cov_cfg cfg;
@@ -36,38 +42,37 @@ class uart_cov extends uvm_component;
   bit       last_ri_rise;      // sentido del último cambio de RI (para TERI)
   int unsigned n_ep;
 
-  // ------------------------------------------------------------ grupos
+  // covergroups y particiones
   covergroup cg_line_cfg with function sample(uart_ser_dir_e dir, bit [7:0] data);
-    cp_dir : coverpoint dir;
-    cp_wls : coverpoint cfg.line.wls { bins b5 = {0}; bins b6 = {1}; bins b7 = {2}; bins b8 = {3}; }
-    cp_stb : coverpoint cfg.line.stb { bins uno = {0}; bins dos = {1}; }
-    cp_par : coverpoint cfg.line.par_mode;
-    cp_loop: coverpoint cfg.ctrl.loop;
-    cp_dl_band : coverpoint cfg.line.dl {
-      bins uno   = {1};
+    cp_dir : coverpoint dir;   // el carácter salió por TX o entró por RX
+    cp_wls : coverpoint cfg.line.wls { bins b5 = {0}; bins b6 = {1}; bins b7 = {2}; bins b8 = {3}; }   // bits de datos 
+    cp_stb : coverpoint cfg.line.stb { bins uno = {0}; bins dos = {1}; }   // bits de parada: 1, o 1.5 y 2 
+    cp_par : coverpoint cfg.line.par_mode;   // modo de paridad: ninguna, impar, par, stick 1 y stick 0
+    cp_loop: coverpoint cfg.ctrl.loop;   // loopback apagado o encendido 
+    cp_dl_band : coverpoint cfg.line.dl {   // banda del divisor de baudios
+      bins uno    = {1};
       bins rapido = {[2:16]};
-      bins b17   = {[17:255]};
-      bins b256  = {[256:4095]};
-      bins b4096 = {[4096:65535]};
+      bins b17    = {[17:255]};
+      bins b256   = {[256:4095]};
+      bins b4096  = {[4096:65535]};
     }
-    cp_data : coverpoint data { bins x00 = {8'h00}; bins xff = {8'hFF}; bins x55 = {8'h55};
+    cp_data : coverpoint data { bins x00 = {8'h00}; bins xff = {8'hFF}; bins x55 = {8'h55};   // valor del dato
                                 bins xaa = {8'hAA}; bins otro = default; }
-    cx_fmt   : cross cp_wls, cp_stb, cp_par, cp_dir;
-    cx_loop  : cross cp_dir, cp_loop;
-    cx_dl    : cross cp_dl_band, cp_dir;
+    cx_fmt   : cross cp_wls, cp_stb, cp_par, cp_dir;   // formato completo en cada dirección
+    cx_loop  : cross cp_dir, cp_loop;   // cada dirección con y sin loopback
+    cx_dl    : cross cp_dl_band, cp_dir;   // cada banda del divisor en cada dirección
   endgroup
 
-  covergroup cg_dl with function sample(bit [15:0] dl, bit lsb_first);
+  covergroup cg_dl with function sample(bit [15:0] dl, bit lsb_first); // coverpoints
     cp_dl : coverpoint dl {
       bins cero = {0}; bins uno = {1}; bins rapido = {[2:16]}; bins b17 = {[17:255]};
       bins b256 = {[256:4095]}; bins b4096 = {[4096:65534]}; bins maximo = {65535};
     }
     cp_order : coverpoint lsb_first { bins msb_primero = {0}; bins lsb_primero = {1}; }
-    cx_dl_order : cross cp_dl, cp_order {
-      ignore_bins dlm_cero = binsof(cp_dl.cero) || binsof(cp_dl.uno);  // con DLM = 0 el orden da igual
-    }
+    cx_dl_order : cross cp_dl, cp_order;
   endgroup
 
+  // Para FIFO
   covergroup cg_fifo_ctrl with function sample(bit [7:0] fcr, bit [1:0] traffic);
     cp_tl     : coverpoint fcr[7:6] { bins tl1 = {0}; bins tl4 = {1}; bins tl8 = {2}; bins tl14 = {3}; }
     cp_rx_clr : coverpoint fcr[1];
@@ -115,6 +120,7 @@ class uart_cov extends uvm_component;
     cp_rd_empty : coverpoint kind { bins vacia = {CK_RDEMPTY}; }
   endgroup
 
+  // errores del LSR
   covergroup cg_err with function sample(bit [7:0] lsr);
     cp_dr  : coverpoint lsr[0];
     cp_oe  : coverpoint lsr[1];
@@ -136,16 +142,17 @@ class uart_cov extends uvm_component;
     }
   endgroup
 
+  // interrupciones (IIR)
   covergroup cg_int with function sample(uart_cov_kind_e kind, bit [7:0] iir, bit level);
     cp_iir_id : coverpoint iir[3:0] iff (kind == CK_IIR) {
       bins ninguna = {4'b0001}; bins rls = {4'b0110}; bins rda = {4'b0100};
       bins timeout = {4'b1100}; bins thre = {4'b0010}; bins msi = {4'b0000};
     }
     cp_ier  : coverpoint ier iff (kind == CK_IIR);
-    cp_mode : coverpoint cfg.sw_mode iff (kind == CK_IIR);
+    cp_sw_mode : coverpoint cfg.sw_mode iff (kind == CK_IIR);
     cp_multi: coverpoint pending iff (kind == CK_IIR) { bins cero = {0}; bins una = {1}; bins dos = {2}; bins mas = {[3:$]}; }
     cp_tl   : coverpoint cfg.ctrl.tl iff (kind == CK_IIR);
-    cx_id_mode  : cross cp_iir_id, cp_mode;
+    cx_id_mode  : cross cp_iir_id, cp_sw_mode;
     cx_id_multi : cross cp_iir_id, cp_multi {
       ignore_bins ninguna_pend = binsof(cp_iir_id.ninguna) && binsof(cp_multi) intersect {[1:$]};
       ignore_bins id_sin_pend  = !binsof(cp_iir_id.ninguna) && binsof(cp_multi.cero);
@@ -162,6 +169,7 @@ class uart_cov extends uvm_component;
     cp_int_edge : coverpoint level iff (kind == CK_EDGE) { bins sube = {1}; bins baja = {0}; }
   endgroup
 
+  // módem (MSR y MCR)
   covergroup cg_modem with function sample(uart_cov_kind_e kind, int unsigned sig, bit rise, bit [7:0] val);
     cp_sig  : coverpoint sig iff (kind == CK_CHG) { bins cts = {0}; bins dsr = {1}; bins ri = {2}; bins dcd = {3}; }
     cp_edge : coverpoint rise iff (kind == CK_CHG) { bins sube = {1}; bins baja = {0}; }
@@ -177,6 +185,7 @@ class uart_cov extends uvm_component;
     cx_out  : cross cp_out, cp_out_loop;
   endgroup
 
+  // Coverpoints de acceso
   covergroup cg_reg_access with function sample(bit [4:0] adr, bit we, bit dl, bit [3:0] sel);
     cp_addr : coverpoint adr { bins regs[] = {[0:7]}; bins dbg1 = {8}; bins dbg2 = {12}; }
     cp_rw   : coverpoint we { bins lee = {0}; bins escribe = {1}; }
@@ -194,9 +203,10 @@ class uart_cov extends uvm_component;
     cx_sel_rw : cross cp_sel, cp_rw;
   endgroup
 
+  // coverpoints de reset
   covergroup cg_reset with function sample(bit [2:0] when, int unsigned width);
     cp_when  : coverpoint when { bins reposo = {0}; bins tx = {1}; bins rx = {2}; bins ambos = {3}; bins en_acceso = {4}; }
-    cp_width : coverpoint width { bins uno = {1}; bins varios = {[2:$]}; }
+    cp_width : coverpoint width { bins uno = {1}; bins varios = {[2:5]}; }
     cx_reset : cross cp_when, cp_width;
   endgroup
 
@@ -206,8 +216,8 @@ class uart_cov extends uvm_component;
     cx_reconfig: cross cp_reg, cp_traffic;
   endgroup
 
-  // ------------------------------------------------------------ armado
-  function new(string name, uvm_component parent);
+  // armado
+  function new(string name, uvm_component parent);   // constructor
     super.new(name, parent);
     wb_imp  = new("wb_imp",  this);
     tx_imp  = new("tx_imp",  this);
@@ -215,7 +225,7 @@ class uart_cov extends uvm_component;
     mdm_imp = new("mdm_imp", this);
     int_imp = new("int_imp", this);
     evt_imp = new("evt_imp", this);
-    // los covergroups de una clase solo se pueden construir en new()
+    // los covergroups de una clase se construyen en new()
     cg_line_cfg   = new();
     cg_dl         = new();
     cg_fifo_ctrl  = new();
@@ -229,13 +239,13 @@ class uart_cov extends uvm_component;
     cg_reconfig   = new();
   endfunction
 
-  function void build_phase(uvm_phase phase);
+  function void build_phase(uvm_phase phase); // toma la configuración publicada por la prueba
     super.build_phase(phase);
     if (!uvm_config_db#(uart_cov_cfg)::get(this, "", "cfg", cfg))
       `uvm_fatal("NOCFG", "No se encontró la configuración de cobertura")
   endfunction
 
-  // [COV_CURVE] al final de cada episodio, para la curva de la línea base
+  // imprime [COV_CURVE] al final de cada episodio, para la curva de la línea base
   task run_phase(uvm_phase phase);
     uvm_event ep_end = uvm_event_pool::get_global("uart_ep_end");
     if (!cfg.enable || cfg.curve_every == 0) return;
@@ -260,7 +270,7 @@ class uart_cov extends uvm_component;
       `uvm_info("COV", $sformatf("cobertura funcional total: %0.2f %%", total()), UVM_NONE)
   endfunction
 
-  // nivel de la FIFO RX en categorías respecto al nivel de disparo
+  // nivel de la FIFO RX en categorías respecto al TL
   function int unsigned level_cat(int unsigned level, bit lost);
     if (lost)                                  return 4;
     if (level >= 15)                           return 3;
@@ -270,11 +280,7 @@ class uart_cov extends uvm_component;
   endfunction
 
   function bit [1:0] traffic(); return {rx_busy, tx_busy}; endfunction
-
-  // ------------------------------------------------------------ entradas
-  // El monitor publica el bus tal cual: dat y dat_rd en su carril y el
-  // sel que de verdad salió. Con uart_reg_of y uart_lane8 vemos el
-  // registro y el byte que usó el DUT, aunque el sel sea inválido.
+  // entradas
   function void write_wb(wb_item item);
     bit [4:0] reg_idx;
     bit [7:0] wr_byte, rd_byte;
@@ -282,7 +288,7 @@ class uart_cov extends uvm_component;
     reg_idx = uart_reg_of(item.adr, item.sel);
     wr_byte = uart_lane8(item.sel, item.dat);
     rd_byte = uart_lane8(item.sel, item.dat_rd);
-    // cp_addr es la dirección que pidió la secuencia y cp_sel el sel real
+    // cp_addr es la dirección pedida y cp_sel el sel real
     cg_reg_access.sample(item.adr, item.we, dlab, item.sel);
     if (item.we) begin
       case (reg_idx)
@@ -313,10 +319,10 @@ class uart_cov extends uvm_component;
         dlm_val = wr_byte;
         if (dll_written) cg_dl.sample({dlm_val, dll_val}, 1'b1);
         dlm_written = 1;
+        if (traffic() != 0) cg_reconfig.sample(1, traffic());
       end
-    end else if (!dlab && item.sel_kind() == SEL_ONE) begin
-      // con sel inválido el DUT devuelve 0 o la palabra de Debug, así que
-      // esas lecturas no dicen nada de LSR, IIR ni MSR
+    end else if (item.sel_kind() == SEL_ONE) begin
+      // con sel inválido la lectura no dice nada de LSR, IIR ni MSR; con DLAB = 1 sí vale (AMB-07)
       case (reg_idx)
         UART_LSR: cg_err.sample(rd_byte);
         UART_IIR: cg_int.sample(CK_IIR, rd_byte, 0);
@@ -326,19 +332,19 @@ class uart_cov extends uvm_component;
     end
   endfunction
 
-  function void write_tx(ser_item item);
+  function void write_tx(ser_item item); //escribir en TX
     if (!cfg.enable) return;
     if (item.err == SER_BREAK) cg_tx.sample(CK_BREAK, 0, 0);
     else                       cg_line_cfg.sample(SER_DIR_TX, item.data);
   endfunction
 
-  function void write_rx(ser_item item);
+  function void write_rx(ser_item item); // escribir en rx
     if (!cfg.enable) return;
     cg_rx.sample(CK_CHAR, item.err, item.data, item.short_stop, 0, 0);
     if (item.err inside {SER_OK, SER_BAUD_IN}) cg_line_cfg.sample(SER_DIR_RX, item.data);
   endfunction
 
-  function void write_mdm(mdm_item item);
+  function void write_mdm(mdm_item item); //escribir en modem
     if (!cfg.enable) return;
     for (int i = 0; i < 4; i++) begin
       if (item.in_chg[i]) begin
@@ -353,7 +359,7 @@ class uart_cov extends uvm_component;
     cg_int.sample(CK_EDGE, 0, item.level);
   endfunction
 
-  function void write_evt(uart_model_evt item);
+  function void write_evt(uart_model_evt item); // escribe event
     if (!cfg.enable) return;
     tx_busy = item.tx_busy;
     rx_busy = item.rx_busy;
@@ -365,7 +371,7 @@ class uart_cov extends uvm_component;
       EV_RESET: begin
         bit [2:0] when = (cfg.wb_vif != null && cfg.wb_vif.cyc === 1'b1) ? 3'd4 : {1'b0, item.rx_busy, item.tx_busy};
         cg_reset.sample(when, item.rst_cycles);
-        dlab = 0;
+        dlab = 0;   // el reset deja LCR e IER en su valor inicial
         ier  = 0;
       end
       default: ;
